@@ -28,6 +28,16 @@ app.get('/', (req, res) => {
       <title>ProductHunter - AI-Powered ProductHunt Launch Analytics</title>
       <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
       <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+      
+      <!-- Google Analytics 4 -->
+      <script async src="https://www.googletagmanager.com/gtag/js?id=G-XXXXXXXXXX"></script>
+      <script>
+        window.dataLayer = window.dataLayer || [];
+        function gtag(){dataLayer.push(arguments);}
+        gtag('js', new Date());
+        gtag('config', 'G-XXXXXXXXXX');
+      </script>
+      
       <style>
         * { margin: 0; padding: 0; box-sizing: border-box; }
         
@@ -1518,6 +1528,15 @@ app.get('/', (req, res) => {
             dot.classList.toggle('active', i === currentSlide);
           });
           
+          // Track feature view
+          const features = ['Hunt Weather', 'Analyze Your Hunt', 'Generate Hunt Assets', 'Analytics Dashboard'];
+          if (typeof gtag === 'function') {
+            gtag('event', 'view_feature', {
+              'feature_name': features[index],
+              'slide_index': index
+            });
+          }
+          
           // Reset auto-rotation
           clearInterval(sliderInterval);
           startSliderAutoRotation();
@@ -1645,6 +1664,13 @@ app.get('/', (req, res) => {
             
             applyFilters();
             updateDashboard();
+            
+            // Track successful dashboard load
+            if (typeof gtag === 'function') {
+              gtag('event', 'dashboard_loaded', {
+                'products_count': allProducts.length
+              });
+            }
             
             document.getElementById('loading').style.display = 'none';
             document.getElementById('dashboard').style.display = 'block';
@@ -2427,6 +2453,16 @@ app.get('/', (req, res) => {
             </div>
           \`).join('');
           
+          // Track hunt analysis
+          if (typeof gtag === 'function') {
+            gtag('event', 'analyze_hunt', {
+              'category': category,
+              'score': overallScore,
+              'has_planned_day': plannedDay ? 1 : 0,
+              'has_planned_time': plannedTime ? 1 : 0
+            });
+          }
+          
           // Show results
           resultsDiv.classList.add('show');
           
@@ -2523,6 +2559,15 @@ app.get('/', (req, res) => {
               <div class="asset-meta">\${asset.meta}</div>
             </div>
           \`).join('');
+          
+          // Track asset generation
+          if (typeof gtag === 'function') {
+            gtag('event', 'generate_assets', {
+              'category': category,
+              'assets_count': assets.length,
+              'has_target_audience': targetAudience ? 1 : 0
+            });
+          }
           
           resultsDiv.classList.add('show');
           resultsDiv.scrollIntoView({ behavior: 'smooth', block: 'nearest' });

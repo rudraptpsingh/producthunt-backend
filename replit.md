@@ -4,7 +4,7 @@
 ProductHunter is an AI-powered analytics platform designed to maximize ProductHunt success for Makers. It offers real-time insights, trend visualization, an AI-powered Hunt Weather system, and professional hunt asset generation. The platform uses authentic ProductHunt terminology (Hunt, Maker, Hunting) throughout to feel native to the PH community and help users predict, optimize, and win their ProductHunt hunts through data-driven recommendations and asset creation.
 
 ### Recent Changes
-*   **October 28, 2025:** Complete UI redesign to match ProductHunt's aesthetic - white backgrounds (#FFFFFF), signature orange (#DA552F), clean borders, minimal shadows. Rebranded from "Launch" to "Hunt" terminology throughout. Updated hero with "Analyze. Hunt. Win." tagline and award badges. Optimized for mobile with responsive design (typography, spacing, touch-friendly buttons).
+*   **October 28, 2025:** Complete UI redesign to match ProductHunt's aesthetic - white backgrounds (#FFFFFF), signature orange (#DA552F), clean borders, minimal shadows. Rebranded from "Launch" to "Hunt" terminology throughout. Updated hero with "Analyze. Hunt. Win." tagline and award badges. Optimized for mobile with responsive design (typography, spacing, touch-friendly buttons). **Added Google Analytics 4 (GA4)** tracking to match top ProductHunt winners' analytics stack - tracks feature views, dashboard loads, hunt analysis, and asset generation with event-based monitoring.
 
 ### User Preferences
 *   Use ProductHunt-specific terminology: "Hunt" (not "Launch"), "Maker" (product creator), "Hunter" (discovers products), "Hunting" (discovering/upvoting)
@@ -30,4 +30,5 @@ ProductHunter is built with Node.js (CommonJS) and uses the Express.js framework
 *   **CORS:** Enables Cross-Origin Resource Sharing.
 *   **Node-Fetch:** HTTP client for API requests.
 *   **Chart.js:** For data visualization in the analytics dashboard.
+*   **Google Analytics 4 (GA4):** Event-based analytics tracking user interactions (feature views, dashboard loads, hunt analysis, asset generation). Requires Measurement ID replacement in server.js (currently placeholder G-XXXXXXXXXX). See ANALYTICS_SETUP.md for configuration.
 *   **Environment Variables:** `PH_TOKEN` (ProductHunt API token) and `PORT`.

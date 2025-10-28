@@ -4077,8 +4077,11 @@ app.post('/api/track-hunt', async (req, res) => {
       };
     });
     
-    // Find the tracked product
-    const trackedProduct = products.find(p => p.slug === slug);
+    // Find the tracked product - match against URL since PH URLs use different slugs than the slug field
+    const trackedProduct = products.find(p => {
+      // Check if the URL contains the slug we extracted
+      return p.url.includes(`/posts/${slug}`) || p.url.includes(`/products/${slug}`);
+    });
     
     if (!trackedProduct) {
       return res.status(404).json({ 

@@ -884,6 +884,18 @@ app.get('/', (req, res) => {
           white-space: nowrap;
         }
         
+        .lb-product .product-link {
+          color: #1A1A1A;
+          text-decoration: none;
+          border-bottom: 1px solid transparent;
+          transition: all 0.2s;
+        }
+        
+        .lb-product .product-link:hover {
+          color: #DA552F;
+          border-bottom-color: #DA552F;
+        }
+        
         .lb-category {
           font-size: 12px;
           color: #666;
@@ -2731,7 +2743,6 @@ app.get('/', (req, res) => {
           updateCommandCenter();
           updateCategoryFilter();
           updateCharts();
-          updateTable();
         }
         
         function updateCommandCenter() {
@@ -2774,7 +2785,7 @@ app.get('/', (req, res) => {
             
             html += '<div class="leaderboard-row">' +
               '<div class="lb-rank ' + rankClass + '">#' + rank + '</div>' +
-              '<div class="lb-product"><a href="' + productUrl + '" target="_blank" style="color: #1A1A1A; text-decoration: none; border-bottom: 1px solid transparent; transition: all 0.2s;">' + product.name + '</a></div>' +
+              '<div class="lb-product"><a href="' + productUrl + '" target="_blank" class="product-link">' + product.name + '</a></div>' +
               '<div class="lb-category">' + product.category + '</div>' +
               '<div class="lb-upvotes">▲ ' + product.votesCount + '</div>' +
               '<div class="lb-comments">💬 ' + product.commentsCount + '</div>' +
@@ -3162,70 +3173,6 @@ Best,
             }
           });
         }
-        
-        function updateTable() {
-          const grid = document.getElementById('productsGrid');
-          grid.innerHTML = '';
-          
-          // Determine how many products to show
-          const productsToShow = showAllProducts ? filteredProducts : filteredProducts.slice(0, INITIAL_PRODUCTS_COUNT);
-          
-          productsToShow.forEach((product, index) => {
-            const card = document.createElement('div');
-            card.className = 'product-card';
-            card.onclick = () => window.open(product.url, '_blank');
-            
-            card.innerHTML = \`
-              <div class="product-header">
-                <div class="product-info">
-                  <div>
-                    <span class="product-rank">#\${index + 1}</span>
-                    <span class="product-name">\${product.name}</span>
-                  </div>
-                  <div class="product-tagline">\${product.tagline || 'No description available'}</div>
-                </div>
-              </div>
-              <div class="product-meta">
-                <span class="upvote-badge">▲ \${product.votesCount}</span>
-                <span>\${product.commentsCount} comments</span>
-                <span class="category-badge">\${product.category}</span>
-                <span>\${new Date(product.createdAt).toLocaleDateString()}</span>
-              </div>
-            \`;
-            
-            grid.appendChild(card);
-          });
-          
-          // Show/hide the "Show More" button
-          const showMoreContainer = document.getElementById('showMoreContainer');
-          const showMoreBtn = document.querySelector('.show-more-btn');
-          const showMoreText = document.getElementById('showMoreText');
-          const showMoreIcon = document.getElementById('showMoreIcon');
-          
-          if (filteredProducts.length > INITIAL_PRODUCTS_COUNT) {
-            showMoreContainer.style.display = 'block';
-            if (showAllProducts) {
-              showMoreText.textContent = 'Show Less Products';
-              showMoreBtn.classList.add('expanded');
-            } else {
-              showMoreText.textContent = \`Show More Products (\${filteredProducts.length - INITIAL_PRODUCTS_COUNT} more)\`;
-              showMoreBtn.classList.remove('expanded');
-            }
-          } else {
-            showMoreContainer.style.display = 'none';
-          }
-        }
-        
-        function toggleProducts() {
-          showAllProducts = !showAllProducts;
-          updateTable();
-          
-          // Scroll to products section if collapsing
-          if (!showAllProducts) {
-            document.getElementById('productsGrid').scrollIntoView({ behavior: 'smooth', block: 'start' });
-          }
-        }
-        
         async function analyzeUserLaunch() {
           // Get form values
           const appName = document.getElementById('appName').value.trim();

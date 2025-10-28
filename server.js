@@ -2942,37 +2942,53 @@ app.get('/', (req, res) => {
           const productName = topProduct ? topProduct.name : '[Your Product]';
           
           // Twitter template
-          twitterTemplate.value = "🚀 We're live on @ProductHunt today!\n\n" +
-            productName + " helps [describe your value proposition in one line].\n\n" +
-            "We'd love your support! \n\n" +
-            "Check it out and let us know what you think 👇\n" +
-            "[Your PH Link]\n\n" +
-            "#ProductHunt #Startup #Launch";
+          twitterTemplate.value = \`🚀 We're live on @ProductHunt today!
+
+\${productName} helps [describe your value proposition in one line].
+
+We'd love your support! 
+
+Check it out and let us know what you think 👇
+[Your PH Link]
+
+#ProductHunt #Startup #Launch\`;
           
           // LinkedIn template
-          linkedinTemplate.value = "Exciting news! We just launched " + productName + " on ProductHunt! 🚀\n\n" +
-            "After months of hard work, we're thrilled to share [brief description of what your product does and the problem it solves].\n\n" +
-            "What makes us different:\n" +
-            "• [Key feature 1]\n" +
-            "• [Key feature 2]\n" +
-            "• [Key feature 3]\n\n" +
-            "We'd be incredibly grateful for your support! Your upvote and feedback would mean the world to our team.\n\n" +
-            "Check us out: [Your ProductHunt Link]\n\n" +
-            "#ProductHunt #ProductLaunch #Innovation #Startup";
+          linkedinTemplate.value = \`Exciting news! We just launched \${productName} on ProductHunt! 🚀
+
+After months of hard work, we're thrilled to share [brief description of what your product does and the problem it solves].
+
+What makes us different:
+• [Key feature 1]
+• [Key feature 2]
+• [Key feature 3]
+
+We'd be incredibly grateful for your support! Your upvote and feedback would mean the world to our team.
+
+Check us out: [Your ProductHunt Link]
+
+#ProductHunt #ProductLaunch #Innovation #Startup\`;
           
           // Email template
-          emailTemplate.value = "Subject: We're live on ProductHunt - would love your support! 🚀\n\n" +
-            "Hi [Name],\n\n" +
-            "I wanted to personally reach out because we just launched " + productName + " on ProductHunt today!\n\n" +
-            "[Brief personal note about your relationship with the recipient]\n\n" +
-            "We've built [product description] to help [target audience] [solve specific problem].\n\n" +
-            "Your support would mean everything to us. If you have 30 seconds, would you mind:\n" +
-            "1. Checking out our launch: [Your PH Link]\n" +
-            "2. Leaving an upvote if you find it valuable\n" +
-            "3. Sharing any feedback you might have\n\n" +
-            "Thank you so much for being part of our journey!\n\n" +
-            "Best,\n" +
-            "[Your Name]";
+          emailTemplate.value = \`Subject: We're live on ProductHunt - would love your support! 🚀
+
+Hi [Name],
+
+I wanted to personally reach out because we just launched \${productName} on ProductHunt today!
+
+[Brief personal note about your relationship with the recipient]
+
+We've built [product description] to help [target audience] [solve specific problem].
+
+Your support would mean everything to us. If you have 30 seconds, would you mind:
+1. Checking out our launch: [Your PH Link]
+2. Leaving an upvote if you find it valuable
+3. Sharing any feedback you might have
+
+Thank you so much for being part of our journey!
+
+Best,
+[Your Name]\`;
         }
         
         function updateCompetitorAnalysis(top20) {

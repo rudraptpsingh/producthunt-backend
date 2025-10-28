@@ -665,6 +665,73 @@ app.get('/', (req, res) => {
             </div>
           </div>
           
+          <div class="stats-grid">
+            <div class="stat-card">
+              <div class="label">Products</div>
+              <div class="value" id="totalProducts">0</div>
+            </div>
+            <div class="stat-card">
+              <div class="label">Total Upvotes</div>
+              <div class="value" id="totalUpvotes">0</div>
+            </div>
+            <div class="stat-card">
+              <div class="label">Categories</div>
+              <div class="value" id="totalCategories">0</div>
+            </div>
+          </div>
+          
+          <div class="filters-section">
+            <div class="filters-grid">
+              <div class="filter-group">
+                <label for="searchInput">Search Products</label>
+                <input type="text" id="searchInput" placeholder="Search by name or tagline...">
+              </div>
+              <div class="filter-group">
+                <label for="categoryFilter">Category</label>
+                <select id="categoryFilter">
+                  <option value="">All Categories</option>
+                </select>
+              </div>
+              <div class="filter-group">
+                <button class="refresh-btn" onclick="loadDashboardData()">Refresh</button>
+              </div>
+            </div>
+          </div>
+          
+          <div class="charts-grid">
+            <div class="chart-card">
+              <h3>📊 Top Categories by Product Count</h3>
+              <div class="chart-container">
+                <canvas id="topCategoriesChart"></canvas>
+              </div>
+            </div>
+            <div class="chart-card">
+              <h3>🥧 Category Distribution</h3>
+              <div class="chart-container">
+                <canvas id="categoryPieChart"></canvas>
+              </div>
+            </div>
+            <div class="chart-card">
+              <h3>📈 Launch Activity Over Time</h3>
+              <div class="chart-container">
+                <canvas id="launchActivityChart"></canvas>
+              </div>
+            </div>
+            <div class="chart-card">
+              <h3>⭐ Average Upvotes by Category</h3>
+              <div class="chart-container">
+                <canvas id="avgUpvotesChart"></canvas>
+              </div>
+            </div>
+          </div>
+          
+          <div class="section-header">
+            <div class="section-title">Top Products</div>
+          </div>
+          
+          <div class="products-grid" id="productsGrid">
+          </div>
+          
           <div class="analyzer-card">
             <div class="analyzer-header">
               <h2>💡 Analyze Your Launch</h2>
@@ -747,73 +814,6 @@ app.get('/', (req, res) => {
               <div class="insights-grid" id="userInsights">
               </div>
             </div>
-          </div>
-          
-          <div class="stats-grid">
-            <div class="stat-card">
-              <div class="label">Products</div>
-              <div class="value" id="totalProducts">0</div>
-            </div>
-            <div class="stat-card">
-              <div class="label">Total Upvotes</div>
-              <div class="value" id="totalUpvotes">0</div>
-            </div>
-            <div class="stat-card">
-              <div class="label">Categories</div>
-              <div class="value" id="totalCategories">0</div>
-            </div>
-          </div>
-          
-          <div class="filters-section">
-            <div class="filters-grid">
-              <div class="filter-group">
-                <label for="searchInput">Search Products</label>
-                <input type="text" id="searchInput" placeholder="Search by name or tagline...">
-              </div>
-              <div class="filter-group">
-                <label for="categoryFilter">Category</label>
-                <select id="categoryFilter">
-                  <option value="">All Categories</option>
-                </select>
-              </div>
-              <div class="filter-group">
-                <button class="refresh-btn" onclick="loadDashboardData()">Refresh</button>
-              </div>
-            </div>
-          </div>
-          
-          <div class="charts-grid">
-            <div class="chart-card">
-              <h3>📊 Top Categories by Product Count</h3>
-              <div class="chart-container">
-                <canvas id="topCategoriesChart"></canvas>
-              </div>
-            </div>
-            <div class="chart-card">
-              <h3>🥧 Category Distribution</h3>
-              <div class="chart-container">
-                <canvas id="categoryPieChart"></canvas>
-              </div>
-            </div>
-            <div class="chart-card">
-              <h3>📈 Launch Activity Over Time</h3>
-              <div class="chart-container">
-                <canvas id="launchActivityChart"></canvas>
-              </div>
-            </div>
-            <div class="chart-card">
-              <h3>⭐ Average Upvotes by Category</h3>
-              <div class="chart-container">
-                <canvas id="avgUpvotesChart"></canvas>
-              </div>
-            </div>
-          </div>
-          
-          <div class="section-header">
-            <div class="section-title">Top Products</div>
-          </div>
-          
-          <div class="products-grid" id="productsGrid">
           </div>
         </div>
       </div>
@@ -1264,34 +1264,56 @@ app.get('/', (req, res) => {
           
           const dateCounts = {};
           filteredProducts.forEach(product => {
-            const date = new Date(product.createdAt).toLocaleDateString();
+            // Use ISO date format (YYYY-MM-DD) for consistent sorting
+            const date = product.createdAt.split('T')[0];
             dateCounts[date] = (dateCounts[date] || 0) + 1;
           });
           
           const sortedDates = Object.entries(dateCounts)
-            .sort((a, b) => new Date(a[0]) - new Date(b[0]));
+            .sort((a, b) => a[0].localeCompare(b[0])); // Sort by date string
+          
+          // Format dates for display (e.g., "Jan 15")
+          const formatDate = (dateStr) => {
+            const date = new Date(dateStr);
+            return date.toLocaleDateString('en-US', { month: 'short', day: 'numeric' });
+          };
           
           charts.launchActivity = new Chart(ctx, {
             type: 'line',
             data: {
-              labels: sortedDates.map(([date]) => date),
+              labels: sortedDates.map(([date]) => formatDate(date)),
               datasets: [{
                 label: 'Products Launched',
                 data: sortedDates.map(([, count]) => count),
                 borderColor: '#da552f',
                 backgroundColor: 'rgba(218, 85, 47, 0.1)',
                 tension: 0.4,
-                fill: true
+                fill: true,
+                pointRadius: 4,
+                pointHoverRadius: 6
               }]
             },
             options: {
               responsive: true,
               maintainAspectRatio: false,
               plugins: {
-                legend: { display: false }
+                legend: { display: false },
+                tooltip: {
+                  callbacks: {
+                    title: (context) => {
+                      const index = context[0].dataIndex;
+                      return sortedDates[index][0]; // Show full date on hover
+                    }
+                  }
+                }
               },
               scales: {
-                y: { beginAtZero: true }
+                y: { 
+                  beginAtZero: true,
+                  ticks: {
+                    stepSize: 1 // Show whole numbers only
+                  }
+                }
               }
             }
           });

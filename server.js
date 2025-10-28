@@ -1377,7 +1377,7 @@ app.get('/', (req, res) => {
       <div class="top-bar">
         <div class="top-bar-content">
           <div class="logo">
-            <div class="logo-icon">🚀</div>
+            <div class="logo-icon">▲</div>
             <h1><span class="hunt">Hunt</span>Product<span class="ph">Hunt</span></h1>
           </div>
         </div>
@@ -1388,19 +1388,19 @@ app.get('/', (req, res) => {
           <div class="hero-title-row">
             <div class="ph-badges">
               <div class="ph-badge">
-                <span class="ph-badge-icon">🏆</span>
+                <span class="ph-badge-icon">①</span>
                 <span>Product of the Day</span>
               </div>
               <div class="ph-badge">
-                <span class="ph-badge-icon">⭐</span>
+                <span class="ph-badge-icon">★</span>
                 <span>Product of the Week</span>
               </div>
               <div class="ph-badge">
-                <span class="ph-badge-icon">💎</span>
+                <span class="ph-badge-icon">◆</span>
                 <span>Product of the Month</span>
               </div>
               <div class="ph-badge">
-                <span class="ph-badge-icon">🐱</span>
+                <span class="ph-badge-icon">♦</span>
                 <span>Golden Kitty</span>
               </div>
             </div>
@@ -1408,7 +1408,7 @@ app.get('/', (req, res) => {
           
           <div class="hero-motto">
             <h2>Analyze. Hunt. Win.</h2>
-            <div class="win-badge">🏆</div>
+            <div class="win-badge">▲</div>
           </div>
           
           <p class="hero-tagline">Launching on ProductHunt gets you instant visibility to 5M+ tech enthusiasts, valuable early feedback, and credibility through community validation. Maximize your success with AI-powered insights from today's top hunts.</p>
@@ -1416,22 +1416,22 @@ app.get('/', (req, res) => {
           <div class="features-slider">
             <div class="features-track" id="featuresTrack">
               <div class="feature-slide">
-                <span class="feature-icon">⛅</span>
+                <span class="feature-icon">◐</span>
                 <h3 class="feature-title">Hunt Weather</h3>
                 <p class="feature-description">AI-powered scoring system analyzing category trends, optimal timing, and competition levels to predict your hunt success potential</p>
               </div>
               <div class="feature-slide">
-                <span class="feature-icon">📊</span>
+                <span class="feature-icon">▣</span>
                 <h3 class="feature-title">Analyze Your Hunt</h3>
                 <p class="feature-description">Get personalized insights on your tagline, category choice, and hunt timing with data-driven recommendations for Makers</p>
               </div>
               <div class="feature-slide">
-                <span class="feature-icon">✨</span>
+                <span class="feature-icon">✦</span>
                 <h3 class="feature-title">Generate Hunt Assets</h3>
                 <p class="feature-description">Create professional taglines, descriptions, first comments, and social posts based on proven patterns from top Makers and Golden Kitty winners</p>
               </div>
               <div class="feature-slide">
-                <span class="feature-icon">📈</span>
+                <span class="feature-icon">▦</span>
                 <h3 class="feature-title">Analytics Dashboard</h3>
                 <p class="feature-description">Real-time ProductHunt trends, category insights, and hunt activity visualization to help you make informed decisions</p>
               </div>
@@ -1454,28 +1454,28 @@ app.get('/', (req, res) => {
         <div id="dashboard" style="display: none;">
           <div class="predictor-card" id="predictorCard">
             <div class="predictor-header">
-              <h2>⛅ Hunt Weather</h2>
+              <h2>◐ Hunt Weather</h2>
               <p>Real-time insights based on today's top 20 product launches to maximize your hunt success</p>
             </div>
             
             <div class="launch-timers">
               <div class="timer-item">
-                <div class="timer-label">🌎 Your Time</div>
+                <div class="timer-label">● Your Time</div>
                 <div class="timer-value" id="userTime">--:--:--</div>
                 <div class="timer-subtitle" id="userTimezone">--</div>
               </div>
               <div class="timer-item">
-                <div class="timer-label">🕐 PST Time</div>
+                <div class="timer-label">◷ PST Time</div>
                 <div class="timer-value" id="pstTime">--:--:--</div>
                 <div class="timer-subtitle">Pacific Time</div>
               </div>
               <div class="timer-item">
-                <div class="timer-label">⏳ Today's Hunt Ends</div>
+                <div class="timer-label">◐ Today's Hunt Ends</div>
                 <div class="timer-value" id="todayEnds">--:--:--</div>
                 <div class="timer-subtitle">Time Remaining</div>
               </div>
               <div class="timer-item">
-                <div class="timer-label">🚀 Next Hunt Starts</div>
+                <div class="timer-label">▲ Next Hunt Starts</div>
                 <div class="timer-value" id="nextLaunch">--:--:--</div>
                 <div class="timer-subtitle">12:01 AM PST Tomorrow</div>
               </div>
@@ -1491,22 +1491,22 @@ app.get('/', (req, res) => {
             
             <div class="recommendations-grid" id="recommendationsGrid">
               <div class="recommendation-item">
-                <div class="rec-label">📁 Category</div>
+                <div class="rec-label">◆ Category</div>
                 <div class="rec-value" id="recCategory">--</div>
                 <div class="rec-impact" id="recCategoryImpact">--</div>
               </div>
               <div class="recommendation-item">
-                <div class="rec-label">📅 Best Day</div>
+                <div class="rec-label">◷ Best Day</div>
                 <div class="rec-value" id="recDay">--</div>
                 <div class="rec-impact" id="recDayImpact">--</div>
               </div>
               <div class="recommendation-item">
-                <div class="rec-label">⏰ Best Time</div>
+                <div class="rec-label">◐ Best Time</div>
                 <div class="rec-value" id="recTime">--</div>
                 <div class="rec-impact" id="recTimeImpact">--</div>
               </div>
               <div class="recommendation-item">
-                <div class="rec-label">🏆 Competition</div>
+                <div class="rec-label">● Competition</div>
                 <div class="rec-value" id="recCompetition">--</div>
                 <div class="rec-impact" id="recCompetitionImpact">--</div>
               </div>
@@ -1530,19 +1530,19 @@ app.get('/', (req, res) => {
           
           <div class="charts-grid">
             <div class="chart-card">
-              <h3>📊 Top Categories by Product Count</h3>
+              <h3>▦ Top Categories by Product Count</h3>
               <div class="chart-container">
                 <canvas id="topCategoriesChart"></canvas>
               </div>
             </div>
             <div class="chart-card">
-              <h3>📈 Hunt Activity by Hour (PST)</h3>
+              <h3>▤ Hunt Activity by Hour (PST)</h3>
               <div class="chart-container">
                 <canvas id="launchActivityChart"></canvas>
               </div>
             </div>
             <div class="chart-card">
-              <h3>⭐ Average Upvotes by Category</h3>
+              <h3>★ Average Upvotes by Category</h3>
               <div class="chart-container">
                 <canvas id="avgUpvotesChart"></canvas>
               </div>
@@ -1550,7 +1550,7 @@ app.get('/', (req, res) => {
           </div>
           
           <div class="section-header">
-            <div class="section-title">📅 Today's Top 20 Products</div>
+            <div class="section-title">▣ Today's Top 20 Products</div>
           </div>
           
           <div class="products-grid" id="productsGrid">
@@ -1565,7 +1565,7 @@ app.get('/', (req, res) => {
           
           <div class="analyzer-card">
             <div class="analyzer-header">
-              <h2>🚀 Get Your Product Ready to Hunt</h2>
+              <h2>▲ Get Your Product Ready to Hunt</h2>
               <p>Analyze your hunt strategy or generate professional assets based on your product details</p>
             </div>
             
@@ -1640,8 +1640,8 @@ app.get('/', (req, res) => {
             </div>
             
             <div class="action-buttons">
-              <button class="analyze-btn" onclick="analyzeUserLaunch()">📊 Analyze My Hunt</button>
-              <button class="analyze-btn secondary" onclick="generateLaunchAssets()">✨ Generate Hunt Assets</button>
+              <button class="analyze-btn" onclick="analyzeUserLaunch()">▣ Analyze My Hunt</button>
+              <button class="analyze-btn secondary" onclick="generateLaunchAssets()">✦ Generate Hunt Assets</button>
             </div>
             
             <div class="analysis-results" id="analysisResults">
@@ -1656,7 +1656,7 @@ app.get('/', (req, res) => {
             </div>
             
             <div class="assets-results" id="assetsResults">
-              <h3 style="margin-bottom: 20px; color: #1a1a1a;">📝 Your Launch Assets</h3>
+              <h3 style="margin-bottom: 20px; color: #1a1a1a;">✦ Your Launch Assets</h3>
               <div id="generatedAssets"></div>
             </div>
           </div>
@@ -1666,8 +1666,8 @@ app.get('/', (req, res) => {
       <!-- Footer -->
       <div class="footer">
         <div class="footer-content">
-          <span class="footer-text">Made for Makers by Makers 🚀</span>
-          <button class="feedback-trigger" onclick="openFeedbackModal()">💬 Feedback</button>
+          <span class="footer-text">Made for Makers by Makers</span>
+          <button class="feedback-trigger" onclick="openFeedbackModal()">▸ Feedback</button>
         </div>
       </div>
       
@@ -1679,15 +1679,15 @@ app.get('/', (req, res) => {
           <p>Help us improve HuntProductHunt for the Maker community</p>
           <div class="feedback-options">
             <a href="mailto:cosmorudyrp@gmail.com?subject=HuntProductHunt Feedback&body=Hi! I'd like to share my feedback about HuntProductHunt:%0D%0A%0D%0A" class="feedback-btn">
-              <span class="feedback-icon">📧</span>
+              <span class="feedback-icon">✉</span>
               <span>Send Email Feedback</span>
             </a>
             <a href="https://twitter.com/intent/tweet?text=Just tried HuntProductHunt - an amazing tool for optimizing ProductHunt launches! Check it out:" target="_blank" rel="noopener" class="feedback-btn">
-              <span class="feedback-icon">🐦</span>
+              <span class="feedback-icon">⤴</span>
               <span>Share on Twitter</span>
             </a>
             <a href="https://www.producthunt.com" target="_blank" rel="noopener" class="feedback-btn">
-              <span class="feedback-icon">🔥</span>
+              <span class="feedback-icon">▲</span>
               <span>Hunt Us on ProductHunt</span>
             </a>
           </div>
@@ -2016,9 +2016,9 @@ app.get('/', (req, res) => {
           );
           
           // Determine category hotness indicator
-          let hotnessIndicator = '🔥 HOT';
-          if (categoryScore < 50) hotnessIndicator = '❄️ COOL';
-          else if (categoryScore < 70) hotnessIndicator = '🌤️ WARM';
+          let hotnessIndicator = '▲ HOT';
+          if (categoryScore < 50) hotnessIndicator = '▼ COOL';
+          else if (categoryScore < 70) hotnessIndicator = '— WARM';
           
           // Find hottest category based on avg upvotes and recency
           const categoryStats = {};
@@ -2912,7 +2912,7 @@ Respond in JSON format:
       "meta": "engagement tips"
     },
     {
-      "title": "🐦 Social Media Post Template",
+      "title": "⤴ Social Media Post Template",
       "content": "the social post text",
       "meta": "platform recommendations"
     },

@@ -2023,16 +2023,6 @@ app.get('/', (req, res) => {
             </div>
           </div>
           
-          <div class="products-grid" id="productsGrid">
-          </div>
-          
-          <div class="show-more-container" id="showMoreContainer" style="display: none;">
-            <button class="show-more-btn" onclick="toggleProducts()">
-              <span id="showMoreText">Show More Products</span>
-              <span id="showMoreIcon">▼</span>
-            </button>
-          </div>
-          
           <div class="analyzer-card">
             <div class="analyzer-header">
               <h2>▲ Get Your Product Ready to Hunt</h2>
@@ -2780,9 +2770,11 @@ app.get('/', (req, res) => {
             const velocityLabel = velocity.label;
             const rankClass = rank <= 3 ? 'top-3' : '';
             
+            const productUrl = product.url || 'https://www.producthunt.com';
+            
             html += '<div class="leaderboard-row">' +
               '<div class="lb-rank ' + rankClass + '">#' + rank + '</div>' +
-              '<div class="lb-product">' + product.name + '</div>' +
+              '<div class="lb-product"><a href="' + productUrl + '" target="_blank" style="color: #1A1A1A; text-decoration: none; border-bottom: 1px solid transparent; transition: all 0.2s;">' + product.name + '</a></div>' +
               '<div class="lb-category">' + product.category + '</div>' +
               '<div class="lb-upvotes">▲ ' + product.votesCount + '</div>' +
               '<div class="lb-comments">💬 ' + product.commentsCount + '</div>' +

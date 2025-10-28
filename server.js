@@ -1984,6 +1984,21 @@ app.get('/', (req, res) => {
                   <div class="rec-impact" id="recCompetitionImpact">--</div>
                 </div>
               </div>
+              
+              <div class="charts-grid" style="margin-top: 24px;">
+                <div class="chart-card">
+                  <h3>▦ Top Categories by Product Count</h3>
+                  <div class="chart-container">
+                    <canvas id="topCategoriesChart"></canvas>
+                  </div>
+                </div>
+                <div class="chart-card">
+                  <h3>★ Average Upvotes by Category</h3>
+                  <div class="chart-container">
+                    <canvas id="avgUpvotesChart"></canvas>
+                  </div>
+                </div>
+              </div>
             </div>
             
             <div class="command-center-grid">
@@ -2006,47 +2021,6 @@ app.get('/', (req, res) => {
                 </div>
               </div>
             </div>
-          </div>
-          
-          <div class="stats-grid">
-            <div class="stat-card">
-              <div class="label">Products</div>
-              <div class="value" id="totalProducts">0</div>
-            </div>
-            <div class="stat-card">
-              <div class="label">Total Upvotes</div>
-              <div class="value" id="totalUpvotes">0</div>
-            </div>
-            <div class="stat-card">
-              <div class="label">Categories</div>
-              <div class="value" id="totalCategories">0</div>
-            </div>
-          </div>
-          
-          <div class="charts-grid">
-            <div class="chart-card">
-              <h3>▦ Top Categories by Product Count</h3>
-              <div class="chart-container">
-                <canvas id="topCategoriesChart"></canvas>
-              </div>
-            </div>
-            <div class="chart-card">
-              <h3>📊 Products Launched by Hour (PST)</h3>
-              <p style="font-size: 13px; color: #666; margin-top: 8px; margin-bottom: 16px;">Lower bars = less competition. Identify optimal hunt windows when fewer products are launching.</p>
-              <div class="chart-container">
-                <canvas id="launchActivityChart"></canvas>
-              </div>
-            </div>
-            <div class="chart-card">
-              <h3>★ Average Upvotes by Category</h3>
-              <div class="chart-container">
-                <canvas id="avgUpvotesChart"></canvas>
-              </div>
-            </div>
-          </div>
-          
-          <div class="section-header">
-            <div class="section-title">▣ Today's Top 20 Products</div>
           </div>
           
           <div class="products-grid" id="productsGrid">
@@ -2765,7 +2739,6 @@ app.get('/', (req, res) => {
         function updateDashboard() {
           updatePredictor();
           updateCommandCenter();
-          updateStats();
           updateCategoryFilter();
           updateCharts();
           updateTable();
@@ -3096,17 +3069,6 @@ Best,
             }, 2000);
           }
         }
-        
-        function updateStats() {
-          const totalProducts = filteredProducts.length;
-          const totalUpvotes = filteredProducts.reduce((sum, p) => sum + p.votesCount, 0);
-          const categories = new Set(filteredProducts.flatMap(p => p.allCategories));
-          
-          document.getElementById('totalProducts').textContent = totalProducts;
-          document.getElementById('totalUpvotes').textContent = totalUpvotes.toLocaleString();
-          document.getElementById('totalCategories').textContent = categories.size;
-        }
-        
         function updateCategoryFilter() {
           const categories = new Set(allProducts.flatMap(p => p.allCategories));
           const appCategory = document.getElementById('appCategory');
@@ -3141,7 +3103,6 @@ Best,
             .slice(0, 10);
           
           updateTopCategoriesChart(sortedCategories);
-          updateLaunchActivityChart();
           updateAvgUpvotesChart(sortedCategories);
         }
         
@@ -3174,135 +3135,6 @@ Best,
             }
           });
         }
-        
-        function updateLaunchActivityChart() {
-          const ctx = document.getElementById('launchActivityChart');
-          if (!ctx) {
-            console.error('Hunt Activity chart canvas not found');
-            return;
-          }
-          
-          if (charts.launchActivity) charts.launchActivity.destroy();
-          
-          // Group by hour of the day for more granular view
-          const hourCounts = {};
-          filteredProducts.forEach(product => {
-            if (!product.createdAt) return;
-            
-            try {
-              const date = new Date(product.createdAt);
-              const hour = date.getHours();
-              hourCounts[hour] = (hourCounts[hour] || 0) + 1;
-            } catch (e) {
-              console.error('Error parsing date:', e);
-            }
-          });
-          
-          // Create 24-hour array (0-23)
-          const hours = Array.from({length: 24}, (_, i) => i);
-          const counts = hours.map(hour => hourCounts[hour] || 0);
-          
-          // Format hour for display (e.g., "12 AM", "1 PM")
-          const formatHour = (hour) => {
-            if (hour === 0) return '12 AM';
-            if (hour < 12) return hour + ' AM';
-            if (hour === 12) return '12 PM';
-            return (hour - 12) + ' PM';
-          };
-          
-          // Color-code bars based on competition level
-          const maxCount = Math.max(...counts);
-          const minCount = Math.min(...counts.filter(c => c > 0));
-          const avgCount = counts.reduce((a, b) => a + b, 0) / counts.filter(c => c > 0).length;
-          
-          const barColors = counts.map(count => {
-            if (count === 0) return 'rgba(200, 200, 200, 0.3)';
-            if (count <= avgCount * 0.6) return 'rgba(16, 185, 129, 0.7)'; // Green - low competition
-            if (count <= avgCount * 1.2) return 'rgba(245, 158, 11, 0.7)'; // Amber - medium
-            return 'rgba(239, 68, 68, 0.7)'; // Red - high competition
-          });
-          
-          const borderColors = counts.map(count => {
-            if (count === 0) return 'rgba(200, 200, 200, 0.5)';
-            if (count <= avgCount * 0.6) return '#10B981';
-            if (count <= avgCount * 1.2) return '#F59E0B';
-            return '#EF4444';
-          });
-          
-          charts.launchActivity = new Chart(ctx, {
-            type: 'bar',
-            data: {
-              labels: hours.map(hour => formatHour(hour)),
-              datasets: [{
-                label: 'Products Launched',
-                data: counts,
-                backgroundColor: barColors,
-                borderColor: borderColors,
-                borderWidth: 2,
-                borderRadius: 4
-              }]
-            },
-            options: {
-              responsive: true,
-              maintainAspectRatio: false,
-              plugins: {
-                legend: { display: false },
-                tooltip: {
-                  callbacks: {
-                    title: (context) => {
-                      const hour = hours[context[0].dataIndex];
-                      return formatHour(hour) + ' PST';
-                    },
-                    label: (context) => {
-                      const count = context.parsed.y;
-                      let competitionLevel = '';
-                      if (count === 0) competitionLevel = ' (No data)';
-                      else if (count <= avgCount * 0.6) competitionLevel = ' 🟢 Low competition';
-                      else if (count <= avgCount * 1.2) competitionLevel = ' 🟠 Medium competition';
-                      else competitionLevel = ' 🔴 High competition';
-                      return count + ' products launched' + competitionLevel;
-                    },
-                    afterLabel: (context) => {
-                      const count = context.parsed.y;
-                      if (count > 0 && count <= avgCount * 0.6) {
-                        return '✓ Good time to hunt!';
-                      }
-                      return '';
-                    }
-                  }
-                }
-              },
-              scales: {
-                y: { 
-                  beginAtZero: true,
-                  ticks: {
-                    stepSize: 1,
-                    precision: 0
-                  },
-                  title: {
-                    display: true,
-                    text: 'Number of Products',
-                    font: { size: 12 }
-                  }
-                },
-                x: {
-                  ticks: {
-                    maxRotation: 90,
-                    minRotation: 45,
-                    autoSkip: true,
-                    maxTicksLimit: 12
-                  },
-                  title: {
-                    display: true,
-                    text: 'Hour of Day (PST)',
-                    font: { size: 12 }
-                  }
-                }
-              }
-            }
-          });
-        }
-        
         function updateAvgUpvotesChart(categoryData) {
           const ctx = document.getElementById('avgUpvotesChart');
           if (charts.avgUpvotes) charts.avgUpvotes.destroy();

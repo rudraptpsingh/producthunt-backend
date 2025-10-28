@@ -1686,7 +1686,7 @@ app.get('/', (req, res) => {
           <h3>We'd Love Your Feedback!</h3>
           <p>Help us improve ProductHunter for the Maker community</p>
           <div class="feedback-options">
-            <a href="mailto:feedback@producthunter.app?subject=ProductHunter Feedback&body=Hi! I'd like to share my feedback about ProductHunter:%0D%0A%0D%0A" class="feedback-btn">
+            <a href="mailto:cosmorudyrp@gmail.com?subject=ProductHunter Feedback&body=Hi! I'd like to share my feedback about ProductHunter:%0D%0A%0D%0A" class="feedback-btn">
               <span class="feedback-icon">📧</span>
               <span>Send Email Feedback</span>
             </a>

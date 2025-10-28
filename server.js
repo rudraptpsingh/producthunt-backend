@@ -419,6 +419,178 @@ app.get('/', (req, res) => {
           margin-left: 8px;
         }
         
+        .analyzer-card {
+          background: white;
+          border: 1px solid #e8e7e6;
+          border-radius: 12px;
+          padding: 32px;
+          margin-bottom: 32px;
+        }
+        
+        .analyzer-header {
+          text-align: center;
+          margin-bottom: 32px;
+        }
+        
+        .analyzer-header h2 {
+          font-size: 24px;
+          margin: 0 0 8px 0;
+          color: #333;
+          font-weight: 700;
+        }
+        
+        .analyzer-header p {
+          margin: 0;
+          color: #828282;
+          font-size: 14px;
+        }
+        
+        .form-grid {
+          display: grid;
+          grid-template-columns: repeat(2, 1fr);
+          gap: 20px;
+          margin-bottom: 24px;
+        }
+        
+        .form-group {
+          display: flex;
+          flex-direction: column;
+        }
+        
+        .form-group.full-width {
+          grid-column: 1 / -1;
+        }
+        
+        .form-group label {
+          font-size: 14px;
+          font-weight: 600;
+          color: #333;
+          margin-bottom: 8px;
+        }
+        
+        .form-group input,
+        .form-group select,
+        .form-group textarea {
+          padding: 12px 16px;
+          border: 1px solid #e8e7e6;
+          border-radius: 8px;
+          font-size: 14px;
+          font-family: 'Inter', sans-serif;
+          transition: border-color 0.2s;
+        }
+        
+        .form-group input:focus,
+        .form-group select:focus,
+        .form-group textarea:focus {
+          outline: none;
+          border-color: #DA552F;
+        }
+        
+        .form-group textarea {
+          resize: vertical;
+          min-height: 80px;
+        }
+        
+        .analyze-btn {
+          background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+          color: white;
+          border: none;
+          padding: 16px 32px;
+          border-radius: 8px;
+          font-size: 16px;
+          font-weight: 600;
+          cursor: pointer;
+          transition: transform 0.2s, box-shadow 0.2s;
+          width: 100%;
+          max-width: 300px;
+          margin: 0 auto;
+          display: block;
+        }
+        
+        .analyze-btn:hover {
+          transform: translateY(-2px);
+          box-shadow: 0 8px 24px rgba(102, 126, 234, 0.3);
+        }
+        
+        .analyze-btn:active {
+          transform: translateY(0);
+        }
+        
+        .analysis-results {
+          margin-top: 32px;
+          padding: 24px;
+          background: #f6f5f4;
+          border-radius: 12px;
+          display: none;
+        }
+        
+        .analysis-results.show {
+          display: block;
+        }
+        
+        .result-header {
+          text-align: center;
+          margin-bottom: 24px;
+        }
+        
+        .result-score {
+          font-size: 48px;
+          font-weight: 800;
+          margin: 16px 0;
+        }
+        
+        .result-score.high { color: #10b981; }
+        .result-score.medium { color: #f59e0b; }
+        .result-score.low { color: #ef4444; }
+        
+        .insights-grid {
+          display: grid;
+          grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+          gap: 16px;
+          margin-top: 24px;
+        }
+        
+        .insight-item {
+          background: white;
+          padding: 20px;
+          border-radius: 8px;
+          border-left: 4px solid #DA552F;
+        }
+        
+        .insight-label {
+          font-size: 12px;
+          text-transform: uppercase;
+          color: #828282;
+          margin-bottom: 8px;
+          font-weight: 600;
+        }
+        
+        .insight-value {
+          font-size: 18px;
+          font-weight: 700;
+          color: #333;
+          margin-bottom: 8px;
+        }
+        
+        .insight-recommendation {
+          font-size: 14px;
+          color: #555;
+          line-height: 1.5;
+        }
+        
+        .insight-status {
+          display: inline-block;
+          padding: 4px 8px;
+          border-radius: 4px;
+          font-size: 12px;
+          font-weight: 600;
+          margin-top: 8px;
+        }
+        
+        .insight-status.good { background: #d1fae5; color: #065f46; }
+        .insight-status.warning { background: #fef3c7; color: #92400e; }
+        .insight-status.bad { background: #fee2e2; color: #991b1b; }
+        
         @media (max-width: 768px) {
           .filters-grid {
             grid-template-columns: 1fr;
@@ -489,6 +661,90 @@ app.get('/', (req, res) => {
                 <div class="rec-label">🏆 Competition</div>
                 <div class="rec-value" id="recCompetition">--</div>
                 <div class="rec-impact" id="recCompetitionImpact">--</div>
+              </div>
+            </div>
+          </div>
+          
+          <div class="analyzer-card">
+            <div class="analyzer-header">
+              <h2>💡 Analyze Your Launch</h2>
+              <p>Enter your app details to get personalized recommendations</p>
+            </div>
+            
+            <div class="form-grid">
+              <div class="form-group">
+                <label for="appName">App Name *</label>
+                <input type="text" id="appName" placeholder="e.g., My Awesome App" required>
+              </div>
+              
+              <div class="form-group">
+                <label for="appCategory">Category *</label>
+                <select id="appCategory" required>
+                  <option value="">Select a category</option>
+                </select>
+              </div>
+              
+              <div class="form-group full-width">
+                <label for="appTagline">Tagline *</label>
+                <textarea id="appTagline" placeholder="Describe your product in one compelling sentence..." required></textarea>
+              </div>
+              
+              <div class="form-group">
+                <label for="plannedDay">Planned Launch Day (Optional)</label>
+                <select id="plannedDay">
+                  <option value="">Not sure yet</option>
+                  <option value="Sunday">Sunday</option>
+                  <option value="Monday">Monday</option>
+                  <option value="Tuesday">Tuesday</option>
+                  <option value="Wednesday">Wednesday</option>
+                  <option value="Thursday">Thursday</option>
+                  <option value="Friday">Friday</option>
+                  <option value="Saturday">Saturday</option>
+                </select>
+              </div>
+              
+              <div class="form-group">
+                <label for="plannedTime">Planned Launch Time (Optional)</label>
+                <select id="plannedTime">
+                  <option value="">Not sure yet</option>
+                  <option value="0">12:00 AM</option>
+                  <option value="1">1:00 AM</option>
+                  <option value="2">2:00 AM</option>
+                  <option value="3">3:00 AM</option>
+                  <option value="4">4:00 AM</option>
+                  <option value="5">5:00 AM</option>
+                  <option value="6">6:00 AM</option>
+                  <option value="7">7:00 AM</option>
+                  <option value="8">8:00 AM</option>
+                  <option value="9">9:00 AM</option>
+                  <option value="10">10:00 AM</option>
+                  <option value="11">11:00 AM</option>
+                  <option value="12">12:00 PM</option>
+                  <option value="13">1:00 PM</option>
+                  <option value="14">2:00 PM</option>
+                  <option value="15">3:00 PM</option>
+                  <option value="16">4:00 PM</option>
+                  <option value="17">5:00 PM</option>
+                  <option value="18">6:00 PM</option>
+                  <option value="19">7:00 PM</option>
+                  <option value="20">8:00 PM</option>
+                  <option value="21">9:00 PM</option>
+                  <option value="22">10:00 PM</option>
+                  <option value="23">11:00 PM</option>
+                </select>
+              </div>
+            </div>
+            
+            <button class="analyze-btn" onclick="analyzeUserLaunch()">🚀 Analyze My Launch</button>
+            
+            <div class="analysis-results" id="analysisResults">
+              <div class="result-header">
+                <h3>Your Launch Analysis</h3>
+                <div class="result-score" id="userScore">--</div>
+                <div id="userScoreLabel">--</div>
+              </div>
+              
+              <div class="insights-grid" id="userInsights">
               </div>
             </div>
           </div>
@@ -896,17 +1152,27 @@ app.get('/', (req, res) => {
         function updateCategoryFilter() {
           const categories = new Set(allProducts.flatMap(p => p.allCategories));
           const categoryFilter = document.getElementById('categoryFilter');
+          const appCategory = document.getElementById('appCategory');
           const currentValue = categoryFilter.value;
+          const currentAppValue = appCategory.value;
           
           categoryFilter.innerHTML = '<option value="">All Categories</option>';
+          appCategory.innerHTML = '<option value="">Select a category</option>';
+          
           Array.from(categories).sort().forEach(cat => {
-            const option = document.createElement('option');
-            option.value = cat;
-            option.textContent = cat;
-            categoryFilter.appendChild(option);
+            const option1 = document.createElement('option');
+            option1.value = cat;
+            option1.textContent = cat;
+            categoryFilter.appendChild(option1);
+            
+            const option2 = document.createElement('option');
+            option2.value = cat;
+            option2.textContent = cat;
+            appCategory.appendChild(option2);
           });
           
           categoryFilter.value = currentValue;
+          appCategory.value = currentAppValue;
         }
         
         function updateCharts() {
@@ -1106,6 +1372,239 @@ app.get('/', (req, res) => {
           applyFilters();
           updateDashboard();
         });
+        
+        function analyzeUserLaunch() {
+          // Get form values
+          const appName = document.getElementById('appName').value.trim();
+          const category = document.getElementById('appCategory').value;
+          const tagline = document.getElementById('appTagline').value.trim();
+          const plannedDay = document.getElementById('plannedDay').value;
+          const plannedTime = document.getElementById('plannedTime').value;
+          
+          // Validation
+          if (!appName || !category || !tagline) {
+            alert('Please fill in all required fields (App Name, Category, and Tagline)');
+            return;
+          }
+          
+          // Calculate optimal tagline length from data
+          const taglineLengths = allProducts
+            .filter(p => p.tagline)
+            .map(p => ({ length: p.tagline.length, votes: p.votesCount }));
+          
+          const avgTaglineLength = taglineLengths.reduce((sum, t) => sum + t.length, 0) / taglineLengths.length;
+          const topPerformers = taglineLengths
+            .sort((a, b) => b.votes - a.votes)
+            .slice(0, 5);
+          const optimalLength = topPerformers.reduce((sum, t) => sum + t.length, 0) / topPerformers.length;
+          
+          // Analyze category
+          const categoryProducts = allProducts.filter(p => p.allCategories.includes(category));
+          const categoryAvgUpvotes = categoryProducts.reduce((sum, p) => sum + p.votesCount, 0) / categoryProducts.length;
+          
+          // Analyze day (if specified)
+          const days = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
+          const dayStats = {};
+          allProducts.forEach(p => {
+            const dayNum = new Date(p.createdAt).getDay();
+            const dayName = days[dayNum];
+            if (!dayStats[dayName]) dayStats[dayName] = { total: 0, count: 0 };
+            dayStats[dayName].total += p.votesCount;
+            dayStats[dayName].count++;
+          });
+          
+          let bestDay = 'Tuesday';
+          let bestDayAvg = 0;
+          Object.entries(dayStats).forEach(([day, stats]) => {
+            const avg = stats.total / stats.count;
+            if (avg > bestDayAvg) {
+              bestDayAvg = avg;
+              bestDay = day;
+            }
+          });
+          
+          // Analyze time (if specified)
+          const timeStats = {};
+          allProducts.forEach(p => {
+            const hour = new Date(p.createdAt).getHours();
+            if (!timeStats[hour]) timeStats[hour] = { total: 0, count: 0 };
+            timeStats[hour].total += p.votesCount;
+            timeStats[hour].count++;
+          });
+          
+          let bestHour = 0;
+          let bestTimeAvg = 0;
+          Object.entries(timeStats).forEach(([hour, stats]) => {
+            const avg = stats.total / stats.count;
+            if (avg > bestTimeAvg) {
+              bestTimeAvg = avg;
+              bestHour = parseInt(hour);
+            }
+          });
+          
+          // Calculate scores for each factor
+          const taglineLengthDiff = Math.abs(tagline.length - optimalLength);
+          const taglineScore = Math.max(0, 100 - (taglineLengthDiff / optimalLength * 100));
+          
+          const categoryScore = Math.min(100, (categoryAvgUpvotes / 100) * 100);
+          
+          let dayScore = 50;
+          if (plannedDay) {
+            const plannedDayAvg = dayStats[plannedDay] ? dayStats[plannedDay].total / dayStats[plannedDay].count : 0;
+            dayScore = Math.min(100, (plannedDayAvg / bestDayAvg) * 100);
+          } else {
+            dayScore = 75; // No penalty if not specified
+          }
+          
+          let timeScore = 50;
+          if (plannedTime) {
+            const plannedHour = parseInt(plannedTime);
+            const plannedTimeAvg = timeStats[plannedHour] ? timeStats[plannedHour].total / timeStats[plannedHour].count : 0;
+            timeScore = Math.min(100, (plannedTimeAvg / bestTimeAvg) * 100);
+          } else {
+            timeScore = 75; // No penalty if not specified
+          }
+          
+          // Final weighted score
+          const finalScore = Math.round(
+            taglineScore * 0.25 +
+            categoryScore * 0.30 +
+            dayScore * 0.25 +
+            timeScore * 0.20
+          );
+          
+          // Display results
+          const resultsDiv = document.getElementById('analysisResults');
+          const scoreDiv = document.getElementById('userScore');
+          const labelDiv = document.getElementById('userScoreLabel');
+          const insightsDiv = document.getElementById('userInsights');
+          
+          // Update score
+          scoreDiv.textContent = finalScore;
+          scoreDiv.className = 'result-score ' + 
+            (finalScore >= 75 ? 'high' : finalScore >= 50 ? 'medium' : 'low');
+          
+          if (finalScore >= 75) {
+            labelDiv.textContent = '🎉 Excellent! Your launch setup looks great!';
+          } else if (finalScore >= 50) {
+            labelDiv.textContent = '👍 Good setup! Consider our recommendations below.';
+          } else {
+            labelDiv.textContent = '⚠️ Several areas could be optimized for better results.';
+          }
+          
+          // Generate insights
+          const insights = [];
+          
+          // Tagline insight
+          const taglineStatus = taglineLengthDiff < optimalLength * 0.2 ? 'good' : 
+                                taglineLengthDiff < optimalLength * 0.5 ? 'warning' : 'bad';
+          insights.push({
+            label: 'Tagline Length',
+            value: \`\${tagline.length} characters\`,
+            recommendation: \`Optimal length is around \${Math.round(optimalLength)} characters. \${
+              tagline.length < optimalLength * 0.8 ? 'Consider adding more detail.' :
+              tagline.length > optimalLength * 1.3 ? 'Try to be more concise.' :
+              'Great length!'
+            }\`,
+            status: taglineStatus,
+            statusText: tagline.length >= optimalLength * 0.8 && tagline.length <= optimalLength * 1.3 ? 
+                       'Optimal' : 'Needs improvement'
+          });
+          
+          // Category insight
+          const categoryPercentile = (categoryAvgUpvotes / 100) * 100;
+          const categoryStatus = categoryPercentile >= 70 ? 'good' : categoryPercentile >= 40 ? 'warning' : 'bad';
+          insights.push({
+            label: 'Category Performance',
+            value: category,
+            recommendation: \`Avg upvotes in this category: \${Math.round(categoryAvgUpvotes)}. \${
+              categoryPercentile >= 70 ? 'This is a hot category! 🔥' :
+              categoryPercentile >= 40 ? 'Moderate competition expected.' :
+              'Consider a different category or standout positioning.'
+            }\`,
+            status: categoryStatus,
+            statusText: categoryPercentile >= 70 ? 'Hot category' : categoryPercentile >= 40 ? 'Moderate' : 'Competitive'
+          });
+          
+          // Day insight
+          if (plannedDay) {
+            const isDayOptimal = plannedDay === bestDay;
+            const dayDiff = ((dayStats[plannedDay]?.total / dayStats[plannedDay]?.count) / bestDayAvg * 100) || 0;
+            insights.push({
+              label: 'Launch Day',
+              value: plannedDay,
+              recommendation: \`Best day is \${bestDay}. \${
+                isDayOptimal ? 'Perfect choice! 🎯' :
+                dayDiff >= 80 ? 'Good choice, close to optimal.' :
+                \`Consider switching to \${bestDay} for +\${Math.round(100 - dayDiff)}% better results.\`
+              }\`,
+              status: dayDiff >= 80 ? 'good' : dayDiff >= 60 ? 'warning' : 'bad',
+              statusText: isDayOptimal ? 'Optimal' : dayDiff >= 80 ? 'Good' : 'Suboptimal'
+            });
+          } else {
+            insights.push({
+              label: 'Launch Day',
+              value: 'Not specified',
+              recommendation: \`We recommend \${bestDay} for best results based on historical data.\`,
+              status: 'warning',
+              statusText: 'Recommendation: ' + bestDay
+            });
+          }
+          
+          // Time insight
+          if (plannedTime) {
+            const formatTime = (hour) => {
+              const h = parseInt(hour);
+              const period = h >= 12 ? 'PM' : 'AM';
+              const displayHour = h === 0 ? 12 : h > 12 ? h - 12 : h;
+              return \`\${displayHour}:00 \${period}\`;
+            };
+            
+            const isTimeOptimal = parseInt(plannedTime) === bestHour;
+            const timeDiff = ((timeStats[plannedTime]?.total / timeStats[plannedTime]?.count) / bestTimeAvg * 100) || 0;
+            insights.push({
+              label: 'Launch Time',
+              value: formatTime(plannedTime),
+              recommendation: \`Best time is \${formatTime(bestHour)}. \${
+                isTimeOptimal ? 'Perfect timing! ⏰' :
+                timeDiff >= 80 ? 'Good timing, close to peak.' :
+                \`Consider \${formatTime(bestHour)} for better visibility.\`
+              }\`,
+              status: timeDiff >= 80 ? 'good' : timeDiff >= 60 ? 'warning' : 'bad',
+              statusText: isTimeOptimal ? 'Optimal' : timeDiff >= 80 ? 'Good' : 'Suboptimal'
+            });
+          } else {
+            const formatTime = (hour) => {
+              const period = hour >= 12 ? 'PM' : 'AM';
+              const displayHour = hour === 0 ? 12 : hour > 12 ? hour - 12 : hour;
+              return \`\${displayHour}:00 \${period}\`;
+            };
+            
+            insights.push({
+              label: 'Launch Time',
+              value: 'Not specified',
+              recommendation: \`We recommend \${formatTime(bestHour)} PST for maximum visibility.\`,
+              status: 'warning',
+              statusText: 'Recommendation: ' + formatTime(bestHour)
+            });
+          }
+          
+          // Render insights
+          insightsDiv.innerHTML = insights.map(insight => \`
+            <div class="insight-item">
+              <div class="insight-label">\${insight.label}</div>
+              <div class="insight-value">\${insight.value}</div>
+              <div class="insight-recommendation">\${insight.recommendation}</div>
+              <span class="insight-status \${insight.status}">\${insight.statusText}</span>
+            </div>
+          \`).join('');
+          
+          // Show results
+          resultsDiv.classList.add('show');
+          
+          // Scroll to results
+          resultsDiv.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+        }
         
         loadDashboardData();
       </script>

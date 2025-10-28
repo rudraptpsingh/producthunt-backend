@@ -1987,9 +1987,10 @@ app.get('/', (req, res) => {
               datasets: [{
                 label: 'Number of Products',
                 data: categoryData.map(([, data]) => data.count),
-                backgroundColor: 'rgba(102, 126, 234, 0.8)',
-                borderColor: 'rgba(102, 126, 234, 1)',
-                borderWidth: 1
+                backgroundColor: 'rgba(218, 85, 47, 0.7)',
+                borderColor: '#DA552F',
+                borderWidth: 1,
+                borderRadius: 4
               }]
             },
             options: {
@@ -2049,9 +2050,9 @@ app.get('/', (req, res) => {
             data: {
               labels: sortedDates.map(([date]) => formatDate(date)),
               datasets: [{
-                label: 'Products Launched',
+                label: 'Products Hunted',
                 data: sortedDates.map(([, count]) => count),
-                borderColor: '#da552f',
+                borderColor: '#DA552F',
                 backgroundColor: 'rgba(218, 85, 47, 0.1)',
                 tension: 0.4,
                 fill: true,
@@ -2108,9 +2109,10 @@ app.get('/', (req, res) => {
               datasets: [{
                 label: 'Average Upvotes',
                 data: avgData.map(d => d.avg),
-                backgroundColor: 'rgba(46, 125, 50, 0.8)',
-                borderColor: 'rgba(46, 125, 50, 1)',
-                borderWidth: 1
+                backgroundColor: 'rgba(218, 85, 47, 0.7)',
+                borderColor: '#DA552F',
+                borderWidth: 1,
+                borderRadius: 4
               }]
             },
             options: {

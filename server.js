@@ -2010,34 +2010,6 @@ app.get('/', (req, res) => {
                 </div>
               </div>
             </div>
-            
-            <div class="templates-section">
-              <h3>📝 One-Click Templates</h3>
-              <div class="templates-grid">
-                <div class="template-card">
-                  <h4>🐦 Twitter Post</h4>
-                  <textarea id="twitterTemplate" readonly></textarea>
-                  <button class="copy-btn" onclick="copyTemplate('twitter')">📋 Copy to Clipboard</button>
-                </div>
-                <div class="template-card">
-                  <h4>💼 LinkedIn Post</h4>
-                  <textarea id="linkedinTemplate" readonly></textarea>
-                  <button class="copy-btn" onclick="copyTemplate('linkedin')">📋 Copy to Clipboard</button>
-                </div>
-                <div class="template-card">
-                  <h4>📧 Email Outreach</h4>
-                  <textarea id="emailTemplate" readonly></textarea>
-                  <button class="copy-btn" onclick="copyTemplate('email')">📋 Copy to Clipboard</button>
-                </div>
-              </div>
-            </div>
-            
-            <div class="competitor-analysis" id="competitorAnalysis">
-              <h3>🎯 Competitor Analysis</h3>
-              <div class="competitor-insights" id="competitorInsights">
-                <div class="loading-placeholder">Analyzing competition...</div>
-              </div>
-            </div>
           </div>
           
           <div class="stats-grid">

@@ -1347,7 +1347,7 @@ app.get('/', (req, res) => {
             <div class="win-badge">🏆</div>
           </div>
           
-          <p class="hero-tagline">Data-driven insights to help Makers win on ProductHunt</p>
+          <p class="hero-tagline">Launching on ProductHunt gets you instant visibility to 5M+ tech enthusiasts, valuable early feedback, and credibility through community validation. Maximize your success with AI-powered insights from today's top hunts.</p>
           
           <div class="features-slider">
             <div class="features-track" id="featuresTrack">
@@ -1391,7 +1391,7 @@ app.get('/', (req, res) => {
           <div class="predictor-card" id="predictorCard">
             <div class="predictor-header">
               <h2>⛅ Hunt Weather</h2>
-              <p>Real-time insights to maximize your hunt success as a Maker</p>
+              <p>Real-time insights based on today's top 20 product launches to maximize your hunt success</p>
             </div>
             
             <div class="launch-timers">
@@ -1485,7 +1485,7 @@ app.get('/', (req, res) => {
           </div>
           
           <div class="section-header">
-            <div class="section-title">Top Products</div>
+            <div class="section-title">📅 Today's Top 20 Products</div>
           </div>
           
           <div class="products-grid" id="productsGrid">

@@ -480,45 +480,6 @@ app.get('/', (req, res) => {
           font-size: 14px;
         }
         
-        .launch-tabs {
-          display: flex;
-          gap: 12px;
-          margin-bottom: 32px;
-          border-bottom: 2px solid #e8e7e6;
-          padding-bottom: 0;
-        }
-        
-        .tab-btn {
-          background: none;
-          border: none;
-          padding: 12px 24px;
-          font-size: 16px;
-          font-weight: 600;
-          color: #828282;
-          cursor: pointer;
-          transition: all 0.3s ease;
-          border-bottom: 3px solid transparent;
-          position: relative;
-          bottom: -2px;
-        }
-        
-        .tab-btn:hover {
-          color: #da552f;
-        }
-        
-        .tab-btn.active {
-          color: #da552f;
-          border-bottom-color: #da552f;
-        }
-        
-        .tab-content {
-          display: none;
-        }
-        
-        .tab-content.active {
-          display: block;
-        }
-        
         .assets-results {
           display: none;
           margin-top: 32px;
@@ -634,6 +595,12 @@ app.get('/', (req, res) => {
           min-height: 80px;
         }
         
+        .action-buttons {
+          display: flex;
+          gap: 16px;
+          margin-top: 24px;
+        }
+        
         .analyze-btn {
           background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
           color: white;
@@ -644,7 +611,7 @@ app.get('/', (req, res) => {
           font-weight: 600;
           cursor: pointer;
           transition: transform 0.2s, box-shadow 0.2s;
-          width: 100%;
+          flex: 1;
           max-width: 300px;
           margin: 0 auto;
           display: block;
@@ -657,6 +624,14 @@ app.get('/', (req, res) => {
         
         .analyze-btn:active {
           transform: translateY(0);
+        }
+        
+        .analyze-btn.secondary {
+          background: linear-gradient(135deg, #da552f 0%, #ff6b47 100%);
+        }
+        
+        .analyze-btn.secondary:hover {
+          box-shadow: 0 8px 24px rgba(218, 85, 47, 0.3);
         }
         
         .analysis-results {
@@ -879,15 +854,9 @@ app.get('/', (req, res) => {
           <div class="analyzer-card">
             <div class="analyzer-header">
               <h2>🚀 Get Your Product Ready to Launch</h2>
-              <p>Analyze your launch strategy or generate professional launch assets</p>
+              <p>Analyze your launch strategy or generate professional launch assets based on your product details</p>
             </div>
             
-            <div class="launch-tabs">
-              <button class="tab-btn active" onclick="switchTab('analyze')">📊 Analyze Launch</button>
-              <button class="tab-btn" onclick="switchTab('generate')">✨ Generate Assets</button>
-            </div>
-            
-            <div id="analyzeTab" class="tab-content active">
             <div class="form-grid">
               <div class="form-group">
                 <label for="appName">App Name *</label>
@@ -902,8 +871,14 @@ app.get('/', (req, res) => {
               </div>
               
               <div class="form-group full-width">
-                <label for="appTagline">Tagline *</label>
-                <textarea id="appTagline" placeholder="Describe your product in one compelling sentence..." required></textarea>
+                <label for="appTagline">Tagline / Key Features *</label>
+                <textarea id="appTagline" placeholder="Describe your product in one compelling sentence, or list key features separated by commas..." rows="3" required></textarea>
+                <small style="color: #666; font-size: 12px;">For analysis: brief tagline. For asset generation: list features and benefits.</small>
+              </div>
+              
+              <div class="form-group">
+                <label for="targetAudience">Target Audience (Optional)</label>
+                <input type="text" id="targetAudience" placeholder="e.g., Developers, Marketers, Founders">
               </div>
               
               <div class="form-group">
@@ -952,7 +927,10 @@ app.get('/', (req, res) => {
               </div>
             </div>
             
-            <button class="analyze-btn" onclick="analyzeUserLaunch()">🚀 Analyze My Launch</button>
+            <div class="action-buttons">
+              <button class="analyze-btn" onclick="analyzeUserLaunch()">📊 Analyze My Launch</button>
+              <button class="analyze-btn secondary" onclick="generateLaunchAssets()">✨ Generate Launch Assets</button>
+            </div>
             
             <div class="analysis-results" id="analysisResults">
               <div class="result-header">
@@ -964,45 +942,10 @@ app.get('/', (req, res) => {
               <div class="insights-grid" id="userInsights">
               </div>
             </div>
-            </div>
             
-            <div id="generateTab" class="tab-content">
-              <div class="form-grid">
-                <div class="form-group">
-                  <label for="genAppName">App Name *</label>
-                  <input type="text" id="genAppName" placeholder="e.g., My Awesome App" required>
-                </div>
-                
-                <div class="form-group">
-                  <label for="genAppCategory">Category *</label>
-                  <select id="genAppCategory" required>
-                    <option value="">Select a category</option>
-                  </select>
-                </div>
-                
-                <div class="form-group full-width">
-                  <label for="genKeyFeatures">Key Features & Benefits *</label>
-                  <textarea id="genKeyFeatures" placeholder="List 3-5 key features or benefits of your product..." rows="4" required></textarea>
-                  <small style="color: #666; font-size: 12px;">Help us create better copy by describing what makes your product unique</small>
-                </div>
-                
-                <div class="form-group">
-                  <label for="genTargetAudience">Target Audience (Optional)</label>
-                  <input type="text" id="genTargetAudience" placeholder="e.g., Developers, Marketers, Founders">
-                </div>
-                
-                <div class="form-group">
-                  <label for="genWebsite">Website URL (Optional)</label>
-                  <input type="url" id="genWebsite" placeholder="https://yourproduct.com">
-                </div>
-              </div>
-              
-              <button class="analyze-btn" onclick="generateLaunchAssets()">✨ Generate Launch Assets</button>
-              
-              <div class="assets-results" id="assetsResults">
-                <h3 style="margin-bottom: 20px; color: #1a1a1a;">📝 Your Launch Assets</h3>
-                <div id="generatedAssets"></div>
-              </div>
+            <div class="assets-results" id="assetsResults">
+              <h3 style="margin-bottom: 20px; color: #1a1a1a;">📝 Your Launch Assets</h3>
+              <div id="generatedAssets"></div>
             </div>
           </div>
         </div>
@@ -1345,13 +1288,11 @@ app.get('/', (req, res) => {
           const categories = new Set(allProducts.flatMap(p => p.allCategories));
           const categoryFilter = document.getElementById('categoryFilter');
           const appCategory = document.getElementById('appCategory');
-          const genAppCategory = document.getElementById('genAppCategory');
           const currentValue = categoryFilter.value;
           const currentAppValue = appCategory.value;
           
           categoryFilter.innerHTML = '<option value="">All Categories</option>';
           appCategory.innerHTML = '<option value="">Select a category</option>';
-          genAppCategory.innerHTML = '<option value="">Select a category</option>';
           
           Array.from(categories).sort().forEach(cat => {
             const option1 = document.createElement('option');
@@ -1363,11 +1304,6 @@ app.get('/', (req, res) => {
             option2.value = cat;
             option2.textContent = cat;
             appCategory.appendChild(option2);
-            
-            const option3 = document.createElement('option');
-            option3.value = cat;
-            option3.textContent = cat;
-            genAppCategory.appendChild(option3);
           });
           
           categoryFilter.value = currentValue;
@@ -1826,31 +1762,16 @@ app.get('/', (req, res) => {
           resultsDiv.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
         }
         
-        function switchTab(tabName) {
-          // Update tab buttons
-          document.querySelectorAll('.tab-btn').forEach(btn => {
-            btn.classList.remove('active');
-          });
-          event.target.classList.add('active');
-          
-          // Update tab content
-          document.querySelectorAll('.tab-content').forEach(content => {
-            content.classList.remove('active');
-          });
-          document.getElementById(tabName + 'Tab').classList.add('active');
-        }
-        
         function generateLaunchAssets() {
-          // Get form values
-          const appName = document.getElementById('genAppName').value.trim();
-          const category = document.getElementById('genAppCategory').value;
-          const keyFeatures = document.getElementById('genKeyFeatures').value.trim();
-          const targetAudience = document.getElementById('genTargetAudience').value.trim();
-          const website = document.getElementById('genWebsite').value.trim();
+          // Get form values (using same fields as analyze)
+          const appName = document.getElementById('appName').value.trim();
+          const category = document.getElementById('appCategory').value;
+          const keyFeatures = document.getElementById('appTagline').value.trim(); // Using tagline field for features
+          const targetAudience = document.getElementById('targetAudience').value.trim();
           
           // Validation
           if (!appName || !category || !keyFeatures) {
-            alert('Please fill in all required fields (App Name, Category, and Key Features)');
+            alert('Please fill in all required fields (App Name, Category, and Tagline/Key Features)');
             return;
           }
           
@@ -1879,7 +1800,7 @@ app.get('/', (req, res) => {
           assets.push({
             title: '💡 Optimized Tagline (60 chars max)',
             content: taglineTemplate,
-            meta: \`Based on top ${category} products with avg length of ${avgTaglineLength} characters\`
+            meta: \`Based on top \${category} products with avg length of \${avgTaglineLength} characters\`
           });
           
           // 2. Product Description
@@ -1911,7 +1832,7 @@ app.get('/', (req, res) => {
           assets.push({
             title: '🎯 Category-Specific Launch Tips',
             content: launchTips,
-            meta: \`Based on successful ${category} launches\`
+            meta: \`Based on successful \${category} launches\`
           });
           
           // Display assets
@@ -1921,13 +1842,13 @@ app.get('/', (req, res) => {
           assetsDiv.innerHTML = assets.map((asset, index) => \`
             <div class="asset-card">
               <div class="asset-header">
-                <div class="asset-title">${asset.title}</div>
+                <div class="asset-title">\${asset.title}</div>
                 <button class="copy-btn" onclick="copyToClipboard(\${index}, 'asset-content-\${index}')">
                   📋 Copy
                 </button>
               </div>
               <div class="asset-content" id="asset-content-\${index}">\${asset.content}</div>
-              <div class="asset-meta">${asset.meta}</div>
+              <div class="asset-meta">\${asset.meta}</div>
             </div>
           \`).join('');
           
@@ -1937,7 +1858,7 @@ app.get('/', (req, res) => {
         
         function generateTagline(appName, features, audience, targetLength) {
           // Extract first feature/benefit
-          const featureList = features.split(/[,.\n]/).map(f => f.trim()).filter(f => f);
+          const featureList = features.split(/[,.\\n]/).map(f => f.trim()).filter(f => f);
           const mainFeature = featureList[0] || 'your productivity';
           
           // Create concise tagline
@@ -1953,7 +1874,7 @@ app.get('/', (req, res) => {
         }
         
         function generateDescription(appName, features, audience, category) {
-          const featureList = features.split(/[,.\n]/).map(f => f.trim()).filter(f => f);
+          const featureList = features.split(/[,.\\n]/).map(f => f.trim()).filter(f => f);
           const audienceText = audience ? \` designed for \${audience}\` : '';
           
           let description = \`\${appName} is a \${category} product\${audienceText} that helps you:\\n\\n\`;
@@ -1968,6 +1889,8 @@ app.get('/', (req, res) => {
         }
         
         function generateFirstComment(appName, features, category) {
+          const featureList = features.split(/[,.\\n]/).map(f => f.trim()).filter(f => f).slice(0, 3).map(f => '• ' + f).join('\\n');
+          
           return \`Hey Product Hunt! 👋
 
 I'm excited to share \${appName} with you all today!
@@ -1975,7 +1898,7 @@ I'm excited to share \${appName} with you all today!
 We built this because we saw a real need in the \${category} space. After months of development and testing, we're thrilled to finally launch here.
 
 What makes \${appName} different:
-${features.split(/[,.\n]/).map(f => f.trim()).filter(f => f).slice(0, 3).map(f => \`• \${f}\`).join('\\n')}
+\${featureList}
 
 We'd love to hear your feedback and answer any questions you have. This community has been incredibly inspiring to us, and we're grateful to be here.
 
@@ -1983,7 +1906,7 @@ Try it out and let us know what you think! 🚀\`;
         }
         
         function generateSocialPost(appName, features) {
-          const mainFeature = features.split(/[,.\n]/).map(f => f.trim()).filter(f => f)[0];
+          const mainFeature = features.split(/[,.\\n]/).map(f => f.trim()).filter(f => f)[0];
           
           return \`🚀 We just launched on @ProductHunt!
 

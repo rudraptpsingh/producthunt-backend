@@ -4010,7 +4010,13 @@ app.post('/api/track-hunt', async (req, res) => {
       return res.status(400).json({ error: 'Could not extract product slug from URL' });
     }
     
-    // Fetch today's products
+    // Get today's date in ProductHunt's timezone (PST)
+    const now = new Date();
+    const pstOffset = -8 * 60; // PST is UTC-8
+    const pstTime = new Date(now.getTime() + (pstOffset + now.getTimezoneOffset()) * 60000);
+    const todayDate = pstTime.toISOString().split('T')[0]; // YYYY-MM-DD format
+    
+    // Fetch today's products with date filter
     const response = await fetch('https://api.producthunt.com/v2/api/graphql', {
       method: 'POST',
       headers: {
@@ -4020,7 +4026,7 @@ app.post('/api/track-hunt', async (req, res) => {
       body: JSON.stringify({
         query: `
           query {
-            posts(first: 50, order: VOTES) {
+            posts(first: 100, order: VOTES, postedAfter: "${todayDate}") {
               edges {
                 node {
                   id
@@ -4030,6 +4036,7 @@ app.post('/api/track-hunt', async (req, res) => {
                   votesCount
                   commentsCount
                   createdAt
+                  featuredAt
                   url
                   productLinks {
                     url
@@ -4069,7 +4076,7 @@ app.post('/api/track-hunt', async (req, res) => {
     
     if (!trackedProduct) {
       return res.status(404).json({ 
-        error: 'Product not found in today\\'s hunts. Make sure the product was hunted today.' 
+        error: "Product not found in today's hunts. Make sure the product was hunted today." 
       });
     }
     

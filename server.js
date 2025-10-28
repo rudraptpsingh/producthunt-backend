@@ -2654,7 +2654,7 @@ app.get('/', (req, res) => {
           if (typeof gtag === 'function') {
             gtag('event', 'analyze_hunt', {
               'category': category,
-              'score': overallScore,
+              'score': finalScore,
               'has_planned_day': plannedDay ? 1 : 0,
               'has_planned_time': plannedTime ? 1 : 0
             });
@@ -2748,7 +2748,7 @@ app.get('/', (req, res) => {
             <div class="asset-card">
               <div class="asset-header">
                 <div class="asset-title">\${asset.title}</div>
-                <button class="copy-btn" onclick="copyToClipboard(\${index}, 'asset-content-\${index}')">
+                <button class="copy-btn" onclick="copyToClipboard(event, \${index}, 'asset-content-\${index}')">
                   📋 Copy
                 </button>
               </div>
@@ -2940,7 +2940,7 @@ AI Agents, AI Coding Tools, AI Video, No-Code, Productivity, Developer Tools
 Good luck! Win those first 4 hours! 🚀\`;
         }
         
-        function copyToClipboard(index, elementId) {
+        function copyToClipboard(event, index, elementId) {
           const content = document.getElementById(elementId).textContent;
           navigator.clipboard.writeText(content).then(() => {
             const btn = event.target;

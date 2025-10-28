@@ -64,9 +64,11 @@ Personalized launch analysis tool where users input their app details and receiv
 - **Summary Statistics**: Products, Total Upvotes, Categories
 - **Search & Filters**: Real-time product search and category filtering
 - **Chart Visualizations** (Chart.js):
+  - Three charts displayed in one row for optimal visual hierarchy
   - Top Categories by Product Count (Bar Chart)
-  - Launch Activity Over Time (Line Chart with improved date formatting)
+  - Launch Activity Over Time (Line Chart with robust date parsing and error handling)
   - Average Upvotes by Category (Bar Chart)
+  - Responsive design: stacks vertically on screens under 1200px
 - **Product Cards**: Clean ProductHunt-style cards with click-to-view functionality
 - **Show More/Less**: Initially displays 3 products with expandable button to view all (optimized for compact homepage)
 
@@ -159,6 +161,14 @@ User-specific weighted scoring algorithm:
 - No external API calls for analysis (all client-side)
 
 ## Recent Changes
+
+### 2025-10-28: Chart Layout Optimization & Launch Activity Fix
+- Fixed Launch Activity Over Time chart with improved date parsing and error handling
+- Optimized chart layout: all 3 charts now display in one row for better visual hierarchy
+- Added responsive breakpoint (1200px) to stack charts on smaller screens
+- Enhanced chart spacing: reduced padding (14px), height (220px), and gap (12px) for compact display
+- Improved x-axis labels with 45-degree rotation for better readability
+- Added defensive error handling to prevent chart rendering failures
 
 ### 2025-10-28: Homepage Compactness Optimization
 - Reduced products section to show only top 3 products initially (changed from 6)

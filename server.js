@@ -1925,7 +1925,7 @@ app.get('/', (req, res) => {
           <div class="command-center-card" id="commandCenterCard">
             <div class="command-center-header">
               <h2>🌤️ Hunt Weather & Command Center</h2>
-              <p>Real-time insights and tactical dashboard for today's top 20 products</p>
+              <p>Real-time insights and tactical dashboard with live ProductHunt data</p>
               <div class="auto-refresh-badge">Auto-refreshing every 30s</div>
             </div>
             
@@ -1988,7 +1988,7 @@ app.get('/', (req, res) => {
             
             <div class="command-center-grid">
               <div class="cc-section leaderboard-section">
-                <h3>📊 Live Leaderboard - Top 20</h3>
+                <h3>📊 Live Leaderboard - <a href="https://www.producthunt.com" target="_blank" style="color: #DA552F; text-decoration: none; border-bottom: 1px solid #DA552F;">Top 20 Products</a></h3>
                 <div class="leaderboard-table" id="leaderboardTable">
                   <div class="loading-placeholder">Loading leaderboard...</div>
                 </div>

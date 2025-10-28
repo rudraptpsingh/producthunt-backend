@@ -653,7 +653,230 @@ app.get('/', (req, res) => {
           });
         }
         
+        function calculateLaunchScore() {
+          const targetCategory = document.getElementById('categoryFilter').value || null;
+          
+          // Use filtered products for analysis (respects search/filter)
+          const analysisProducts = targetCategory 
+            ? allProducts.filter(p => p.allCategories.includes(targetCategory))
+            : allProducts;
+          
+          if (analysisProducts.length < 3) {
+            // Low confidence - not enough data
+            return {
+              score: 0,
+              category: targetCategory || 'All Categories',
+              categoryHotness: 'Low Data',
+              bestDay: '--',
+              bestTime: '--',
+              competition: 'Unknown',
+              confidence: 'Low',
+              impacts: {
+                category: 'Need more data for accurate prediction',
+                day: 'Need more data',
+                time: 'Need more data',
+                competition: 'Insufficient samples'
+              }
+            };
+          }
+          
+          // 1. Category Hotness Score (35% weight)
+          // Calculate based on recency and performance
+          const now = Date.now();
+          const dayMs = 24 * 60 * 60 * 1000;
+          let categoryScore = 0;
+          
+          if (analysisProducts.length > 0) {
+            const avgUpvotes = analysisProducts.reduce((sum, p) => sum + p.votesCount, 0) / analysisProducts.length;
+            const recentProducts = analysisProducts.filter(p => {
+              const age = (now - new Date(p.createdAt).getTime()) / dayMs;
+              return age <= 14; // Last 14 days
+            });
+            
+            const recentRatio = recentProducts.length / analysisProducts.length;
+            const performanceScore = Math.min(avgUpvotes / 100, 1); // Normalize to 0-1
+            categoryScore = (recentRatio * 0.4 + performanceScore * 0.6) * 100;
+          }
+          
+          // 2. Best Day Analysis (25% weight)
+          const dayStats = {};
+          const days = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
+          
+          analysisProducts.forEach(p => {
+            const dayNum = new Date(p.createdAt).getDay();
+            const dayName = days[dayNum];
+            if (!dayStats[dayName]) dayStats[dayName] = { total: 0, count: 0 };
+            dayStats[dayName].total += p.votesCount;
+            dayStats[dayName].count++;
+          });
+          
+          let bestDay = 'Tuesday';
+          let bestDayAvg = 0;
+          Object.entries(dayStats).forEach(([day, stats]) => {
+            const avg = stats.total / stats.count;
+            if (avg > bestDayAvg) {
+              bestDayAvg = avg;
+              bestDay = day;
+            }
+          });
+          
+          const dayScore = dayStats[bestDay] ? Math.min((bestDayAvg / 100) * 100, 100) : 50;
+          
+          // 3. Best Time Analysis (20% weight)
+          const timeStats = {};
+          analysisProducts.forEach(p => {
+            const hour = new Date(p.createdAt).getHours();
+            if (!timeStats[hour]) timeStats[hour] = { total: 0, count: 0 };
+            timeStats[hour].total += p.votesCount;
+            timeStats[hour].count++;
+          });
+          
+          let bestHour = 0;
+          let bestTimeAvg = 0;
+          Object.entries(timeStats).forEach(([hour, stats]) => {
+            const avg = stats.total / stats.count;
+            if (avg > bestTimeAvg) {
+              bestTimeAvg = avg;
+              bestHour = parseInt(hour);
+            }
+          });
+          
+          const formatTime = (hour) => {
+            const period = hour >= 12 ? 'PM' : 'AM';
+            const displayHour = hour === 0 ? 12 : hour > 12 ? hour - 12 : hour;
+            return \`\${displayHour}:00 \${period} PST\`;
+          };
+          
+          const timeScore = Math.min((bestTimeAvg / 100) * 100, 100);
+          
+          // 4. Competition Level (20% weight - inverse)
+          const avgUpvotes = analysisProducts.reduce((sum, p) => sum + p.votesCount, 0) / analysisProducts.length;
+          const topQuartile = analysisProducts
+            .map(p => p.votesCount)
+            .sort((a, b) => b - a)
+            .slice(0, Math.ceil(analysisProducts.length / 4));
+          const topAvg = topQuartile.reduce((sum, v) => sum + v, 0) / topQuartile.length;
+          
+          const competitionRatio = avgUpvotes / topAvg;
+          const competitionScore = competitionRatio * 100; // Higher ratio = less competitive
+          
+          let competitionLevel = 'High';
+          let competitionImpact = 'Very competitive category';
+          if (competitionRatio > 0.7) {
+            competitionLevel = 'Low';
+            competitionImpact = 'Great opportunity! 🎯';
+          } else if (competitionRatio > 0.4) {
+            competitionLevel = 'Medium';
+            competitionImpact = 'Moderate competition';
+          }
+          
+          // Calculate final weighted score
+          const weights = { category: 0.35, day: 0.25, time: 0.20, competition: 0.20 };
+          const finalScore = Math.round(
+            categoryScore * weights.category +
+            dayScore * weights.day +
+            timeScore * weights.time +
+            competitionScore * weights.competition
+          );
+          
+          // Determine category hotness indicator
+          let hotnessIndicator = '🔥 HOT';
+          if (categoryScore < 50) hotnessIndicator = '❄️ COOL';
+          else if (categoryScore < 70) hotnessIndicator = '🌤️ WARM';
+          
+          // Find hottest category if no specific category is selected
+          let displayCategory = targetCategory;
+          if (!displayCategory) {
+            // Calculate hottest category based on avg upvotes and recency
+            const categoryStats = {};
+            allProducts.forEach(p => {
+              p.allCategories.forEach(cat => {
+                if (!categoryStats[cat]) {
+                  categoryStats[cat] = { total: 0, count: 0, recent: 0 };
+                }
+                categoryStats[cat].total += p.votesCount;
+                categoryStats[cat].count++;
+                const age = (now - new Date(p.createdAt).getTime()) / dayMs;
+                if (age <= 14) categoryStats[cat].recent++;
+              });
+            });
+            
+            let hottestCategory = 'Productivity';
+            let hottestScore = 0;
+            Object.entries(categoryStats).forEach(([cat, stats]) => {
+              const avgUpvotes = stats.total / stats.count;
+              const recentRatio = stats.recent / stats.count;
+              const score = avgUpvotes * 0.6 + recentRatio * 40; // Weighted score
+              if (score > hottestScore) {
+                hottestScore = score;
+                hottestCategory = cat;
+              }
+            });
+            displayCategory = hottestCategory;
+          }
+          
+          // Calculate impact predictions
+          const dayImpact = \`+\${Math.round(dayScore / 10)}% better results\`;
+          const timeImpact = bestHour === 0 ? 'Midnight launch (12:01 AM)' : 'Peak engagement time';
+          
+          return {
+            score: Math.min(finalScore, 100),
+            category: displayCategory,
+            categoryHotness: hotnessIndicator,
+            bestDay: bestDay,
+            bestTime: formatTime(bestHour),
+            competition: competitionLevel,
+            confidence: analysisProducts.length >= 10 ? 'High' : analysisProducts.length >= 5 ? 'Medium' : 'Low',
+            impacts: {
+              category: hotnessIndicator,
+              day: dayImpact,
+              time: timeImpact,
+              competition: competitionImpact
+            }
+          };
+        }
+        
+        function updatePredictor() {
+          const prediction = calculateLaunchScore();
+          
+          // Update score circle
+          const scoreCircle = document.getElementById('scoreCircle');
+          const scoreValue = document.getElementById('scoreValue');
+          const scoreLabel = document.getElementById('scoreLabel');
+          
+          scoreValue.textContent = prediction.score;
+          
+          // Update card color based on score
+          scoreCircle.classList.remove('score-high', 'score-medium', 'score-low');
+          if (prediction.score >= 75) {
+            scoreCircle.classList.add('score-high');
+            scoreLabel.textContent = 'Excellent Launch Potential!';
+          } else if (prediction.score >= 50) {
+            scoreCircle.classList.add('score-medium');
+            scoreLabel.textContent = 'Good Launch Opportunity';
+          } else if (prediction.score > 0) {
+            scoreCircle.classList.add('score-low');
+            scoreLabel.textContent = 'Consider Optimizing';
+          } else {
+            scoreLabel.textContent = 'Not Enough Data';
+          }
+          
+          // Update recommendations
+          document.getElementById('recCategory').textContent = prediction.category;
+          document.getElementById('recCategoryImpact').textContent = prediction.impacts.category;
+          
+          document.getElementById('recDay').textContent = prediction.bestDay;
+          document.getElementById('recDayImpact').textContent = prediction.impacts.day;
+          
+          document.getElementById('recTime').textContent = prediction.bestTime;
+          document.getElementById('recTimeImpact').textContent = prediction.impacts.time;
+          
+          document.getElementById('recCompetition').textContent = prediction.competition;
+          document.getElementById('recCompetitionImpact').textContent = prediction.impacts.competition;
+        }
+        
         function updateDashboard() {
+          updatePredictor();
           updateStats();
           updateCategoryFilter();
           updateCharts();

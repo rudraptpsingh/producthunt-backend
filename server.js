@@ -17,8 +17,8 @@ if (!PH_TOKEN) {
 app.use(cors());
 app.use(express.json());
 
-// Dashboard analytics page
-app.get('/dashboard', (req, res) => {
+// Analytics Dashboard - Home Page
+app.get('/', (req, res) => {
   res.send(`
     <!DOCTYPE html>
     <html>
@@ -33,101 +33,118 @@ app.get('/dashboard', (req, res) => {
         
         body {
           font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
-          background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+          background: #f6f5f4;
           min-height: 100vh;
-          padding: 20px;
         }
         
-        .container {
-          max-width: 1400px;
-          margin: 0 auto;
-        }
-        
-        .header {
-          text-align: center;
-          color: white;
-          margin-bottom: 30px;
-        }
-        
-        .header h1 {
-          font-size: 42px;
-          font-weight: 700;
-          margin-bottom: 8px;
-          text-shadow: 0 2px 20px rgba(0,0,0,0.2);
-        }
-        
-        .header p {
-          font-size: 16px;
-          opacity: 0.95;
-        }
-        
-        .stats-grid {
-          display: grid;
-          grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-          gap: 20px;
-          margin-bottom: 30px;
-        }
-        
-        .stat-card {
+        .top-bar {
           background: white;
-          border-radius: 12px;
-          padding: 24px;
-          box-shadow: 0 4px 20px rgba(0,0,0,0.1);
-          transition: transform 0.3s ease;
+          border-bottom: 1px solid #e8e7e6;
+          padding: 16px 24px;
+          margin-bottom: 32px;
         }
         
-        .stat-card:hover {
-          transform: translateY(-4px);
+        .top-bar-content {
+          max-width: 1200px;
+          margin: 0 auto;
+          display: flex;
+          align-items: center;
+          justify-content: space-between;
         }
         
-        .stat-card .icon {
+        .logo {
+          display: flex;
+          align-items: center;
+          gap: 12px;
+        }
+        
+        .logo-icon {
           font-size: 32px;
-          margin-bottom: 10px;
         }
         
-        .stat-card .label {
-          color: #666;
-          font-size: 14px;
-          font-weight: 500;
-          margin-bottom: 8px;
-        }
-        
-        .stat-card .value {
-          font-size: 36px;
+        .logo h1 {
+          font-size: 24px;
           font-weight: 700;
           color: #1a1a1a;
         }
         
+        .logo span {
+          color: #da552f;
+        }
+        
+        .container {
+          max-width: 1200px;
+          margin: 0 auto;
+          padding: 0 24px 40px;
+        }
+        
+        .stats-grid {
+          display: grid;
+          grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+          gap: 16px;
+          margin-bottom: 24px;
+        }
+        
+        .stat-card {
+          background: white;
+          border: 1px solid #e8e7e6;
+          border-radius: 8px;
+          padding: 20px;
+          transition: border-color 0.2s ease, box-shadow 0.2s ease;
+        }
+        
+        .stat-card:hover {
+          border-color: #da552f;
+          box-shadow: 0 2px 8px rgba(218, 85, 47, 0.1);
+        }
+        
+        .stat-card .label {
+          color: #828282;
+          font-size: 13px;
+          font-weight: 500;
+          margin-bottom: 8px;
+          text-transform: uppercase;
+          letter-spacing: 0.5px;
+        }
+        
+        .stat-card .value {
+          font-size: 32px;
+          font-weight: 700;
+          color: #da552f;
+        }
+        
         .filters-section {
           background: white;
-          border-radius: 12px;
+          border: 1px solid #e8e7e6;
+          border-radius: 8px;
           padding: 20px;
-          margin-bottom: 30px;
-          box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+          margin-bottom: 24px;
         }
         
         .filters-grid {
           display: grid;
           grid-template-columns: 1fr 1fr auto;
-          gap: 15px;
+          gap: 12px;
           align-items: end;
         }
         
         .filter-group label {
           display: block;
           font-weight: 600;
-          margin-bottom: 8px;
+          margin-bottom: 6px;
           color: #1a1a1a;
+          font-size: 14px;
         }
         
         .filter-group input,
         .filter-group select {
           width: 100%;
-          padding: 12px;
-          border: 2px solid #e0e0e0;
-          border-radius: 8px;
+          padding: 10px 12px;
+          border: 1px solid #e8e7e6;
+          border-radius: 6px;
           font-size: 14px;
-          transition: border-color 0.3s ease;
+          transition: border-color 0.2s ease;
+          font-family: 'Inter', sans-serif;
         }
         
         .filter-group input:focus,
@@ -137,144 +154,269 @@ app.get('/dashboard', (req, res) => {
         }
         
         .refresh-btn {
-          background: linear-gradient(135deg, #da552f 0%, #e8744f 100%);
+          background: #da552f;
           color: white;
           border: none;
-          padding: 12px 24px;
-          border-radius: 8px;
+          padding: 10px 20px;
+          border-radius: 6px;
           cursor: pointer;
           font-size: 14px;
           font-weight: 600;
-          transition: all 0.3s ease;
-          box-shadow: 0 4px 15px rgba(218, 85, 47, 0.3);
+          transition: background 0.2s ease;
         }
         
         .refresh-btn:hover {
-          transform: translateY(-2px);
-          box-shadow: 0 6px 20px rgba(218, 85, 47, 0.4);
+          background: #c14a29;
         }
         
         .charts-grid {
           display: grid;
           grid-template-columns: repeat(auto-fit, minmax(500px, 1fr));
-          gap: 20px;
-          margin-bottom: 30px;
+          gap: 16px;
+          margin-bottom: 24px;
         }
         
         .chart-card {
           background: white;
-          border-radius: 12px;
-          padding: 24px;
-          box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+          border: 1px solid #e8e7e6;
+          border-radius: 8px;
+          padding: 20px;
         }
         
         .chart-card h3 {
-          font-size: 18px;
-          margin-bottom: 20px;
+          font-size: 16px;
+          font-weight: 600;
+          margin-bottom: 16px;
           color: #1a1a1a;
         }
         
         .chart-container {
           position: relative;
-          height: 300px;
+          height: 280px;
         }
         
-        .table-card {
+        .section-header {
+          margin-bottom: 16px;
+          display: flex;
+          align-items: center;
+          justify-content: space-between;
+        }
+        
+        .section-title {
+          font-size: 18px;
+          font-weight: 700;
+          color: #1a1a1a;
+        }
+        
+        .products-grid {
+          display: grid;
+          gap: 12px;
+        }
+        
+        .product-card {
           background: white;
-          border-radius: 12px;
-          padding: 24px;
-          box-shadow: 0 4px 20px rgba(0,0,0,0.1);
-          overflow-x: auto;
-        }
-        
-        .table-card h3 {
-          font-size: 20px;
-          margin-bottom: 20px;
-          color: #1a1a1a;
-        }
-        
-        table {
-          width: 100%;
-          border-collapse: collapse;
-        }
-        
-        thead {
-          background: #f8f9fa;
-        }
-        
-        th {
-          padding: 12px;
-          text-align: left;
-          font-weight: 600;
-          color: #1a1a1a;
-          border-bottom: 2px solid #e0e0e0;
+          border: 1px solid #e8e7e6;
+          border-radius: 8px;
+          padding: 16px;
+          transition: border-color 0.2s ease, box-shadow 0.2s ease;
           cursor: pointer;
-          user-select: none;
         }
         
-        th:hover {
-          background: #e9ecef;
+        .product-card:hover {
+          border-color: #da552f;
+          box-shadow: 0 2px 8px rgba(218, 85, 47, 0.08);
         }
         
-        th.sortable::after {
-          content: ' ⇅';
-          opacity: 0.3;
+        .product-header {
+          display: flex;
+          align-items: flex-start;
+          justify-content: space-between;
+          margin-bottom: 12px;
         }
         
-        th.sort-asc::after {
-          content: ' ↑';
-          opacity: 1;
+        .product-info {
+          flex: 1;
         }
         
-        th.sort-desc::after {
-          content: ' ↓';
-          opacity: 1;
-        }
-        
-        td {
-          padding: 12px;
-          border-bottom: 1px solid #f0f0f0;
-        }
-        
-        tr:hover {
-          background: #f8f9fa;
-        }
-        
-        .product-link {
-          color: #da552f;
-          text-decoration: none;
-          font-weight: 600;
-        }
-        
-        .product-link:hover {
-          text-decoration: underline;
-        }
-        
-        .rank {
-          display: inline-block;
-          background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        .product-rank {
+          background: #da552f;
           color: white;
-          padding: 4px 10px;
-          border-radius: 12px;
-          font-weight: 600;
+          font-size: 11px;
+          font-weight: 700;
+          padding: 3px 8px;
+          border-radius: 4px;
+          margin-right: 10px;
+          display: inline-block;
+        }
+        
+        .product-name {
+          font-size: 16px;
+          font-weight: 700;
+          color: #1a1a1a;
+          margin-bottom: 4px;
+        }
+        
+        .product-tagline {
           font-size: 14px;
+          color: #828282;
+          line-height: 1.4;
+          margin-bottom: 12px;
+        }
+        
+        .product-meta {
+          display: flex;
+          align-items: center;
+          gap: 16px;
+          font-size: 13px;
+          color: #828282;
+        }
+        
+        .upvote-badge {
+          display: inline-flex;
+          align-items: center;
+          gap: 4px;
+          background: #fff7f5;
+          border: 1px solid #da552f;
+          color: #da552f;
+          padding: 4px 10px;
+          border-radius: 6px;
+          font-weight: 600;
+          font-size: 13px;
         }
         
         .category-badge {
           display: inline-block;
-          background: #e8f5e9;
-          color: #2e7d32;
+          background: #f6f5f4;
+          color: #828282;
           padding: 4px 10px;
           border-radius: 6px;
           font-size: 12px;
           font-weight: 500;
         }
         
+        .product-link {
+          color: #da552f;
+          text-decoration: none;
+          font-weight: 600;
+          font-size: 13px;
+        }
+        
+        .product-link:hover {
+          text-decoration: underline;
+        }
+        
         .loading {
           text-align: center;
-          padding: 40px;
+          padding: 80px 20px;
+          background: white;
+          border: 1px solid #e8e7e6;
+          border-radius: 8px;
+          margin: 40px 0;
+        }
+        
+        .loading div {
+          color: #828282;
+          font-size: 16px;
+        }
+        
+        .predictor-card {
+          background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+          border-radius: 12px;
+          padding: 32px;
           color: white;
-          font-size: 18px;
+          margin-bottom: 32px;
+          box-shadow: 0 10px 40px rgba(102, 126, 234, 0.3);
+        }
+        
+        .predictor-header {
+          text-align: center;
+          margin-bottom: 24px;
+        }
+        
+        .predictor-header h2 {
+          font-size: 24px;
+          margin: 0 0 8px 0;
+          font-weight: 700;
+        }
+        
+        .predictor-header p {
+          margin: 0;
+          opacity: 0.9;
+          font-size: 14px;
+        }
+        
+        .score-display {
+          text-align: center;
+          margin: 32px 0;
+        }
+        
+        .score-circle {
+          width: 160px;
+          height: 160px;
+          border-radius: 50%;
+          margin: 0 auto 16px;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          font-size: 56px;
+          font-weight: 800;
+          border: 6px solid rgba(255, 255, 255, 0.3);
+          background: rgba(255, 255, 255, 0.1);
+          backdrop-filter: blur(10px);
+        }
+        
+        .score-label {
+          font-size: 16px;
+          text-transform: uppercase;
+          letter-spacing: 1px;
+          opacity: 0.9;
+          font-weight: 600;
+        }
+        
+        .score-high { background: linear-gradient(135deg, #10b981 0%, #059669 100%); }
+        .score-medium { background: linear-gradient(135deg, #f59e0b 0%, #d97706 100%); }
+        .score-low { background: linear-gradient(135deg, #ef4444 0%, #dc2626 100%); }
+        
+        .recommendations-grid {
+          display: grid;
+          grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+          gap: 16px;
+          margin-top: 24px;
+        }
+        
+        .recommendation-item {
+          background: rgba(255, 255, 255, 0.15);
+          padding: 16px;
+          border-radius: 8px;
+          backdrop-filter: blur(10px);
+        }
+        
+        .recommendation-item .rec-label {
+          font-size: 12px;
+          text-transform: uppercase;
+          letter-spacing: 0.5px;
+          opacity: 0.8;
+          margin-bottom: 4px;
+        }
+        
+        .recommendation-item .rec-value {
+          font-size: 20px;
+          font-weight: 700;
+          margin-bottom: 4px;
+        }
+        
+        .recommendation-item .rec-impact {
+          font-size: 13px;
+          opacity: 0.9;
+        }
+        
+        .confidence-badge {
+          display: inline-block;
+          background: rgba(255, 255, 255, 0.2);
+          padding: 4px 12px;
+          border-radius: 12px;
+          font-size: 12px;
+          margin-left: 8px;
         }
         
         @media (max-width: 768px) {
@@ -285,34 +427,82 @@ app.get('/dashboard', (req, res) => {
           .charts-grid {
             grid-template-columns: 1fr;
           }
+          
+          .recommendations-grid {
+            grid-template-columns: 1fr;
+          }
+          
+          .score-circle {
+            width: 120px;
+            height: 120px;
+            font-size: 42px;
+          }
         }
       </style>
     </head>
     <body>
-      <div class="container">
-        <div class="header">
-          <h1>📊 ProductHunt Analytics Dashboard</h1>
-          <p>Real-time insights and trends from ProductHunt</p>
+      <div class="top-bar">
+        <div class="top-bar-content">
+          <div class="logo">
+            <div class="logo-icon">🚀</div>
+            <h1>Product<span>Hunt</span> Analytics</h1>
+          </div>
         </div>
-        
+      </div>
+      
+      <div class="container">
         <div id="loading" class="loading">
-          <div>⏳ Loading dashboard data...</div>
+          <div>Loading dashboard data...</div>
         </div>
         
         <div id="dashboard" style="display: none;">
+          <div class="predictor-card" id="predictorCard">
+            <div class="predictor-header">
+              <h2>🎯 Launch Score Predictor</h2>
+              <p>AI-powered insights to maximize your ProductHunt launch success</p>
+            </div>
+            
+            <div class="score-display">
+              <div class="score-circle" id="scoreCircle">
+                <span id="scoreValue">--</span>
+              </div>
+              <div class="score-label" id="scoreLabel">Calculating...</div>
+            </div>
+            
+            <div class="recommendations-grid" id="recommendationsGrid">
+              <div class="recommendation-item">
+                <div class="rec-label">📁 Category</div>
+                <div class="rec-value" id="recCategory">--</div>
+                <div class="rec-impact" id="recCategoryImpact">--</div>
+              </div>
+              <div class="recommendation-item">
+                <div class="rec-label">📅 Best Day</div>
+                <div class="rec-value" id="recDay">--</div>
+                <div class="rec-impact" id="recDayImpact">--</div>
+              </div>
+              <div class="recommendation-item">
+                <div class="rec-label">⏰ Best Time</div>
+                <div class="rec-value" id="recTime">--</div>
+                <div class="rec-impact" id="recTimeImpact">--</div>
+              </div>
+              <div class="recommendation-item">
+                <div class="rec-label">🏆 Competition</div>
+                <div class="rec-value" id="recCompetition">--</div>
+                <div class="rec-impact" id="recCompetitionImpact">--</div>
+              </div>
+            </div>
+          </div>
+          
           <div class="stats-grid">
             <div class="stat-card">
-              <div class="icon">📦</div>
-              <div class="label">Total Products</div>
+              <div class="label">Products</div>
               <div class="value" id="totalProducts">0</div>
             </div>
             <div class="stat-card">
-              <div class="icon">⬆️</div>
               <div class="label">Total Upvotes</div>
               <div class="value" id="totalUpvotes">0</div>
             </div>
             <div class="stat-card">
-              <div class="icon">📁</div>
               <div class="label">Categories</div>
               <div class="value" id="totalCategories">0</div>
             </div>
@@ -321,17 +511,17 @@ app.get('/dashboard', (req, res) => {
           <div class="filters-section">
             <div class="filters-grid">
               <div class="filter-group">
-                <label for="searchInput">🔍 Search Products</label>
+                <label for="searchInput">Search Products</label>
                 <input type="text" id="searchInput" placeholder="Search by name or tagline...">
               </div>
               <div class="filter-group">
-                <label for="categoryFilter">📁 Filter by Category</label>
+                <label for="categoryFilter">Category</label>
                 <select id="categoryFilter">
                   <option value="">All Categories</option>
                 </select>
               </div>
               <div class="filter-group">
-                <button class="refresh-btn" onclick="loadDashboardData()">🔄 Refresh</button>
+                <button class="refresh-btn" onclick="loadDashboardData()">Refresh</button>
               </div>
             </div>
           </div>
@@ -363,24 +553,11 @@ app.get('/dashboard', (req, res) => {
             </div>
           </div>
           
-          <div class="table-card">
-            <h3>📋 Product Rankings</h3>
-            <table>
-              <thead>
-                <tr>
-                  <th class="sortable" data-column="rank">Rank</th>
-                  <th class="sortable" data-column="name">Product Name</th>
-                  <th class="sortable" data-column="tagline">Tagline</th>
-                  <th class="sortable" data-column="category">Category</th>
-                  <th class="sortable" data-column="votesCount">Upvotes</th>
-                  <th class="sortable" data-column="commentsCount">Comments</th>
-                  <th class="sortable" data-column="createdAt">Launch Date</th>
-                  <th>Link</th>
-                </tr>
-              </thead>
-              <tbody id="productsTable">
-              </tbody>
-            </table>
+          <div class="section-header">
+            <div class="section-title">Top Products</div>
+          </div>
+          
+          <div class="products-grid" id="productsGrid">
           </div>
         </div>
       </div>
@@ -398,10 +575,28 @@ app.get('/dashboard', (req, res) => {
             document.getElementById('dashboard').style.display = 'none';
             
             const response = await fetch('/api/dashboard-data');
+            
+            if (!response.ok) {
+              const errorData = await response.json();
+              const errorMsg = errorData.error || 'Failed to fetch data from server';
+              document.getElementById('loading').innerHTML = '❌ Error: ' + errorMsg + '<br><small>Please check if PH_TOKEN is set correctly</small>';
+              return;
+            }
+            
             const data = await response.json();
             
+            if (data.error) {
+              document.getElementById('loading').innerHTML = '❌ Server Error: ' + data.error + '<br><small>Please check if PH_TOKEN is set correctly</small>';
+              return;
+            }
+            
             if (data.errors) {
-              alert('Error loading data: ' + JSON.stringify(data.errors));
+              document.getElementById('loading').innerHTML = '❌ API Error: ' + JSON.stringify(data.errors);
+              return;
+            }
+            
+            if (!data.data?.posts?.edges) {
+              document.getElementById('loading').innerHTML = '❌ No product data available<br><small>The API did not return expected data</small>';
               return;
             }
             
@@ -419,7 +614,7 @@ app.get('/dashboard', (req, res) => {
             document.getElementById('dashboard').style.display = 'block';
           } catch (error) {
             console.error('Error loading dashboard data:', error);
-            alert('Failed to load dashboard data');
+            document.getElementById('loading').innerHTML = '❌ Failed to load dashboard data<br><small>' + error.message + '</small>';
           }
         }
         
@@ -649,21 +844,33 @@ app.get('/dashboard', (req, res) => {
         }
         
         function updateTable() {
-          const tbody = document.getElementById('productsTable');
-          tbody.innerHTML = '';
+          const grid = document.getElementById('productsGrid');
+          grid.innerHTML = '';
           
           filteredProducts.forEach((product, index) => {
-            const row = tbody.insertRow();
-            row.innerHTML = \`
-              <td><span class="rank">#\${index + 1}</span></td>
-              <td><strong>\${product.name}</strong></td>
-              <td>\${product.tagline || 'No tagline'}</td>
-              <td><span class="category-badge">\${product.category}</span></td>
-              <td><strong>\${product.votesCount}</strong></td>
-              <td>\${product.commentsCount}</td>
-              <td>\${new Date(product.createdAt).toLocaleDateString()}</td>
-              <td><a href="\${product.url}" target="_blank" class="product-link">View →</a></td>
+            const card = document.createElement('div');
+            card.className = 'product-card';
+            card.onclick = () => window.open(product.url, '_blank');
+            
+            card.innerHTML = \`
+              <div class="product-header">
+                <div class="product-info">
+                  <div>
+                    <span class="product-rank">#\${index + 1}</span>
+                    <span class="product-name">\${product.name}</span>
+                  </div>
+                  <div class="product-tagline">\${product.tagline || 'No description available'}</div>
+                </div>
+              </div>
+              <div class="product-meta">
+                <span class="upvote-badge">▲ \${product.votesCount}</span>
+                <span>\${product.commentsCount} comments</span>
+                <span class="category-badge">\${product.category}</span>
+                <span>\${new Date(product.createdAt).toLocaleDateString()}</span>
+              </div>
             \`;
+            
+            grid.appendChild(card);
           });
         }
         
@@ -677,367 +884,7 @@ app.get('/dashboard', (req, res) => {
           updateDashboard();
         });
         
-        document.querySelectorAll('th.sortable').forEach(th => {
-          th.addEventListener('click', () => {
-            const column = th.dataset.column;
-            if (sortColumn === column) {
-              sortDirection = sortDirection === 'asc' ? 'desc' : 'asc';
-            } else {
-              sortColumn = column;
-              sortDirection = 'desc';
-            }
-            
-            document.querySelectorAll('th').forEach(h => {
-              h.classList.remove('sort-asc', 'sort-desc');
-            });
-            th.classList.add('sort-' + sortDirection);
-            
-            applyFilters();
-            updateTable();
-          });
-        });
-        
         loadDashboardData();
-      </script>
-    </body>
-    </html>
-  `);
-});
-
-// Homepage with test interface
-app.get('/', (req, res) => {
-  res.send(`
-    <!DOCTYPE html>
-    <html>
-    <head>
-      <meta charset="UTF-8">
-      <meta name="viewport" content="width=device-width, initial-scale=1.0">
-      <title>ProductHunt API Proxy</title>
-      <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
-      <style>
-        * { margin: 0; padding: 0; box-sizing: border-box; }
-        
-        body {
-          font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
-          background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-          min-height: 100vh;
-          padding: 40px 20px;
-        }
-        
-        .container {
-          max-width: 900px;
-          margin: 0 auto;
-        }
-        
-        .header {
-          text-align: center;
-          color: white;
-          margin-bottom: 40px;
-          animation: fadeInDown 0.6s ease-out;
-        }
-        
-        .header h1 {
-          font-size: 48px;
-          font-weight: 700;
-          margin-bottom: 12px;
-          text-shadow: 0 2px 20px rgba(0,0,0,0.2);
-        }
-        
-        .header p {
-          font-size: 18px;
-          opacity: 0.95;
-        }
-        
-        .card {
-          background: white;
-          border-radius: 16px;
-          padding: 32px;
-          margin-bottom: 24px;
-          box-shadow: 0 10px 40px rgba(0,0,0,0.1);
-          animation: fadeInUp 0.6s ease-out;
-          transition: transform 0.3s ease, box-shadow 0.3s ease;
-        }
-        
-        .card:hover {
-          transform: translateY(-4px);
-          box-shadow: 0 20px 60px rgba(0,0,0,0.15);
-        }
-        
-        .card h2 {
-          font-size: 24px;
-          color: #1a1a1a;
-          margin-bottom: 16px;
-          display: flex;
-          align-items: center;
-          gap: 10px;
-        }
-        
-        .icon {
-          font-size: 28px;
-        }
-        
-        .card p {
-          color: #666;
-          line-height: 1.6;
-          margin-bottom: 20px;
-        }
-        
-        button {
-          background: linear-gradient(135deg, #da552f 0%, #e8744f 100%);
-          color: white;
-          border: none;
-          padding: 14px 32px;
-          border-radius: 8px;
-          cursor: pointer;
-          font-size: 16px;
-          font-weight: 600;
-          transition: all 0.3s ease;
-          box-shadow: 0 4px 15px rgba(218, 85, 47, 0.3);
-        }
-        
-        button:hover {
-          transform: translateY(-2px);
-          box-shadow: 0 6px 20px rgba(218, 85, 47, 0.4);
-        }
-        
-        button:active {
-          transform: translateY(0);
-        }
-        
-        button:disabled {
-          opacity: 0.6;
-          cursor: not-allowed;
-          transform: none;
-        }
-        
-        .status {
-          margin-top: 24px;
-          padding: 16px;
-          border-radius: 8px;
-          font-weight: 500;
-          display: none;
-        }
-        
-        .status.show {
-          display: block;
-          animation: slideIn 0.3s ease-out;
-        }
-        
-        .status.loading {
-          background: #e3f2fd;
-          color: #1976d2;
-        }
-        
-        .status.success {
-          background: #e8f5e9;
-          color: #2e7d32;
-        }
-        
-        .status.error {
-          background: #ffebee;
-          color: #c62828;
-        }
-        
-        .posts-container {
-          display: grid;
-          gap: 16px;
-          margin-top: 20px;
-        }
-        
-        .post-item {
-          background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
-          padding: 20px;
-          border-radius: 12px;
-          border-left: 4px solid #da552f;
-          animation: slideIn 0.4s ease-out;
-        }
-        
-        .post-item h3 {
-          color: #1a1a1a;
-          font-size: 18px;
-          margin-bottom: 8px;
-        }
-        
-        .post-item .tagline {
-          color: #555;
-          font-size: 14px;
-          margin-bottom: 12px;
-          line-height: 1.5;
-        }
-        
-        .post-meta {
-          display: flex;
-          gap: 20px;
-          font-size: 13px;
-          color: #777;
-        }
-        
-        .votes {
-          display: flex;
-          align-items: center;
-          gap: 5px;
-          font-weight: 600;
-          color: #da552f;
-        }
-        
-        .code-block {
-          background: #1e1e1e;
-          color: #d4d4d4;
-          padding: 20px;
-          border-radius: 8px;
-          overflow-x: auto;
-          font-family: 'Courier New', monospace;
-          font-size: 14px;
-          line-height: 1.5;
-        }
-        
-        .endpoint {
-          background: #f8f9fa;
-          padding: 12px 16px;
-          border-radius: 6px;
-          font-family: monospace;
-          color: #da552f;
-          font-weight: 600;
-          margin: 16px 0;
-          border-left: 3px solid #da552f;
-        }
-        
-        @keyframes fadeInDown {
-          from {
-            opacity: 0;
-            transform: translateY(-20px);
-          }
-          to {
-            opacity: 1;
-            transform: translateY(0);
-          }
-        }
-        
-        @keyframes fadeInUp {
-          from {
-            opacity: 0;
-            transform: translateY(20px);
-          }
-          to {
-            opacity: 1;
-            transform: translateY(0);
-          }
-        }
-        
-        @keyframes slideIn {
-          from {
-            opacity: 0;
-            transform: translateX(-10px);
-          }
-          to {
-            opacity: 1;
-            transform: translateX(0);
-          }
-        }
-        
-        .badge {
-          display: inline-block;
-          padding: 4px 12px;
-          background: #da552f;
-          color: white;
-          border-radius: 12px;
-          font-size: 12px;
-          font-weight: 600;
-          margin-left: 8px;
-        }
-      </style>
-    </head>
-    <body>
-      <div class="container">
-        <div class="header">
-          <h1>🚀 ProductHunt API Proxy</h1>
-          <p>Seamlessly access ProductHunt's GraphQL API</p>
-          <a href="/dashboard" style="display: inline-block; margin-top: 20px; background: white; color: #667eea; padding: 12px 24px; border-radius: 8px; text-decoration: none; font-weight: 600; box-shadow: 0 4px 15px rgba(0,0,0,0.1); transition: transform 0.3s ease;">📊 View Analytics Dashboard</a>
-        </div>
-        
-        <div class="card">
-          <h2><span class="icon">🎯</span> Test Live Data</h2>
-          <p>Click the button below to fetch the latest trending products from ProductHunt:</p>
-          <button onclick="testAPI()" id="testBtn">Get Latest Posts</button>
-          <div class="status" id="status"></div>
-          <div id="postsContainer" class="posts-container"></div>
-        </div>
-
-        <div class="card">
-          <h2><span class="icon">📡</span> API Documentation</h2>
-          <p>Send POST requests to this endpoint with GraphQL queries:</p>
-          <div class="endpoint">POST /api/producthunt</div>
-          <p><strong>Example Request Body:</strong></p>
-          <div class="code-block">{
-  "query": "{ posts(first: 5) { edges { node { name tagline votesCount } } } }"
-}</div>
-        </div>
-      </div>
-
-      <script>
-        async function testAPI() {
-          const statusEl = document.getElementById('status');
-          const postsContainer = document.getElementById('postsContainer');
-          const btn = document.getElementById('testBtn');
-          
-          statusEl.className = 'status loading show';
-          statusEl.innerHTML = '⏳ Fetching latest products...';
-          postsContainer.innerHTML = '';
-          btn.disabled = true;
-          
-          try {
-            const response = await fetch('/api/producthunt', {
-              method: 'POST',
-              headers: { 'Content-Type': 'application/json' },
-              body: JSON.stringify({
-                query: \`{
-                  posts(first: 5) {
-                    edges {
-                      node {
-                        name
-                        tagline
-                        votesCount
-                        createdAt
-                      }
-                    }
-                  }
-                }\`
-              })
-            });
-            
-            const data = await response.json();
-            
-            if (data.errors) {
-              statusEl.className = 'status error show';
-              statusEl.innerHTML = '❌ Error: ' + JSON.stringify(data.errors);
-            } else if (data.data && data.data.posts) {
-              statusEl.className = 'status success show';
-              statusEl.innerHTML = '✅ Successfully fetched products!';
-              
-              const posts = data.data.posts.edges;
-              posts.forEach((edge, index) => {
-                const post = edge.node;
-                const postEl = document.createElement('div');
-                postEl.className = 'post-item';
-                postEl.style.animationDelay = (index * 0.1) + 's';
-                postEl.innerHTML = \`
-                  <h3>\${post.name}</h3>
-                  <div class="tagline">\${post.tagline || 'No tagline available'}</div>
-                  <div class="post-meta">
-                    <div class="votes">▲ \${post.votesCount} upvotes</div>
-                    <div>📅 \${new Date(post.createdAt).toLocaleDateString()}</div>
-                  </div>
-                \`;
-                postsContainer.appendChild(postEl);
-              });
-            }
-          } catch (error) {
-            statusEl.className = 'status error show';
-            statusEl.innerHTML = '❌ Error: ' + error.message;
-          } finally {
-            btn.disabled = false;
-          }
-        }
       </script>
     </body>
     </html>
@@ -1081,18 +928,24 @@ app.post('/api/producthunt', async (req, res) => {
 // Dashboard data endpoint - fetches comprehensive ProductHunt data
 app.get('/api/dashboard-data', async (req, res) => {
   try {
+    if (!PH_TOKEN) {
+      return res.status(401).json({
+        error: 'ProductHunt API token not configured',
+        message: 'Please set PH_TOKEN in environment variables'
+      });
+    }
+    
     const query = `{
-      posts(first: 50, order: VOTES) {
+      posts(first: 50) {
         edges {
           node {
-            id
             name
             tagline
             votesCount
             commentsCount
             createdAt
             url
-            topics(first: 2) {
+            topics(first: 1) {
               edges {
                 node {
                   name

@@ -89,15 +89,38 @@ app.get('/', (req, res) => {
           display: flex;
           align-items: center;
           justify-content: center;
-          font-size: 24px;
-          color: white;
           box-shadow: 0 2px 8px rgba(218, 85, 47, 0.25);
           transition: all 0.3s ease;
+          position: relative;
         }
         
         .logo-icon:hover {
           transform: translateY(-2px);
           box-shadow: 0 4px 12px rgba(218, 85, 47, 0.35);
+        }
+        
+        .logo-icon::before {
+          content: '';
+          width: 0;
+          height: 0;
+          border-left: 9px solid transparent;
+          border-right: 9px solid transparent;
+          border-bottom: 15px solid white;
+          position: absolute;
+          top: 50%;
+          left: 50%;
+          transform: translate(-50%, -50%);
+        }
+        
+        .logo-icon::after {
+          content: '';
+          width: 2px;
+          height: 8px;
+          background: white;
+          position: absolute;
+          top: 60%;
+          left: 50%;
+          transform: translateX(-50%);
         }
         
         .logo h1 {
@@ -1126,7 +1149,16 @@ app.get('/', (req, res) => {
           .logo-icon {
             width: 36px;
             height: 36px;
-            font-size: 20px;
+          }
+          
+          .logo-icon::before {
+            border-left: 8px solid transparent;
+            border-right: 8px solid transparent;
+            border-bottom: 13px solid white;
+          }
+          
+          .logo-icon::after {
+            height: 7px;
           }
           
           .hero {
@@ -1442,7 +1474,7 @@ app.get('/', (req, res) => {
       <div class="top-bar">
         <div class="top-bar-content">
           <div class="logo">
-            <div class="logo-icon">🎯</div>
+            <div class="logo-icon"></div>
             <h1><span class="hunt">Hunt</span>Product<span class="ph">Hunt</span></h1>
           </div>
         </div>

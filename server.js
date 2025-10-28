@@ -719,32 +719,30 @@ app.get('/', (req, res) => {
         }
         
         .analyzer-card {
-          background: rgba(255, 255, 255, 0.9);
-          backdrop-filter: blur(10px);
-          -webkit-backdrop-filter: blur(10px);
-          border: 1px solid rgba(255, 255, 255, 0.18);
-          border-radius: 20px;
-          padding: 40px;
-          margin-bottom: 40px;
-          box-shadow: 0 20px 60px rgba(0, 0, 0, 0.08);
+          background: #FFFFFF;
+          border: 1px solid #E5E5E5;
+          border-radius: 8px;
+          padding: 32px;
+          margin-bottom: 32px;
+          box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
         }
         
         .analyzer-header {
           text-align: center;
-          margin-bottom: 40px;
+          margin-bottom: 32px;
         }
         
         .analyzer-header h2 {
-          font-size: 28px;
-          margin: 0 0 12px 0;
-          color: #1a1a1a;
-          font-weight: 800;
+          font-size: 24px;
+          margin: 0 0 8px 0;
+          color: #1A1A1A;
+          font-weight: 700;
         }
         
         .analyzer-header p {
           margin: 0;
-          color: #828282;
-          font-size: 16px;
+          color: #666666;
+          font-size: 14px;
           line-height: 1.6;
         }
         
@@ -1166,6 +1164,34 @@ app.get('/', (req, res) => {
           .product-tagline {
             font-size: 13px;
           }
+          
+          .analyzer-card {
+            padding: 20px 16px;
+          }
+          
+          .analyzer-header h2 {
+            font-size: 20px;
+          }
+          
+          .analyzer-header p {
+            font-size: 13px;
+          }
+          
+          .form-grid {
+            grid-template-columns: 1fr !important;
+            gap: 16px;
+          }
+          
+          .form-group label {
+            font-size: 13px;
+          }
+          
+          .form-group input,
+          .form-group select,
+          .form-group textarea {
+            font-size: 14px;
+            padding: 10px 12px;
+          }
         }
       </style>
     </head>
@@ -1378,8 +1404,8 @@ app.get('/', (req, res) => {
           
           <div class="analyzer-card">
             <div class="analyzer-header">
-              <h2>🚀 Get Your Product Ready to Launch</h2>
-              <p>Analyze your launch strategy or generate professional launch assets based on your product details</p>
+              <h2>🚀 Get Your Product Ready to Hunt</h2>
+              <p>Analyze your hunt strategy or generate professional assets based on your product details</p>
             </div>
             
             <div class="form-grid">

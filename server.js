@@ -1584,7 +1584,8 @@ app.get('/', (req, res) => {
               </div>
             </div>
             <div class="chart-card">
-              <h3>▤ Hunt Activity by Hour (PST)</h3>
+              <h3>📊 Products Launched by Hour (PST)</h3>
+              <p style="font-size: 13px; color: #666; margin-top: 8px; margin-bottom: 16px;">Lower bars = less competition. Identify optimal hunt windows when fewer products are launching.</p>
               <div class="chart-container">
                 <canvas id="launchActivityChart"></canvas>
               </div>
@@ -2396,16 +2397,35 @@ app.get('/', (req, res) => {
             return (hour - 12) + ' PM';
           };
           
+          // Color-code bars based on competition level
+          const maxCount = Math.max(...counts);
+          const minCount = Math.min(...counts.filter(c => c > 0));
+          const avgCount = counts.reduce((a, b) => a + b, 0) / counts.filter(c => c > 0).length;
+          
+          const barColors = counts.map(count => {
+            if (count === 0) return 'rgba(200, 200, 200, 0.3)';
+            if (count <= avgCount * 0.6) return 'rgba(16, 185, 129, 0.7)'; // Green - low competition
+            if (count <= avgCount * 1.2) return 'rgba(245, 158, 11, 0.7)'; // Amber - medium
+            return 'rgba(239, 68, 68, 0.7)'; // Red - high competition
+          });
+          
+          const borderColors = counts.map(count => {
+            if (count === 0) return 'rgba(200, 200, 200, 0.5)';
+            if (count <= avgCount * 0.6) return '#10B981';
+            if (count <= avgCount * 1.2) return '#F59E0B';
+            return '#EF4444';
+          });
+          
           charts.launchActivity = new Chart(ctx, {
             type: 'bar',
             data: {
               labels: hours.map(hour => formatHour(hour)),
               datasets: [{
-                label: 'Products Hunted',
+                label: 'Products Launched',
                 data: counts,
-                backgroundColor: 'rgba(218, 85, 47, 0.7)',
-                borderColor: '#DA552F',
-                borderWidth: 1,
+                backgroundColor: barColors,
+                borderColor: borderColors,
+                borderWidth: 2,
                 borderRadius: 4
               }]
             },
@@ -2418,10 +2438,23 @@ app.get('/', (req, res) => {
                   callbacks: {
                     title: (context) => {
                       const hour = hours[context[0].dataIndex];
-                      return formatHour(hour);
+                      return formatHour(hour) + ' PST';
                     },
                     label: (context) => {
-                      return context.parsed.y + ' products hunted';
+                      const count = context.parsed.y;
+                      let competitionLevel = '';
+                      if (count === 0) competitionLevel = ' (No data)';
+                      else if (count <= avgCount * 0.6) competitionLevel = ' 🟢 Low competition';
+                      else if (count <= avgCount * 1.2) competitionLevel = ' 🟠 Medium competition';
+                      else competitionLevel = ' 🔴 High competition';
+                      return count + ' products launched' + competitionLevel;
+                    },
+                    afterLabel: (context) => {
+                      const count = context.parsed.y;
+                      if (count > 0 && count <= avgCount * 0.6) {
+                        return '✓ Good time to hunt!';
+                      }
+                      return '';
                     }
                   }
                 }
@@ -2432,6 +2465,11 @@ app.get('/', (req, res) => {
                   ticks: {
                     stepSize: 1,
                     precision: 0
+                  },
+                  title: {
+                    display: true,
+                    text: 'Number of Products',
+                    font: { size: 12 }
                   }
                 },
                 x: {
@@ -2440,6 +2478,11 @@ app.get('/', (req, res) => {
                     minRotation: 45,
                     autoSkip: true,
                     maxTicksLimit: 12
+                  },
+                  title: {
+                    display: true,
+                    text: 'Hour of Day (PST)',
+                    font: { size: 12 }
                   }
                 }
               }

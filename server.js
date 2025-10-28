@@ -385,7 +385,66 @@ app.post('/api/producthunt', async (req, res) => {
   }
 });
 
+// Dashboard data endpoint - fetches comprehensive ProductHunt data
+app.get('/api/dashboard-data', async (req, res) => {
+  try {
+    const query = `{
+      posts(first: 50, order: VOTES) {
+        edges {
+          node {
+            id
+            name
+            tagline
+            slug
+            votesCount
+            commentsCount
+            createdAt
+            featuredAt
+            url
+            topics {
+              edges {
+                node {
+                  id
+                  name
+                }
+              }
+            }
+          }
+        }
+      }
+    }`;
+    
+    const response = await fetch('https://api.producthunt.com/v2/api/graphql', {
+      method: 'POST',
+      headers: {
+        'Authorization': `Bearer ${PH_TOKEN}`,
+        'Content-Type': 'application/json',
+        'Accept': 'application/json',
+      },
+      body: JSON.stringify({ query })
+    });
+
+    const data = await response.json();
+    
+    if (!response.ok) {
+      return res.status(response.status).json({
+        error: 'ProductHunt API error',
+        details: data
+      });
+    }
+    
+    res.json(data);
+  } catch (error) {
+    console.error('Error fetching dashboard data:', error);
+    res.status(500).json({
+      error: 'Server error',
+      message: error.message
+    });
+  }
+});
+
 app.listen(PORT, '0.0.0.0', () => {
   console.log(`ProductHunt proxy server running on port ${PORT}`);
   console.log(`API endpoint: /api/producthunt`);
+  console.log(`Dashboard endpoint: /api/dashboard-data`);
 });

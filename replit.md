@@ -1,7 +1,7 @@
 # ProductHunt Analytics Dashboard
 
 ## Overview
-A comprehensive ProductHunt analytics platform featuring real-time insights, trends visualization, and an AI-powered Launch Score Predictor to help founders maximize their ProductHunt launch success.
+A comprehensive ProductHunt analytics platform featuring real-time insights, trends visualization, an AI-powered Launch Score Predictor, and a personalized Launch Analyzer to help founders maximize their ProductHunt launch success.
 
 ## Project Architecture
 - **Language**: Node.js (CommonJS)
@@ -17,7 +17,7 @@ A comprehensive ProductHunt analytics platform featuring real-time insights, tre
 
 ## Key Features
 
-### 🎯 Launch Score Predictor (MVP Feature)
+### 🎯 Launch Score Predictor (MVP Feature #1)
 AI-powered predictive scoring system that analyzes ProductHunt data to provide actionable launch insights:
 - **Launch Score (0-100)**: Weighted algorithm analyzing multiple factors
   - Category Hotness (35% weight): Recent performance and trend analysis
@@ -35,6 +35,31 @@ AI-powered predictive scoring system that analyzes ProductHunt data to provide a
   - Orange (50-74): Good Launch Opportunity
   - Red (<50): Consider Optimizing
 
+### 💡 Analyze Your Launch (MVP Feature #2)
+Personalized launch analysis tool where users input their app details and receive custom recommendations:
+- **User Input Form**:
+  - App Name (required)
+  - Category selection from live ProductHunt data (required)
+  - Tagline with multi-line input (required)
+  - Planned Launch Day (optional)
+  - Planned Launch Time (optional)
+- **Intelligent Analysis** (Weighted Scoring):
+  - **Tagline Length Optimization (25%)**: Compares user tagline to top performers
+  - **Category Performance (30%)**: Analyzes competition and success rate
+  - **Launch Day Timing (25%)**: Compares to historical best days
+  - **Launch Time Optimization (20%)**: Identifies peak engagement hours
+- **Personalized Results Display**:
+  - Overall score (0-100) with color coding
+  - Success message tailored to score
+  - 4 detailed insight cards with recommendations
+  - Status badges (Optimal/Good/Needs improvement)
+  - Smooth scroll to results
+- **Data-Driven Benchmarks**:
+  - Optimal tagline length from top 5 performers
+  - Category average upvotes and competition level
+  - Best performing days and times from real data
+  - No penalties for optional fields
+
 ### 📊 Analytics Dashboard
 - **Summary Statistics**: Products, Total Upvotes, Categories
 - **Search & Filters**: Real-time product search and category filtering
@@ -51,6 +76,7 @@ AI-powered predictive scoring system that analyzes ProductHunt data to provide a
   - Background: Clean beige (#f6f5f4)
   - Cards: White with subtle borders (#e8e7e6)
   - Predictor: Purple gradient (667eea to 764ba2)
+  - Insights: Color-coded status (green/yellow/red)
 - **Typography**: Inter font family
 - **Components**: Card-based layouts, glassmorphism effects, smooth transitions
 - **Responsive**: Mobile-optimized with breakpoints
@@ -77,7 +103,7 @@ AI-powered predictive scoring system that analyzes ProductHunt data to provide a
 
 ## Algorithm Details
 
-### Launch Score Calculation
+### Launch Score Calculation (Predictor)
 The predictor uses a weighted scoring algorithm:
 
 1. **Category Hotness (35%)**
@@ -101,13 +127,47 @@ The predictor uses a weighted scoring algorithm:
    - Medium competition (40-70% ratio): Moderate difficulty
    - High competition (<40% ratio): Very competitive
 
+### Personalized Launch Analysis (Analyzer)
+User-specific weighted scoring algorithm:
+
+1. **Tagline Length (25%)**
+   - Calculates optimal length from top 5 performers
+   - Scores based on proximity to optimal (±20% is optimal)
+   - Provides specific guidance (add detail vs. be concise)
+
+2. **Category Performance (30%)**
+   - Analyzes average upvotes in selected category
+   - Benchmarks against all categories
+   - Identifies hot categories (70%+), moderate (40-70%), competitive (<40%)
+
+3. **Launch Day Alignment (25%)**
+   - Compares user's choice to best performing day
+   - Shows percentage difference from optimal
+   - No penalty if day not specified (defaults to 75 score)
+
+4. **Launch Time Alignment (20%)**
+   - Compares planned time to peak engagement hour
+   - Identifies optimal launch windows
+   - No penalty if time not specified (defaults to 75 score)
+
 ### Data Handling
 - Minimum 3 products required for predictions
 - Confidence levels: High (10+ products), Medium (5-9), Low (<5)
 - Graceful fallbacks for insufficient data
 - Respects user filters for targeted analysis
+- All calculations use real ProductHunt data
+- No external API calls for analysis (all client-side)
 
 ## Recent Changes
+
+### 2025-10-28: "Analyze Your Launch" Feature
+- Added personalized launch analyzer with input form
+- Implemented tagline length optimization analysis
+- Created category performance benchmarking
+- Added day/time optimization recommendations
+- Built color-coded insight cards with status badges
+- Integrated form validation and smooth UX
+- Populated category dropdown from live data
 
 ### 2025-10-28: Launch Score Predictor MVP
 - Implemented AI-powered launch score predictor as hero feature
@@ -115,7 +175,8 @@ The predictor uses a weighted scoring algorithm:
 - Created purple gradient predictor card with glassmorphism effects
 - Added real-time score updates based on filter changes
 - Implemented color-coded scoring (green/orange/red)
-- Added confidence badges for data quality indication
+- Fixed category display bug (now shows actual categories)
+- Fixed time display to clarify midnight launches
 
 ### 2025-10-28: ProductHunt-Inspired Redesign
 - Redesigned from purple gradient to clean ProductHunt aesthetic
@@ -139,16 +200,34 @@ The predictor uses a weighted scoring algorithm:
 - Installed Node.js 20 and dependencies
 
 ## User Experience
-- Immediate value: Users get actionable insights in seconds
-- No forms required: Predictor automatically analyzes best opportunities
-- Interactive: Updates dynamically with category selection
-- Professional: ProductHunt-inspired design builds trust
-- Data-driven: All recommendations backed by real ProductHunt data
+
+### Immediate Value
+- Launch Score Predictor provides insights in seconds
+- Analyze Your Launch gives personalized recommendations
+- No complex setup or API keys required from users
+
+### Interactive Features
+- Predictor updates dynamically with category selection
+- Analyzer processes user inputs with instant results
+- Smooth animations and transitions throughout
+
+### Professional Design
+- ProductHunt-inspired design builds trust
+- Clean, modern interface
+- Mobile-responsive layouts
+
+### Data-Driven Insights
+- All recommendations backed by real ProductHunt data
+- Specific, actionable advice
+- Transparent scoring methodology
 
 ## Future Enhancements (Potential)
-- Detailed report generation ($97 premium feature)
-- Email list integration (save your score)
-- Tagline length optimization
-- Historical trend tracking
+- Detailed PDF report generation ($97 premium feature)
+- Email list integration (save your analysis)
+- Historical trend tracking (6-month lookback)
 - More granular time zone support
 - Extended data fetching (pagination for 50+ products)
+- A/B testing recommendations for taglines
+- Competitor analysis by product name
+- Launch checklist generator
+- Email reminders for optimal launch timing

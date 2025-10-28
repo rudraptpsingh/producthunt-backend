@@ -6,7 +6,6 @@ A Node.js Express server that proxies requests to the ProductHunt GraphQL API.
 
 1. **Add your ProductHunt token** as a secret:
    - The token `PH_TOKEN` should be added through the Replit Secrets interface
-   - Your token: `83vHxl0Vm4u6ywIYuH7HttXg-HLx23ADuKnoY5rQX6k`
 
 2. The server will automatically start on port 5000
 

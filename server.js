@@ -1171,6 +1171,10 @@ app.get('/', (req, res) => {
             font-size: 15px;
           }
           
+          .footer {
+            padding: 16px;
+          }
+          
           .product-tagline {
             font-size: 13px;
           }
@@ -1202,6 +1206,161 @@ app.get('/', (req, res) => {
             font-size: 14px;
             padding: 10px 12px;
           }
+          
+          .feedback-modal {
+            padding: 20px;
+          }
+          
+          .feedback-content h3 {
+            font-size: 18px;
+          }
+          
+          .feedback-options {
+            gap: 12px;
+          }
+          
+          .feedback-btn {
+            font-size: 13px;
+            padding: 10px 16px;
+          }
+        }
+        
+        /* Footer Styles */
+        .footer {
+          background: #FFFFFF;
+          border-top: 1px solid #E5E5E5;
+          padding: 24px;
+          margin-top: 40px;
+          text-align: center;
+        }
+        
+        .footer-content {
+          max-width: 1200px;
+          margin: 0 auto;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          gap: 20px;
+          flex-wrap: wrap;
+        }
+        
+        .footer-text {
+          color: #666;
+          font-size: 14px;
+        }
+        
+        .feedback-trigger {
+          background: #DA552F;
+          color: white;
+          border: none;
+          padding: 10px 20px;
+          border-radius: 8px;
+          font-weight: 600;
+          cursor: pointer;
+          font-size: 14px;
+          transition: all 0.2s;
+        }
+        
+        .feedback-trigger:hover {
+          background: #c24a28;
+          transform: translateY(-1px);
+        }
+        
+        /* Feedback Modal */
+        .feedback-modal {
+          display: none;
+          position: fixed;
+          top: 0;
+          left: 0;
+          right: 0;
+          bottom: 0;
+          background: rgba(0, 0, 0, 0.5);
+          z-index: 1000;
+          align-items: center;
+          justify-content: center;
+        }
+        
+        .feedback-modal.show {
+          display: flex;
+        }
+        
+        .feedback-content {
+          background: white;
+          border-radius: 12px;
+          padding: 32px;
+          max-width: 500px;
+          width: 90%;
+          position: relative;
+        }
+        
+        .feedback-close {
+          position: absolute;
+          top: 16px;
+          right: 16px;
+          background: none;
+          border: none;
+          font-size: 24px;
+          cursor: pointer;
+          color: #999;
+          padding: 0;
+          width: 32px;
+          height: 32px;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          border-radius: 50%;
+          transition: all 0.2s;
+        }
+        
+        .feedback-close:hover {
+          background: #F0F0F0;
+          color: #333;
+        }
+        
+        .feedback-content h3 {
+          margin-bottom: 8px;
+          color: #1a1a1a;
+          font-size: 24px;
+        }
+        
+        .feedback-content p {
+          color: #666;
+          margin-bottom: 24px;
+          line-height: 1.6;
+        }
+        
+        .feedback-options {
+          display: flex;
+          flex-direction: column;
+          gap: 16px;
+        }
+        
+        .feedback-btn {
+          background: #F8F8F8;
+          border: 1px solid #E5E5E5;
+          padding: 12px 20px;
+          border-radius: 8px;
+          font-size: 14px;
+          cursor: pointer;
+          transition: all 0.2s;
+          text-align: left;
+          display: flex;
+          align-items: center;
+          gap: 12px;
+          font-weight: 500;
+          color: #1a1a1a;
+        }
+        
+        .feedback-btn:hover {
+          background: #DA552F;
+          color: white;
+          border-color: #DA552F;
+          transform: translateY(-2px);
+          box-shadow: 0 4px 12px rgba(218, 85, 47, 0.2);
+        }
+        
+        .feedback-icon {
+          font-size: 20px;
         }
       </style>
     </head>
@@ -1508,6 +1667,37 @@ app.get('/', (req, res) => {
               <h3 style="margin-bottom: 20px; color: #1a1a1a;">📝 Your Launch Assets</h3>
               <div id="generatedAssets"></div>
             </div>
+          </div>
+        </div>
+      </div>
+      
+      <!-- Footer -->
+      <div class="footer">
+        <div class="footer-content">
+          <span class="footer-text">Made for Makers by Makers 🚀</span>
+          <button class="feedback-trigger" onclick="openFeedbackModal()">💬 Feedback</button>
+        </div>
+      </div>
+      
+      <!-- Feedback Modal -->
+      <div class="feedback-modal" id="feedbackModal" onclick="if(event.target === this) closeFeedbackModal()">
+        <div class="feedback-content">
+          <button class="feedback-close" onclick="closeFeedbackModal()">×</button>
+          <h3>We'd Love Your Feedback!</h3>
+          <p>Help us improve ProductHunter for the Maker community</p>
+          <div class="feedback-options">
+            <a href="mailto:feedback@producthunter.app?subject=ProductHunter Feedback&body=Hi! I'd like to share my feedback about ProductHunter:%0D%0A%0D%0A" class="feedback-btn">
+              <span class="feedback-icon">📧</span>
+              <span>Send Email Feedback</span>
+            </a>
+            <a href="https://twitter.com/intent/tweet?text=Just tried @ProductHunter - an amazing tool for optimizing ProductHunt launches! Check it out:" target="_blank" rel="noopener" class="feedback-btn">
+              <span class="feedback-icon">🐦</span>
+              <span>Share on Twitter</span>
+            </a>
+            <a href="https://www.producthunt.com" target="_blank" rel="noopener" class="feedback-btn">
+              <span class="feedback-icon">🔥</span>
+              <span>Hunt Us on ProductHunt</span>
+            </a>
           </div>
         </div>
       </div>
@@ -2765,6 +2955,22 @@ Good luck! Win those first 4 hours! 🚀\`;
           }).catch(err => {
             alert('Failed to copy. Please copy manually.');
           });
+        }
+        
+        // Feedback modal functions
+        function openFeedbackModal() {
+          document.getElementById('feedbackModal').classList.add('show');
+          
+          // Track feedback modal open
+          if (typeof gtag === 'function') {
+            gtag('event', 'open_feedback_modal', {
+              'event_category': 'engagement'
+            });
+          }
+        }
+        
+        function closeFeedbackModal() {
+          document.getElementById('feedbackModal').classList.remove('show');
         }
         
         loadDashboardData();

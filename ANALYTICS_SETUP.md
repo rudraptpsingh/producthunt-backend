@@ -1,10 +1,10 @@
 # Google Analytics 4 Setup Guide
 
-ProductHunter now has Google Analytics 4 tracking integrated, just like top ProductHunt winners use.
+HuntProductHunt now has Google Analytics 4 tracking integrated, just like top ProductHunt winners use.
 
 ## What's Being Tracked
 
-ProductHunter automatically tracks these key user interactions:
+HuntProductHunt automatically tracks these key user interactions:
 
 ### 1. **Feature Views** (`view_feature`)
 - Tracks which features users explore (Hunt Weather, Analyze Your Hunt, etc.)
@@ -29,7 +29,7 @@ ProductHunter automatically tracks these key user interactions:
 1. Go to [Google Analytics](https://analytics.google.com/)
 2. Click **Admin** (gear icon in bottom left)
 3. Under **Property**, click **Create Property**
-4. Enter your property name: "ProductHunter"
+4. Enter your property name: "HuntProductHunt"
 5. Select your timezone and currency
 6. Click **Next** → Choose your industry and business size → Click **Create**
 7. Accept the Terms of Service
@@ -39,11 +39,11 @@ ProductHunter automatically tracks these key user interactions:
 1. In your new GA4 property, go to **Admin** → **Data Streams**
 2. Click **Add stream** → Choose **Web**
 3. Enter your website URL (your published Replit URL)
-4. Give it a name: "ProductHunter Website"
+4. Give it a name: "HuntProductHunt Website"
 5. Click **Create stream**
 6. Copy your **Measurement ID** (format: `G-XXXXXXXXXX`)
 
-### Step 3: Update ProductHunter
+### Step 3: Update HuntProductHunt
 
 1. Open `server.js` in your Replit project
 2. Search for `G-XXXXXXXXXX` (appears twice)
@@ -64,7 +64,7 @@ gtag('config', 'G-YOUR-ID-HERE');
 
 ### Step 4: Verify It's Working
 
-1. Open your ProductHunter website
+1. Open your HuntProductHunt website
 2. In Google Analytics, go to **Reports** → **Realtime**
 3. You should see yourself as an active user
 4. Interact with the features (view slides, analyze a hunt)
@@ -77,7 +77,7 @@ After a few hours of usage, you'll be able to see:
 - **User Metrics**: Total users, new users, sessions
 - **Engagement**: Average engagement time per session
 - **Popular Features**: Which features users interact with most
-- **User Flow**: How users navigate through ProductHunter
+- **User Flow**: How users navigate through HuntProductHunt
 - **Categories**: Which product categories users analyze most
 - **Conversions**: Track when users complete key actions
 

@@ -34,7 +34,7 @@ app.get('/', (req, res) => {
     <head>
       <meta charset="UTF-8">
       <meta name="viewport" content="width=device-width, initial-scale=1.0">
-      <title>ProductHunter - AI-Powered ProductHunt Launch Analytics</title>
+      <title>HuntProductHunt - AI-Powered ProductHunt Launch Analytics</title>
       <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
       <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
       
@@ -91,7 +91,11 @@ app.get('/', (req, res) => {
           color: #1a1a1a;
         }
         
-        .logo span {
+        .logo span.hunt {
+          color: #da552f;
+        }
+        
+        .logo span.ph {
           color: #da552f;
         }
         
@@ -1378,7 +1382,7 @@ app.get('/', (req, res) => {
         <div class="top-bar-content">
           <div class="logo">
             <div class="logo-icon">🚀</div>
-            <h1>Product<span>Hunter</span></h1>
+            <h1><span class="hunt">Hunt</span>Product<span class="ph">Hunt</span></h1>
           </div>
         </div>
       </div>
@@ -1693,13 +1697,13 @@ app.get('/', (req, res) => {
         <div class="feedback-content">
           <button class="feedback-close" onclick="closeFeedbackModal()">×</button>
           <h3>We'd Love Your Feedback!</h3>
-          <p>Help us improve ProductHunter for the Maker community</p>
+          <p>Help us improve HuntProductHunt for the Maker community</p>
           <div class="feedback-options">
-            <a href="mailto:cosmorudyrp@gmail.com?subject=ProductHunter Feedback&body=Hi! I'd like to share my feedback about ProductHunter:%0D%0A%0D%0A" class="feedback-btn">
+            <a href="mailto:cosmorudyrp@gmail.com?subject=HuntProductHunt Feedback&body=Hi! I'd like to share my feedback about HuntProductHunt:%0D%0A%0D%0A" class="feedback-btn">
               <span class="feedback-icon">📧</span>
               <span>Send Email Feedback</span>
             </a>
-            <a href="https://twitter.com/intent/tweet?text=Just tried @ProductHunter - an amazing tool for optimizing ProductHunt launches! Check it out:" target="_blank" rel="noopener" class="feedback-btn">
+            <a href="https://twitter.com/intent/tweet?text=Just tried HuntProductHunt - an amazing tool for optimizing ProductHunt launches! Check it out:" target="_blank" rel="noopener" class="feedback-btn">
               <span class="feedback-icon">🐦</span>
               <span>Share on Twitter</span>
             </a>

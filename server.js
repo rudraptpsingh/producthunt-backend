@@ -4010,13 +4010,7 @@ app.post('/api/track-hunt', async (req, res) => {
       return res.status(400).json({ error: 'Could not extract product slug from URL' });
     }
     
-    // Get today's date in ProductHunt's timezone (PST)
-    const nowDate = new Date();
-    const pstOffset = -8 * 60; // PST is UTC-8
-    const pstTime = new Date(nowDate.getTime() + (pstOffset + nowDate.getTimezoneOffset()) * 60000);
-    const todayDate = pstTime.toISOString().split('T')[0]; // YYYY-MM-DD format
-    
-    // Fetch today's products with date filter
+    // Fetch today's products (no order parameter fetches today's posts by default)
     const response = await fetch('https://api.producthunt.com/v2/api/graphql', {
       method: 'POST',
       headers: {
@@ -4026,7 +4020,7 @@ app.post('/api/track-hunt', async (req, res) => {
       body: JSON.stringify({
         query: `
           query {
-            posts(first: 100, order: VOTES, postedAfter: "${todayDate}") {
+            posts(first: 50) {
               edges {
                 node {
                   id
@@ -4036,11 +4030,7 @@ app.post('/api/track-hunt', async (req, res) => {
                   votesCount
                   commentsCount
                   createdAt
-                  featuredAt
                   url
-                  productLinks {
-                    url
-                  }
                   topics {
                     edges {
                       node {
@@ -4061,6 +4051,16 @@ app.post('/api/track-hunt', async (req, res) => {
     }
     
     const data = await response.json();
+    
+    // Check if we have data
+    if (!data || !data.data || !data.data.posts || !data.data.posts.edges) {
+      console.error('Unexpected API response structure:', data);
+      return res.status(500).json({ 
+        error: 'Invalid response from ProductHunt API',
+        details: data && data.errors ? data.errors : 'No data returned'
+      });
+    }
+    
     const products = data.data.posts.edges.map((edge, index) => {
       const topics = edge.node.topics.edges.map(t => t.node.name);
       return {

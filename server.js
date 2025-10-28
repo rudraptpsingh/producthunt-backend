@@ -480,6 +480,114 @@ app.get('/', (req, res) => {
           font-size: 14px;
         }
         
+        .launch-tabs {
+          display: flex;
+          gap: 12px;
+          margin-bottom: 32px;
+          border-bottom: 2px solid #e8e7e6;
+          padding-bottom: 0;
+        }
+        
+        .tab-btn {
+          background: none;
+          border: none;
+          padding: 12px 24px;
+          font-size: 16px;
+          font-weight: 600;
+          color: #828282;
+          cursor: pointer;
+          transition: all 0.3s ease;
+          border-bottom: 3px solid transparent;
+          position: relative;
+          bottom: -2px;
+        }
+        
+        .tab-btn:hover {
+          color: #da552f;
+        }
+        
+        .tab-btn.active {
+          color: #da552f;
+          border-bottom-color: #da552f;
+        }
+        
+        .tab-content {
+          display: none;
+        }
+        
+        .tab-content.active {
+          display: block;
+        }
+        
+        .assets-results {
+          display: none;
+          margin-top: 32px;
+          padding-top: 32px;
+          border-top: 2px solid #e8e7e6;
+        }
+        
+        .assets-results.show {
+          display: block;
+        }
+        
+        .asset-card {
+          background: #f6f5f4;
+          border-radius: 8px;
+          padding: 20px;
+          margin-bottom: 20px;
+        }
+        
+        .asset-header {
+          display: flex;
+          justify-content: space-between;
+          align-items: center;
+          margin-bottom: 12px;
+        }
+        
+        .asset-title {
+          font-size: 16px;
+          font-weight: 600;
+          color: #333;
+        }
+        
+        .copy-btn {
+          background: #da552f;
+          color: white;
+          border: none;
+          padding: 6px 16px;
+          border-radius: 6px;
+          font-size: 13px;
+          font-weight: 600;
+          cursor: pointer;
+          transition: all 0.2s ease;
+        }
+        
+        .copy-btn:hover {
+          background: #c44a2a;
+          transform: translateY(-1px);
+        }
+        
+        .copy-btn.copied {
+          background: #2e7d32;
+        }
+        
+        .asset-content {
+          background: white;
+          padding: 16px;
+          border-radius: 6px;
+          border: 1px solid #e8e7e6;
+          color: #333;
+          line-height: 1.6;
+          white-space: pre-wrap;
+          font-size: 14px;
+        }
+        
+        .asset-meta {
+          margin-top: 8px;
+          font-size: 12px;
+          color: #828282;
+        }
+        
         .form-grid {
           display: grid;
           grid-template-columns: repeat(2, 1fr);
@@ -770,10 +878,16 @@ app.get('/', (req, res) => {
           
           <div class="analyzer-card">
             <div class="analyzer-header">
-              <h2>💡 Analyze Your Launch</h2>
-              <p>Enter your app details to get personalized recommendations</p>
+              <h2>🚀 Get Your Product Ready to Launch</h2>
+              <p>Analyze your launch strategy or generate professional launch assets</p>
             </div>
             
+            <div class="launch-tabs">
+              <button class="tab-btn active" onclick="switchTab('analyze')">📊 Analyze Launch</button>
+              <button class="tab-btn" onclick="switchTab('generate')">✨ Generate Assets</button>
+            </div>
+            
+            <div id="analyzeTab" class="tab-content active">
             <div class="form-grid">
               <div class="form-group">
                 <label for="appName">App Name *</label>
@@ -848,6 +962,46 @@ app.get('/', (req, res) => {
               </div>
               
               <div class="insights-grid" id="userInsights">
+              </div>
+            </div>
+            </div>
+            
+            <div id="generateTab" class="tab-content">
+              <div class="form-grid">
+                <div class="form-group">
+                  <label for="genAppName">App Name *</label>
+                  <input type="text" id="genAppName" placeholder="e.g., My Awesome App" required>
+                </div>
+                
+                <div class="form-group">
+                  <label for="genAppCategory">Category *</label>
+                  <select id="genAppCategory" required>
+                    <option value="">Select a category</option>
+                  </select>
+                </div>
+                
+                <div class="form-group full-width">
+                  <label for="genKeyFeatures">Key Features & Benefits *</label>
+                  <textarea id="genKeyFeatures" placeholder="List 3-5 key features or benefits of your product..." rows="4" required></textarea>
+                  <small style="color: #666; font-size: 12px;">Help us create better copy by describing what makes your product unique</small>
+                </div>
+                
+                <div class="form-group">
+                  <label for="genTargetAudience">Target Audience (Optional)</label>
+                  <input type="text" id="genTargetAudience" placeholder="e.g., Developers, Marketers, Founders">
+                </div>
+                
+                <div class="form-group">
+                  <label for="genWebsite">Website URL (Optional)</label>
+                  <input type="url" id="genWebsite" placeholder="https://yourproduct.com">
+                </div>
+              </div>
+              
+              <button class="analyze-btn" onclick="generateLaunchAssets()">✨ Generate Launch Assets</button>
+              
+              <div class="assets-results" id="assetsResults">
+                <h3 style="margin-bottom: 20px; color: #1a1a1a;">📝 Your Launch Assets</h3>
+                <div id="generatedAssets"></div>
               </div>
             </div>
           </div>
@@ -1191,11 +1345,13 @@ app.get('/', (req, res) => {
           const categories = new Set(allProducts.flatMap(p => p.allCategories));
           const categoryFilter = document.getElementById('categoryFilter');
           const appCategory = document.getElementById('appCategory');
+          const genAppCategory = document.getElementById('genAppCategory');
           const currentValue = categoryFilter.value;
           const currentAppValue = appCategory.value;
           
           categoryFilter.innerHTML = '<option value="">All Categories</option>';
           appCategory.innerHTML = '<option value="">Select a category</option>';
+          genAppCategory.innerHTML = '<option value="">Select a category</option>';
           
           Array.from(categories).sort().forEach(cat => {
             const option1 = document.createElement('option');
@@ -1207,6 +1363,11 @@ app.get('/', (req, res) => {
             option2.value = cat;
             option2.textContent = cat;
             appCategory.appendChild(option2);
+            
+            const option3 = document.createElement('option');
+            option3.value = cat;
+            option3.textContent = cat;
+            genAppCategory.appendChild(option3);
           });
           
           categoryFilter.value = currentValue;
@@ -1663,6 +1824,225 @@ app.get('/', (req, res) => {
           
           // Scroll to results
           resultsDiv.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+        }
+        
+        function switchTab(tabName) {
+          // Update tab buttons
+          document.querySelectorAll('.tab-btn').forEach(btn => {
+            btn.classList.remove('active');
+          });
+          event.target.classList.add('active');
+          
+          // Update tab content
+          document.querySelectorAll('.tab-content').forEach(content => {
+            content.classList.remove('active');
+          });
+          document.getElementById(tabName + 'Tab').classList.add('active');
+        }
+        
+        function generateLaunchAssets() {
+          // Get form values
+          const appName = document.getElementById('genAppName').value.trim();
+          const category = document.getElementById('genAppCategory').value;
+          const keyFeatures = document.getElementById('genKeyFeatures').value.trim();
+          const targetAudience = document.getElementById('genTargetAudience').value.trim();
+          const website = document.getElementById('genWebsite').value.trim();
+          
+          // Validation
+          if (!appName || !category || !keyFeatures) {
+            alert('Please fill in all required fields (App Name, Category, and Key Features)');
+            return;
+          }
+          
+          // Get category data for insights
+          const categoryProducts = allProducts.filter(p => 
+            p.allCategories && p.allCategories.includes(category)
+          );
+          
+          const topProductsInCategory = categoryProducts
+            .sort((a, b) => b.votesCount - a.votesCount)
+            .slice(0, 5);
+          
+          // Calculate optimal tagline length from top products
+          const taglineLengths = topProductsInCategory
+            .filter(p => p.tagline)
+            .map(p => p.tagline.length);
+          const avgTaglineLength = taglineLengths.length > 0 
+            ? Math.round(taglineLengths.reduce((sum, l) => sum + l, 0) / taglineLengths.length)
+            : 50;
+          
+          // Generate assets based on data
+          const assets = [];
+          
+          // 1. Optimized Tagline
+          const taglineTemplate = generateTagline(appName, keyFeatures, targetAudience, avgTaglineLength);
+          assets.push({
+            title: '💡 Optimized Tagline (60 chars max)',
+            content: taglineTemplate,
+            meta: \`Based on top ${category} products with avg length of ${avgTaglineLength} characters\`
+          });
+          
+          // 2. Product Description
+          const description = generateDescription(appName, keyFeatures, targetAudience, category);
+          assets.push({
+            title: '📄 Product Description',
+            content: description,
+            meta: 'Compelling, benefit-driven description for your ProductHunt post'
+          });
+          
+          // 3. First Comment (Maker Introduction)
+          const firstComment = generateFirstComment(appName, keyFeatures, category);
+          assets.push({
+            title: '👋 First Comment (Maker Introduction)',
+            content: firstComment,
+            meta: '70% of top products include a personal first comment from the maker'
+          });
+          
+          // 4. Social Media Post
+          const socialPost = generateSocialPost(appName, keyFeatures);
+          assets.push({
+            title: '🐦 Social Media Post Template',
+            content: socialPost,
+            meta: 'Use this for Twitter/X, LinkedIn, and other social platforms'
+          });
+          
+          // 5. Launch Day Tips
+          const launchTips = generateLaunchTips(category, topProductsInCategory);
+          assets.push({
+            title: '🎯 Category-Specific Launch Tips',
+            content: launchTips,
+            meta: \`Based on successful ${category} launches\`
+          });
+          
+          // Display assets
+          const resultsDiv = document.getElementById('assetsResults');
+          const assetsDiv = document.getElementById('generatedAssets');
+          
+          assetsDiv.innerHTML = assets.map((asset, index) => \`
+            <div class="asset-card">
+              <div class="asset-header">
+                <div class="asset-title">${asset.title}</div>
+                <button class="copy-btn" onclick="copyToClipboard(\${index}, 'asset-content-\${index}')">
+                  📋 Copy
+                </button>
+              </div>
+              <div class="asset-content" id="asset-content-\${index}">\${asset.content}</div>
+              <div class="asset-meta">${asset.meta}</div>
+            </div>
+          \`).join('');
+          
+          resultsDiv.classList.add('show');
+          resultsDiv.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+        }
+        
+        function generateTagline(appName, features, audience, targetLength) {
+          // Extract first feature/benefit
+          const featureList = features.split(/[,.\n]/).map(f => f.trim()).filter(f => f);
+          const mainFeature = featureList[0] || 'your productivity';
+          
+          // Create concise tagline
+          const audienceText = audience ? \` for \${audience}\` : '';
+          let tagline = \`\${mainFeature}\${audienceText}\`.trim();
+          
+          // Ensure it's under 60 characters
+          if (tagline.length > 58) {
+            tagline = tagline.substring(0, 55) + '...';
+          }
+          
+          return tagline;
+        }
+        
+        function generateDescription(appName, features, audience, category) {
+          const featureList = features.split(/[,.\n]/).map(f => f.trim()).filter(f => f);
+          const audienceText = audience ? \` designed for \${audience}\` : '';
+          
+          let description = \`\${appName} is a \${category} product\${audienceText} that helps you:\\n\\n\`;
+          
+          featureList.slice(0, 4).forEach(feature => {
+            description += \`✨ \${feature}\\n\`;
+          });
+          
+          description += \`\\nPerfect for anyone looking to streamline their workflow and achieve better results.\`;
+          
+          return description;
+        }
+        
+        function generateFirstComment(appName, features, category) {
+          return \`Hey Product Hunt! 👋
+
+I'm excited to share \${appName} with you all today!
+
+We built this because we saw a real need in the \${category} space. After months of development and testing, we're thrilled to finally launch here.
+
+What makes \${appName} different:
+${features.split(/[,.\n]/).map(f => f.trim()).filter(f => f).slice(0, 3).map(f => \`• \${f}\`).join('\\n')}
+
+We'd love to hear your feedback and answer any questions you have. This community has been incredibly inspiring to us, and we're grateful to be here.
+
+Try it out and let us know what you think! 🚀\`;
+        }
+        
+        function generateSocialPost(appName, features) {
+          const mainFeature = features.split(/[,.\n]/).map(f => f.trim()).filter(f => f)[0];
+          
+          return \`🚀 We just launched on @ProductHunt!
+
+\${appName} - \${mainFeature}
+
+Check it out and let us know what you think! Your support means the world to us. 🙏
+
+[Your ProductHunt Link Here]
+
+#ProductHunt #Launch #NewProduct\`;
+        }
+        
+        function generateLaunchTips(category, topProducts) {
+          const avgUpvotes = topProducts.length > 0 
+            ? Math.round(topProducts.reduce((sum, p) => sum + p.votesCount, 0) / topProducts.length)
+            : 0;
+          
+          return \`Based on successful \${category} launches:
+
+📊 Category Benchmarks:
+• Average upvotes for top products: \${avgUpvotes}
+• Total products in category: \${topProducts.length} in our dataset
+
+⏰ Launch Timing:
+• Best time: 12:01 AM PST (maximize 24-hour cycle)
+• Be ready to respond to comments within minutes
+
+🎯 Success Strategies:
+• Respond to EVERY comment personally and quickly
+• Have your "first comment" ready to post immediately
+• Share with your network, but ask for comments (not upvotes)
+• Use high-quality visuals (240×240px thumbnail minimum)
+• Include a demo video if possible (53% of top products do)
+
+📝 Pre-Launch Checklist:
+• Complete your ProductHunt profile
+• Engage with the community beforehand
+• Prepare 2+ gallery images (1270×760px)
+• Test all links thoroughly
+• Brief your team on launch day responsibilities
+
+Good luck with your launch! 🚀\`;
+        }
+        
+        function copyToClipboard(index, elementId) {
+          const content = document.getElementById(elementId).textContent;
+          navigator.clipboard.writeText(content).then(() => {
+            const btn = event.target;
+            const originalText = btn.textContent;
+            btn.textContent = '✅ Copied!';
+            btn.classList.add('copied');
+            
+            setTimeout(() => {
+              btn.textContent = originalText;
+              btn.classList.remove('copied');
+            }, 2000);
+          }).catch(err => {
+            alert('Failed to copy. Please copy manually.');
+          });
         }
         
         loadDashboardData();

@@ -1202,6 +1202,95 @@ app.get('/', (req, res) => {
           transform: rotate(180deg);
         }
         
+        .track-hunt-card {
+          background: #FFFFFF;
+          border: 1px solid #E5E5E5;
+          border-radius: 8px;
+          padding: 32px;
+          margin-bottom: 32px;
+          box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+        }
+        
+        .track-hunt-header h2 {
+          color: #1A1A1A;
+          font-size: 24px;
+          font-weight: 700;
+          margin-bottom: 8px;
+          text-align: center;
+        }
+        
+        .track-hunt-header p {
+          color: #666;
+          font-size: 14px;
+          margin-bottom: 24px;
+          text-align: center;
+        }
+        
+        .url-input-section {
+          margin-bottom: 24px;
+          padding: 24px;
+          background: #F9FAFB;
+          border-radius: 6px;
+          border: 1px solid #E5E5E5;
+        }
+        
+        .track-btn {
+          background: #DA552F;
+          color: white;
+          border: none;
+          padding: 14px 28px;
+          border-radius: 6px;
+          font-size: 16px;
+          font-weight: 600;
+          cursor: pointer;
+          transition: all 0.2s;
+          width: 100%;
+        }
+        
+        .track-btn:hover {
+          background: #C44A27;
+          transform: translateY(-1px);
+          box-shadow: 0 4px 12px rgba(218, 85, 47, 0.3);
+        }
+        
+        .track-btn:active {
+          transform: translateY(0);
+        }
+        
+        .product-summary {
+          padding: 24px;
+          background: #F9FAFB;
+          border-radius: 6px;
+          border: 1px solid #E5E5E5;
+        }
+        
+        .summary-grid {
+          display: grid;
+          grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+          gap: 16px;
+        }
+        
+        .summary-item {
+          padding: 16px;
+          background: white;
+          border-radius: 4px;
+          border: 1px solid #E5E5E5;
+        }
+        
+        .summary-label {
+          font-size: 12px;
+          color: #666;
+          text-transform: uppercase;
+          letter-spacing: 0.5px;
+          margin-bottom: 8px;
+        }
+        
+        .summary-value {
+          font-size: 20px;
+          font-weight: 700;
+          color: #1A1A1A;
+        }
+        
         .analyzer-card {
           background: #FFFFFF;
           border: 1px solid #E5E5E5;
@@ -2035,6 +2124,73 @@ app.get('/', (req, res) => {
             </div>
           </div>
           
+          <!-- Track My Hunt Section -->
+          <div class="track-hunt-card" id="trackHuntCard">
+            <div class="track-hunt-header">
+              <h2>📍 Track My Hunt</h2>
+              <p>Enter your ProductHunt URL to get real-time tracking, social templates, and competitor insights</p>
+            </div>
+            
+            <div class="url-input-section">
+              <div class="form-group">
+                <label for="productHuntUrl">ProductHunt URL *</label>
+                <input 
+                  type="text" 
+                  id="productHuntUrl" 
+                  placeholder="https://www.producthunt.com/posts/your-product" 
+                  required
+                  style="width: 100%; padding: 12px; border: 1px solid #E5E5E5; border-radius: 6px; font-size: 14px;"
+                >
+                <small style="color: #666; font-size: 12px; display: block; margin-top: 8px;">
+                  Paste your ProductHunt product page URL to track performance and get personalized templates
+                </small>
+              </div>
+              <button class="track-btn" onclick="trackProductHunt()" style="margin-top: 16px;">
+                🔍 Track This Hunt
+              </button>
+            </div>
+            
+            <!-- Product Summary Section -->
+            <div class="product-summary" id="productSummary" style="display: none; margin-top: 32px;">
+              <h3 style="color: #1a1a1a; margin-bottom: 16px;">📊 Product Summary</h3>
+              <div class="summary-grid" id="summaryGrid">
+                <!-- Will be populated dynamically -->
+              </div>
+            </div>
+            
+            <!-- Social Templates Section -->
+            <div class="templates-section" id="trackTemplates" style="display: none; margin-top: 40px;">
+              <h3>📝 One-Click Templates</h3>
+              <p style="font-size: 14px; color: #666; margin-bottom: 20px;">Customized templates for your product's hunt</p>
+              <div class="templates-grid">
+                <div class="template-card">
+                  <h4>🐦 Twitter Post</h4>
+                  <textarea id="trackTwitterTemplate" readonly></textarea>
+                  <button class="copy-btn" onclick="copyTrackTemplate('twitter')">📋 Copy to Clipboard</button>
+                </div>
+                <div class="template-card">
+                  <h4>💼 LinkedIn Post</h4>
+                  <textarea id="trackLinkedinTemplate" readonly></textarea>
+                  <button class="copy-btn" onclick="copyTrackTemplate('linkedin')">📋 Copy to Clipboard</button>
+                </div>
+                <div class="template-card">
+                  <h4>📧 Email Outreach</h4>
+                  <textarea id="trackEmailTemplate" readonly></textarea>
+                  <button class="copy-btn" onclick="copyTrackTemplate('email')">📋 Copy to Clipboard</button>
+                </div>
+              </div>
+            </div>
+            
+            <!-- Competitor Analysis Section -->
+            <div class="competitor-analysis" id="trackCompetitorAnalysis" style="display: none; margin-top: 40px;">
+              <h3>🎯 Competitor Analysis</h3>
+              <p style="font-size: 14px; color: #666; margin-bottom: 20px;">See how your product ranks against today's top hunts</p>
+              <div id="trackCompetitorInsights">
+                <!-- Will be populated dynamically -->
+              </div>
+            </div>
+          </div>
+          
           <div class="analyzer-card">
             <div class="analyzer-header">
               <h2>▲ Get Your Product Ready to Hunt</h2>
@@ -2130,38 +2286,6 @@ app.get('/', (req, res) => {
             <div class="assets-results" id="assetsResults">
               <h3 style="margin-bottom: 20px; color: #1a1a1a;">✦ Your Launch Assets</h3>
               <div id="generatedAssets"></div>
-            </div>
-            
-            <!-- Social Templates Section -->
-            <div class="templates-section" style="margin-top: 40px;">
-              <h3>📝 One-Click Templates</h3>
-              <p style="font-size: 14px; color: #666; margin-bottom: 20px;">Pre-written templates for your launch day outreach</p>
-              <div class="templates-grid">
-                <div class="template-card">
-                  <h4>🐦 Twitter Post</h4>
-                  <textarea id="twitterTemplate" readonly></textarea>
-                  <button class="copy-btn" onclick="copyTemplate('twitter')">📋 Copy to Clipboard</button>
-                </div>
-                <div class="template-card">
-                  <h4>💼 LinkedIn Post</h4>
-                  <textarea id="linkedinTemplate" readonly></textarea>
-                  <button class="copy-btn" onclick="copyTemplate('linkedin')">📋 Copy to Clipboard</button>
-                </div>
-                <div class="template-card">
-                  <h4>📧 Email Outreach</h4>
-                  <textarea id="emailTemplate" readonly></textarea>
-                  <button class="copy-btn" onclick="copyTemplate('email')">📋 Copy to Clipboard</button>
-                </div>
-              </div>
-            </div>
-            
-            <!-- Competitor Analysis Section -->
-            <div class="competitor-analysis" id="competitorAnalysis" style="margin-top: 40px;">
-              <h3>🎯 Competitor Analysis</h3>
-              <p style="font-size: 14px; color: #666; margin-bottom: 20px;">Track top products and identify opportunities</p>
-              <div id="competitorInsights">
-                <div class="loading-placeholder">Analysis will appear here once dashboard loads</div>
-              </div>
             </div>
           </div>
         </div>
@@ -3072,6 +3196,221 @@ Best,
             }, 2000);
           }
         }
+        
+        function copyTrackTemplate(type) {
+          let textarea;
+          let btnSelector;
+          
+          if (type === 'twitter') {
+            textarea = document.getElementById('trackTwitterTemplate');
+            btnSelector = '#trackTemplates .template-card:nth-child(1) .copy-btn';
+          } else if (type === 'linkedin') {
+            textarea = document.getElementById('trackLinkedinTemplate');
+            btnSelector = '#trackTemplates .template-card:nth-child(2) .copy-btn';
+          } else if (type === 'email') {
+            textarea = document.getElementById('trackEmailTemplate');
+            btnSelector = '#trackTemplates .template-card:nth-child(3) .copy-btn';
+          }
+          
+          if (!textarea) return;
+          
+          textarea.select();
+          document.execCommand('copy');
+          
+          const btn = document.querySelector(btnSelector);
+          if (btn) {
+            const originalText = btn.innerHTML;
+            btn.classList.add('copied');
+            btn.innerHTML = '✓ Copied!';
+            
+            setTimeout(() => {
+              btn.classList.remove('copied');
+              btn.innerHTML = originalText;
+            }, 2000);
+          }
+        }
+        
+        async function trackProductHunt() {
+          const urlInput = document.getElementById('productHuntUrl');
+          const url = urlInput.value.trim();
+          
+          if (!url) {
+            alert('Please enter a ProductHunt URL');
+            return;
+          }
+          
+          // Basic validation
+          if (!url.includes('producthunt.com/posts/')) {
+            alert('Please enter a valid ProductHunt product page URL (e.g., https://www.producthunt.com/posts/your-product)');
+            return;
+          }
+          
+          // Show loading state
+          const trackBtn = document.querySelector('.track-btn');
+          const originalText = trackBtn.textContent;
+          trackBtn.textContent = '⏳ Tracking...';
+          trackBtn.disabled = true;
+          
+          try {
+            const response = await fetch('/api/track-hunt', {
+              method: 'POST',
+              headers: { 'Content-Type': 'application/json' },
+              body: JSON.stringify({ url })
+            });
+            
+            if (!response.ok) {
+              throw new Error('Failed to track product');
+            }
+            
+            const data = await response.json();
+            
+            // Display product summary
+            displayProductSummary(data.product);
+            
+            // Generate and display templates
+            generateTrackTemplates(data.product);
+            
+            // Display competitor analysis
+            displayTrackCompetitorAnalysis(data.product, data.competitors);
+            
+            // Show sections
+            document.getElementById('productSummary').style.display = 'block';
+            document.getElementById('trackTemplates').style.display = 'block';
+            document.getElementById('trackCompetitorAnalysis').style.display = 'block';
+            
+            // Scroll to summary
+            document.getElementById('productSummary').scrollIntoView({ behavior: 'smooth', block: 'start' });
+            
+          } catch (error) {
+            console.error('Error tracking product:', error);
+            alert('Failed to track product. Please check the URL and try again.');
+          } finally {
+            trackBtn.textContent = originalText;
+            trackBtn.disabled = false;
+          }
+        }
+        
+        function displayProductSummary(product) {
+          const summaryGrid = document.getElementById('summaryGrid');
+          
+          summaryGrid.innerHTML = \`
+            <div class="summary-item">
+              <div class="summary-label">Product Name</div>
+              <div class="summary-value">\${product.name}</div>
+            </div>
+            <div class="summary-item">
+              <div class="summary-label">Rank</div>
+              <div class="summary-value">#\${product.rank}</div>
+            </div>
+            <div class="summary-item">
+              <div class="summary-label">Upvotes</div>
+              <div class="summary-value">▲ \${product.votesCount}</div>
+            </div>
+            <div class="summary-item">
+              <div class="summary-label">Comments</div>
+              <div class="summary-value">💬 \${product.commentsCount}</div>
+            </div>
+            <div class="summary-item">
+              <div class="summary-label">Category</div>
+              <div class="summary-value">\${product.category}</div>
+            </div>
+            <div class="summary-item">
+              <div class="summary-label">Velocity</div>
+              <div class="summary-value">\${product.velocity || 'Calculating...'}</div>
+            </div>
+          \`;
+        }
+        
+        function generateTrackTemplates(product) {
+          const productUrl = product.url || \`https://www.producthunt.com/posts/\${product.slug}\`;
+          
+          // Twitter template
+          const twitterText = \`🚀 Just hunted on @ProductHunt today!
+
+\${product.name} - \${product.tagline}
+
+Currently at #\${product.rank} with \${product.votesCount} upvotes! 🎯
+
+Check it out and show your support: \${productUrl}
+
+#ProductHunt #Startup\`;
+          
+          // LinkedIn template
+          const linkedinText = \`Exciting news! We're live on ProductHunt today! 🚀
+
+\${product.name} is currently ranked #\${product.rank} with \${product.votesCount} upvotes.
+
+\${product.tagline}
+
+We'd love your support and feedback. Check out our hunt here: \${productUrl}
+
+#ProductHunt #ProductLaunch #Startup\`;
+          
+          // Email template
+          const emailText = \`Subject: We're Live on ProductHunt! 🚀
+
+Hi there,
+
+I'm excited to share that \${product.name} is live on ProductHunt today!
+
+We're currently at #\${product.rank} with \${product.votesCount} upvotes and would love your support.
+
+\${product.tagline}
+
+Check it out here: \${productUrl}
+
+Your upvote and feedback would mean the world to us!
+
+Best regards\`;
+          
+          document.getElementById('trackTwitterTemplate').value = twitterText;
+          document.getElementById('trackLinkedinTemplate').value = linkedinText;
+          document.getElementById('trackEmailTemplate').value = emailText;
+        }
+        
+        function displayTrackCompetitorAnalysis(product, competitors) {
+          const insights = document.getElementById('trackCompetitorInsights');
+          
+          if (!competitors || competitors.length === 0) {
+            insights.innerHTML = '<div class="loading-placeholder">No competitor data available</div>';
+            return;
+          }
+          
+          let html = '';
+          const productRank = product.rank;
+          
+          // Show products around the tracked product
+          competitors.forEach((comp, index) => {
+            const rank = comp.rank;
+            const gap = Math.abs(comp.votesCount - product.votesCount);
+            const isAbove = comp.rank < productRank;
+            const isSameProduct = comp.name === product.name;
+            
+            let cardClass = '';
+            let actionText = '';
+            
+            if (isSameProduct) {
+              cardClass = 'current-product';
+              actionText = '👉 Your Product';
+            } else if (isAbove) {
+              cardClass = gap <= 50 ? 'catchable' : 'out-of-reach';
+              actionText = gap <= 50 ? (\`💪 Gap: \${gap} upvotes - Catchable!\`) : (\`🎯 Gap: \${gap} upvotes - Keep pushing!\`);
+            } else {
+              cardClass = 'behind';
+              actionText = \`✅ Leading by \${gap} upvotes\`;
+            }
+            
+            html += '<div class="competitor-card ' + cardClass + '">' +
+              '<div class="comp-rank">#' + rank + '</div>' +
+              '<div class="comp-name">' + comp.name + '</div>' +
+              '<div class="comp-gap">▲ ' + comp.votesCount + ' upvotes</div>' +
+              '<div class="comp-action">' + actionText + '</div>' +
+              '</div>';
+          });
+          
+          insights.innerHTML = html;
+        }
+        
         function updateCategoryFilter() {
           const categories = new Set(allProducts.flatMap(p => p.allCategories));
           const appCategory = document.getElementById('appCategory');
@@ -3654,10 +3993,115 @@ Respond in JSON format:
   }
 });
 
+// Track hunt endpoint - parse PH URL and return product data
+app.post('/api/track-hunt', async (req, res) => {
+  try {
+    const { url } = req.body;
+    
+    if (!url || !url.includes('producthunt.com/posts/')) {
+      return res.status(400).json({ error: 'Invalid ProductHunt URL' });
+    }
+    
+    // Extract product slug from URL
+    const urlParts = url.split('/posts/');
+    const slug = urlParts[1].split('?')[0].split('/')[0].trim();
+    
+    if (!slug) {
+      return res.status(400).json({ error: 'Could not extract product slug from URL' });
+    }
+    
+    // Fetch today's products
+    const response = await fetch('https://api.producthunt.com/v2/api/graphql', {
+      method: 'POST',
+      headers: {
+        'Authorization': 'Bearer ' + PH_TOKEN,
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({
+        query: `
+          query {
+            posts(first: 50, order: VOTES) {
+              edges {
+                node {
+                  id
+                  name
+                  tagline
+                  slug
+                  votesCount
+                  commentsCount
+                  createdAt
+                  url
+                  productLinks {
+                    url
+                  }
+                  topics {
+                    edges {
+                      node {
+                        name
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        `
+      })
+    });
+    
+    if (!response.ok) {
+      throw new Error('ProductHunt API request failed');
+    }
+    
+    const data = await response.json();
+    const products = data.data.posts.edges.map((edge, index) => {
+      const topics = edge.node.topics.edges.map(t => t.node.name);
+      return {
+        ...edge.node,
+        rank: index + 1,
+        category: topics[0] || 'General',
+        allCategories: topics
+      };
+    });
+    
+    // Find the tracked product
+    const trackedProduct = products.find(p => p.slug === slug);
+    
+    if (!trackedProduct) {
+      return res.status(404).json({ 
+        error: 'Product not found in today\\'s hunts. Make sure the product was hunted today.' 
+      });
+    }
+    
+    // Calculate velocity
+    const createdAt = new Date(trackedProduct.createdAt);
+    const now = new Date();
+    const hoursLive = (now - createdAt) / (1000 * 60 * 60);
+    const velocity = hoursLive > 0 ? Math.round(trackedProduct.votesCount / hoursLive) : 0;
+    trackedProduct.velocity = velocity + '/hr';
+    
+    // Get competitors (products around it)
+    const rank = trackedProduct.rank;
+    const startIndex = Math.max(0, rank - 4);
+    const endIndex = Math.min(products.length, rank + 3);
+    const competitors = products.slice(startIndex, endIndex);
+    
+    res.json({
+      product: trackedProduct,
+      competitors: competitors
+    });
+    
+  } catch (error) {
+    console.error('Error tracking hunt:', error);
+    res.status(500).json({ error: 'Failed to track product' });
+  }
+});
+
 app.listen(PORT, '0.0.0.0', () => {
   console.log(`ProductHunt proxy server running on port ${PORT}`);
   console.log(`API endpoint: /api/producthunt`);
   console.log(`Dashboard endpoint: /api/dashboard-data`);
   console.log(`AI Hunt Analysis: /api/analyze-hunt`);
   console.log(`AI Asset Generation: /api/generate-assets`);
+  console.log(`Track Hunt: /api/track-hunt`);
 });

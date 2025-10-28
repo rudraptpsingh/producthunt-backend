@@ -3240,7 +3240,7 @@ Best,
           }
           
           // Basic validation
-          if (!url.includes('producthunt.com/posts/')) {
+          if (!url.includes('producthunt.com/posts/') && !url.includes('producthunt.com/products/')) {
             alert('Please enter a valid ProductHunt product page URL (e.g., https://www.producthunt.com/posts/your-product)');
             return;
           }

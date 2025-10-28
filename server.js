@@ -6,7 +6,12 @@ const app = express();
 const PORT = process.env.PORT || 5000;
 
 // Get ProductHunt token from environment variable
-const PH_TOKEN = process.env.PH_TOKEN || '83vHxl0Vm4u6ywIYuH7HttXg-HLx23ADuKnoY5rQX6k';
+const PH_TOKEN = process.env.PH_TOKEN;
+
+if (!PH_TOKEN) {
+  console.error('ERROR: PH_TOKEN environment variable is not set!');
+  console.error('Please set your ProductHunt API token in the Secrets tab');
+}
 
 // Enable CORS for all routes
 app.use(cors());
@@ -1083,16 +1088,13 @@ app.get('/api/dashboard-data', async (req, res) => {
             id
             name
             tagline
-            slug
             votesCount
             commentsCount
             createdAt
-            featuredAt
             url
-            topics {
+            topics(first: 2) {
               edges {
                 node {
-                  id
                   name
                 }
               }

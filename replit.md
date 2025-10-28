@@ -1,7 +1,11 @@
-# ProductHunt Analytics Dashboard
+# ProductHunter
 
 ## Overview
-A comprehensive ProductHunt analytics platform featuring real-time insights, trends visualization, an AI-powered Launch Score Predictor, and a personalized Launch Analyzer to help founders maximize their ProductHunt launch success.
+ProductHunter is an AI-powered ProductHunt launch analytics platform. It provides real-time insights, trends visualization, an AI-powered Launch Score Predictor, and professional launch asset generation to help founders maximize their ProductHunt launch success.
+
+**Tagline**: Predict. Optimize. Launch. Win.
+
+**Value Proposition**: AI-powered analytics and insights to maximize your ProductHunt launch success. Get data-driven recommendations, generate professional assets, and launch with confidence.
 
 ## Project Architecture
 - **Language**: Node.js (CommonJS)

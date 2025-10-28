@@ -25,7 +25,7 @@ app.get('/', (req, res) => {
     <head>
       <meta charset="UTF-8">
       <meta name="viewport" content="width=device-width, initial-scale=1.0">
-      <title>ProductHunt Analytics Dashboard</title>
+      <title>ProductHunter - AI-Powered ProductHunt Launch Analytics</title>
       <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
       <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
       <style>
@@ -33,15 +33,21 @@ app.get('/', (req, res) => {
         
         body {
           font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
-          background: #f6f5f4;
+          background: linear-gradient(135deg, #f5f7fa 0%, #e9ecef 100%);
           min-height: 100vh;
         }
         
         .top-bar {
-          background: white;
-          border-bottom: 1px solid #e8e7e6;
-          padding: 16px 24px;
-          margin-bottom: 32px;
+          background: rgba(255, 255, 255, 0.95);
+          backdrop-filter: blur(10px);
+          -webkit-backdrop-filter: blur(10px);
+          border-bottom: 1px solid rgba(255, 255, 255, 0.18);
+          padding: 20px 24px;
+          margin-bottom: 0;
+          box-shadow: 0 4px 30px rgba(0, 0, 0, 0.05);
+          position: sticky;
+          top: 0;
+          z-index: 100;
         }
         
         .top-bar-content {
@@ -72,6 +78,76 @@ app.get('/', (req, res) => {
           color: #da552f;
         }
         
+        .hero {
+          background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+          padding: 64px 24px;
+          margin-bottom: 48px;
+          text-align: center;
+          color: white;
+          position: relative;
+          overflow: hidden;
+        }
+        
+        .hero::before {
+          content: '';
+          position: absolute;
+          top: 0;
+          left: 0;
+          right: 0;
+          bottom: 0;
+          background: radial-gradient(circle at 20% 50%, rgba(255, 255, 255, 0.1) 0%, transparent 50%),
+                      radial-gradient(circle at 80% 80%, rgba(255, 255, 255, 0.1) 0%, transparent 50%);
+          pointer-events: none;
+        }
+        
+        .hero-content {
+          max-width: 800px;
+          margin: 0 auto;
+        }
+        
+        .hero h2 {
+          font-size: 48px;
+          font-weight: 800;
+          margin-bottom: 20px;
+          line-height: 1.2;
+          position: relative;
+          z-index: 1;
+          text-shadow: 0 2px 20px rgba(0, 0, 0, 0.1);
+        }
+        
+        .hero p {
+          font-size: 20px;
+          opacity: 0.95;
+          line-height: 1.6;
+          margin-bottom: 32px;
+          position: relative;
+          z-index: 1;
+        }
+        
+        .hero-stats {
+          display: flex;
+          justify-content: center;
+          gap: 40px;
+          flex-wrap: wrap;
+          margin-top: 32px;
+        }
+        
+        .hero-stat {
+          text-align: center;
+        }
+        
+        .hero-stat .number {
+          font-size: 32px;
+          font-weight: 700;
+          display: block;
+          margin-bottom: 4px;
+        }
+        
+        .hero-stat .label {
+          font-size: 14px;
+          opacity: 0.9;
+        }
+        
         .container {
           max-width: 1200px;
           margin: 0 auto;
@@ -86,16 +162,20 @@ app.get('/', (req, res) => {
         }
         
         .stat-card {
-          background: white;
-          border: 1px solid #e8e7e6;
-          border-radius: 8px;
-          padding: 20px;
-          transition: border-color 0.2s ease, box-shadow 0.2s ease;
+          background: rgba(255, 255, 255, 0.9);
+          backdrop-filter: blur(10px);
+          -webkit-backdrop-filter: blur(10px);
+          border: 1px solid rgba(255, 255, 255, 0.18);
+          border-radius: 16px;
+          padding: 24px;
+          transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+          box-shadow: 0 4px 20px rgba(0, 0, 0, 0.06);
         }
         
         .stat-card:hover {
-          border-color: #da552f;
-          box-shadow: 0 2px 8px rgba(218, 85, 47, 0.1);
+          transform: translateY(-4px);
+          box-shadow: 0 12px 40px rgba(218, 85, 47, 0.15);
+          border-color: rgba(218, 85, 47, 0.3);
         }
         
         .stat-card .label {
@@ -114,11 +194,14 @@ app.get('/', (req, res) => {
         }
         
         .filters-section {
-          background: white;
-          border: 1px solid #e8e7e6;
-          border-radius: 8px;
-          padding: 20px;
+          background: rgba(255, 255, 255, 0.9);
+          backdrop-filter: blur(10px);
+          -webkit-backdrop-filter: blur(10px);
+          border: 1px solid rgba(255, 255, 255, 0.18);
+          border-radius: 16px;
+          padding: 24px;
           margin-bottom: 24px;
+          box-shadow: 0 4px 20px rgba(0, 0, 0, 0.06);
         }
         
         .filters-grid {
@@ -139,34 +222,43 @@ app.get('/', (req, res) => {
         .filter-group input,
         .filter-group select {
           width: 100%;
-          padding: 10px 12px;
-          border: 1px solid #e8e7e6;
-          border-radius: 6px;
+          padding: 12px 16px;
+          border: 2px solid #e8e7e6;
+          border-radius: 12px;
           font-size: 14px;
-          transition: border-color 0.2s ease;
+          transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
           font-family: 'Inter', sans-serif;
+          background: white;
         }
         
         .filter-group input:focus,
         .filter-group select:focus {
           outline: none;
           border-color: #da552f;
+          box-shadow: 0 0 0 4px rgba(218, 85, 47, 0.1);
+          transform: translateY(-1px);
         }
         
         .refresh-btn {
-          background: #da552f;
+          background: linear-gradient(135deg, #da552f 0%, #ff6b47 100%);
           color: white;
           border: none;
-          padding: 10px 20px;
-          border-radius: 6px;
+          padding: 12px 24px;
+          border-radius: 12px;
           cursor: pointer;
           font-size: 14px;
           font-weight: 600;
-          transition: background 0.2s ease;
+          transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+          box-shadow: 0 4px 12px rgba(218, 85, 47, 0.25);
         }
         
         .refresh-btn:hover {
-          background: #c14a29;
+          transform: translateY(-2px);
+          box-shadow: 0 8px 20px rgba(218, 85, 47, 0.35);
+        }
+        
+        .refresh-btn:active {
+          transform: translateY(0);
         }
         
         .charts-grid {
@@ -183,16 +275,25 @@ app.get('/', (req, res) => {
         }
         
         .chart-card {
-          background: white;
-          border: 1px solid #e8e7e6;
-          border-radius: 8px;
-          padding: 14px;
+          background: rgba(255, 255, 255, 0.9);
+          backdrop-filter: blur(10px);
+          -webkit-backdrop-filter: blur(10px);
+          border: 1px solid rgba(255, 255, 255, 0.18);
+          border-radius: 16px;
+          padding: 20px;
+          box-shadow: 0 4px 20px rgba(0, 0, 0, 0.06);
+          transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        
+        .chart-card:hover {
+          transform: translateY(-2px);
+          box-shadow: 0 8px 30px rgba(0, 0, 0, 0.1);
         }
         
         .chart-card h3 {
-          font-size: 14px;
-          font-weight: 600;
-          margin-bottom: 12px;
+          font-size: 15px;
+          font-weight: 700;
+          margin-bottom: 16px;
           color: #1a1a1a;
         }
         
@@ -220,17 +321,21 @@ app.get('/', (req, res) => {
         }
         
         .product-card {
-          background: white;
-          border: 1px solid #e8e7e6;
-          border-radius: 8px;
-          padding: 12px;
-          transition: border-color 0.2s ease, box-shadow 0.2s ease;
+          background: rgba(255, 255, 255, 0.9);
+          backdrop-filter: blur(10px);
+          -webkit-backdrop-filter: blur(10px);
+          border: 1px solid rgba(255, 255, 255, 0.18);
+          border-radius: 16px;
+          padding: 20px;
+          transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
           cursor: pointer;
+          box-shadow: 0 4px 20px rgba(0, 0, 0, 0.06);
         }
         
         .product-card:hover {
-          border-color: #da552f;
-          box-shadow: 0 2px 8px rgba(218, 85, 47, 0.08);
+          transform: translateY(-4px);
+          box-shadow: 0 12px 40px rgba(218, 85, 47, 0.15);
+          border-color: rgba(218, 85, 47, 0.3);
         }
         
         .product-header {
@@ -245,14 +350,15 @@ app.get('/', (req, res) => {
         }
         
         .product-rank {
-          background: #da552f;
+          background: linear-gradient(135deg, #da552f 0%, #ff6b47 100%);
           color: white;
           font-size: 11px;
           font-weight: 700;
-          padding: 3px 8px;
-          border-radius: 4px;
+          padding: 4px 10px;
+          border-radius: 8px;
           margin-right: 10px;
           display: inline-block;
+          box-shadow: 0 2px 8px rgba(218, 85, 47, 0.3);
         }
         
         .product-name {
@@ -281,23 +387,27 @@ app.get('/', (req, res) => {
           display: inline-flex;
           align-items: center;
           gap: 4px;
-          background: #fff7f5;
-          border: 1px solid #da552f;
+          background: linear-gradient(135deg, #fff7f5 0%, #ffe8e0 100%);
+          border: 2px solid #da552f;
           color: #da552f;
-          padding: 4px 10px;
-          border-radius: 6px;
-          font-weight: 600;
+          padding: 6px 12px;
+          border-radius: 10px;
+          font-weight: 700;
           font-size: 13px;
+          box-shadow: 0 2px 8px rgba(218, 85, 47, 0.15);
         }
         
         .category-badge {
           display: inline-block;
-          background: #f6f5f4;
+          background: rgba(246, 245, 244, 0.8);
+          backdrop-filter: blur(5px);
+          -webkit-backdrop-filter: blur(5px);
           color: #828282;
-          padding: 4px 10px;
-          border-radius: 6px;
+          padding: 6px 12px;
+          border-radius: 10px;
           font-size: 12px;
-          font-weight: 500;
+          font-weight: 600;
+          border: 1px solid rgba(130, 130, 130, 0.1);
         }
         
         .product-link {
@@ -314,10 +424,13 @@ app.get('/', (req, res) => {
         .loading {
           text-align: center;
           padding: 80px 20px;
-          background: white;
-          border: 1px solid #e8e7e6;
-          border-radius: 8px;
+          background: rgba(255, 255, 255, 0.9);
+          backdrop-filter: blur(10px);
+          -webkit-backdrop-filter: blur(10px);
+          border: 1px solid rgba(255, 255, 255, 0.18);
+          border-radius: 16px;
           margin: 40px 0;
+          box-shadow: 0 4px 20px rgba(0, 0, 0, 0.06);
         }
         
         .loading div {
@@ -327,28 +440,44 @@ app.get('/', (req, res) => {
         
         .predictor-card {
           background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-          border-radius: 12px;
-          padding: 32px;
+          border-radius: 20px;
+          padding: 40px;
           color: white;
-          margin-bottom: 32px;
-          box-shadow: 0 10px 40px rgba(102, 126, 234, 0.3);
+          margin-bottom: 40px;
+          box-shadow: 0 20px 60px rgba(102, 126, 234, 0.3);
+          position: relative;
+          overflow: hidden;
+        }
+        
+        .predictor-card::before {
+          content: '';
+          position: absolute;
+          top: 0;
+          left: 0;
+          right: 0;
+          bottom: 0;
+          background: radial-gradient(circle at 30% 40%, rgba(255, 255, 255, 0.15) 0%, transparent 60%);
+          pointer-events: none;
         }
         
         .predictor-header {
           text-align: center;
-          margin-bottom: 24px;
+          margin-bottom: 32px;
+          position: relative;
+          z-index: 1;
         }
         
         .predictor-header h2 {
-          font-size: 24px;
-          margin: 0 0 8px 0;
-          font-weight: 700;
+          font-size: 28px;
+          margin: 0 0 12px 0;
+          font-weight: 800;
+          text-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
         }
         
         .predictor-header p {
           margin: 0;
-          opacity: 0.9;
-          font-size: 14px;
+          opacity: 0.95;
+          font-size: 15px;
         }
         
         .score-display {
@@ -357,18 +486,24 @@ app.get('/', (req, res) => {
         }
         
         .score-circle {
-          width: 160px;
-          height: 160px;
+          width: 180px;
+          height: 180px;
           border-radius: 50%;
-          margin: 0 auto 16px;
+          margin: 0 auto 20px;
           display: flex;
           align-items: center;
           justify-content: center;
-          font-size: 56px;
-          font-weight: 800;
-          border: 6px solid rgba(255, 255, 255, 0.3);
-          background: rgba(255, 255, 255, 0.1);
+          font-size: 64px;
+          font-weight: 900;
+          border: 8px solid rgba(255, 255, 255, 0.3);
+          background: rgba(255, 255, 255, 0.15);
           backdrop-filter: blur(10px);
+          box-shadow: 0 10px 40px rgba(0, 0, 0, 0.2);
+          transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        
+        .score-circle:hover {
+          transform: scale(1.05);
         }
         
         .score-label {
@@ -391,10 +526,19 @@ app.get('/', (req, res) => {
         }
         
         .recommendation-item {
-          background: rgba(255, 255, 255, 0.15);
-          padding: 16px;
-          border-radius: 8px;
+          background: rgba(255, 255, 255, 0.2);
+          padding: 20px;
+          border-radius: 12px;
           backdrop-filter: blur(10px);
+          border: 1px solid rgba(255, 255, 255, 0.3);
+          transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+          position: relative;
+          z-index: 1;
+        }
+        
+        .recommendation-item:hover {
+          background: rgba(255, 255, 255, 0.25);
+          transform: translateY(-2px);
         }
         
         .recommendation-item .rec-label {
@@ -431,25 +575,28 @@ app.get('/', (req, res) => {
         }
         
         .show-more-btn {
-          background: white;
+          background: rgba(255, 255, 255, 0.9);
+          backdrop-filter: blur(10px);
+          -webkit-backdrop-filter: blur(10px);
           border: 2px solid #da552f;
           color: #da552f;
-          padding: 12px 32px;
-          border-radius: 8px;
+          padding: 14px 36px;
+          border-radius: 12px;
           font-size: 16px;
-          font-weight: 600;
+          font-weight: 700;
           cursor: pointer;
-          transition: all 0.3s ease;
+          transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
           display: inline-flex;
           align-items: center;
           gap: 8px;
+          box-shadow: 0 4px 12px rgba(218, 85, 47, 0.15);
         }
         
         .show-more-btn:hover {
-          background: #da552f;
+          background: linear-gradient(135deg, #da552f 0%, #ff6b47 100%);
           color: white;
-          transform: translateY(-2px);
-          box-shadow: 0 4px 12px rgba(218, 85, 47, 0.3);
+          transform: translateY(-3px);
+          box-shadow: 0 8px 20px rgba(218, 85, 47, 0.35);
         }
         
         .show-more-btn #showMoreIcon {
@@ -461,29 +608,33 @@ app.get('/', (req, res) => {
         }
         
         .analyzer-card {
-          background: white;
-          border: 1px solid #e8e7e6;
-          border-radius: 12px;
-          padding: 32px;
-          margin-bottom: 32px;
+          background: rgba(255, 255, 255, 0.9);
+          backdrop-filter: blur(10px);
+          -webkit-backdrop-filter: blur(10px);
+          border: 1px solid rgba(255, 255, 255, 0.18);
+          border-radius: 20px;
+          padding: 40px;
+          margin-bottom: 40px;
+          box-shadow: 0 20px 60px rgba(0, 0, 0, 0.08);
         }
         
         .analyzer-header {
           text-align: center;
-          margin-bottom: 32px;
+          margin-bottom: 40px;
         }
         
         .analyzer-header h2 {
-          font-size: 24px;
-          margin: 0 0 8px 0;
-          color: #333;
-          font-weight: 700;
+          font-size: 28px;
+          margin: 0 0 12px 0;
+          color: #1a1a1a;
+          font-weight: 800;
         }
         
         .analyzer-header p {
           margin: 0;
           color: #828282;
-          font-size: 14px;
+          font-size: 16px;
+          line-height: 1.6;
         }
         
         .assets-results {
@@ -498,10 +649,19 @@ app.get('/', (req, res) => {
         }
         
         .asset-card {
-          background: #f6f5f4;
-          border-radius: 8px;
-          padding: 20px;
+          background: rgba(246, 245, 244, 0.6);
+          backdrop-filter: blur(5px);
+          -webkit-backdrop-filter: blur(5px);
+          border: 1px solid rgba(255, 255, 255, 0.3);
+          border-radius: 16px;
+          padding: 24px;
           margin-bottom: 20px;
+          transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        
+        .asset-card:hover {
+          transform: translateY(-2px);
+          box-shadow: 0 8px 24px rgba(0, 0, 0, 0.08);
         }
         
         .asset-header {
@@ -518,31 +678,35 @@ app.get('/', (req, res) => {
         }
         
         .copy-btn {
-          background: #da552f;
+          background: linear-gradient(135deg, #da552f 0%, #ff6b47 100%);
           color: white;
           border: none;
-          padding: 6px 16px;
-          border-radius: 6px;
+          padding: 8px 20px;
+          border-radius: 10px;
           font-size: 13px;
-          font-weight: 600;
+          font-weight: 700;
           cursor: pointer;
-          transition: all 0.2s ease;
+          transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+          box-shadow: 0 2px 8px rgba(218, 85, 47, 0.25);
         }
         
         .copy-btn:hover {
-          background: #c44a2a;
-          transform: translateY(-1px);
+          transform: translateY(-2px);
+          box-shadow: 0 4px 12px rgba(218, 85, 47, 0.35);
         }
         
         .copy-btn.copied {
-          background: #2e7d32;
+          background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+          box-shadow: 0 2px 8px rgba(16, 185, 129, 0.25);
         }
         
         .asset-content {
-          background: white;
-          padding: 16px;
-          border-radius: 6px;
-          border: 1px solid #e8e7e6;
+          background: rgba(255, 255, 255, 0.8);
+          backdrop-filter: blur(5px);
+          -webkit-backdrop-filter: blur(5px);
+          padding: 20px;
+          border-radius: 12px;
+          border: 1px solid rgba(232, 231, 230, 0.5);
           color: #333;
           line-height: 1.6;
           white-space: pre-wrap;
@@ -581,12 +745,15 @@ app.get('/', (req, res) => {
         .form-group input,
         .form-group select,
         .form-group textarea {
-          padding: 12px 16px;
-          border: 1px solid #e8e7e6;
-          border-radius: 8px;
+          padding: 14px 18px;
+          border: 2px solid #e8e7e6;
+          border-radius: 12px;
           font-size: 14px;
           font-family: 'Inter', sans-serif;
-          transition: border-color 0.2s;
+          transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+          background: rgba(255, 255, 255, 0.8);
+          backdrop-filter: blur(5px);
+          -webkit-backdrop-filter: blur(5px);
         }
         
         .form-group input:focus,
@@ -594,6 +761,9 @@ app.get('/', (req, res) => {
         .form-group textarea:focus {
           outline: none;
           border-color: #DA552F;
+          box-shadow: 0 0 0 4px rgba(218, 85, 47, 0.1);
+          transform: translateY(-1px);
+          background: white;
         }
         
         .form-group textarea {
@@ -611,41 +781,47 @@ app.get('/', (req, res) => {
           background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
           color: white;
           border: none;
-          padding: 16px 32px;
-          border-radius: 8px;
-          font-size: 16px;
-          font-weight: 600;
+          padding: 18px 40px;
+          border-radius: 14px;
+          font-size: 17px;
+          font-weight: 700;
           cursor: pointer;
-          transition: transform 0.2s, box-shadow 0.2s;
+          transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
           flex: 1;
           max-width: 300px;
           margin: 0 auto;
           display: block;
-        }
-        
-        .analyze-btn:hover {
-          transform: translateY(-2px);
           box-shadow: 0 8px 24px rgba(102, 126, 234, 0.3);
         }
         
+        .analyze-btn:hover {
+          transform: translateY(-3px);
+          box-shadow: 0 12px 32px rgba(102, 126, 234, 0.4);
+        }
+        
         .analyze-btn:active {
-          transform: translateY(0);
+          transform: translateY(-1px);
         }
         
         .analyze-btn.secondary {
           background: linear-gradient(135deg, #da552f 0%, #ff6b47 100%);
-        }
-        
-        .analyze-btn.secondary:hover {
           box-shadow: 0 8px 24px rgba(218, 85, 47, 0.3);
         }
         
+        .analyze-btn.secondary:hover {
+          box-shadow: 0 12px 32px rgba(218, 85, 47, 0.4);
+        }
+        
         .analysis-results {
-          margin-top: 32px;
-          padding: 24px;
-          background: #f6f5f4;
-          border-radius: 12px;
+          margin-top: 40px;
+          padding: 32px;
+          background: rgba(246, 245, 244, 0.6);
+          backdrop-filter: blur(10px);
+          -webkit-backdrop-filter: blur(10px);
+          border-radius: 20px;
           display: none;
+          border: 1px solid rgba(255, 255, 255, 0.3);
+          box-shadow: 0 10px 40px rgba(0, 0, 0, 0.08);
         }
         
         .analysis-results.show {
@@ -675,10 +851,19 @@ app.get('/', (req, res) => {
         }
         
         .insight-item {
-          background: white;
-          padding: 20px;
-          border-radius: 8px;
+          background: rgba(255, 255, 255, 0.95);
+          backdrop-filter: blur(10px);
+          -webkit-backdrop-filter: blur(10px);
+          padding: 24px;
+          border-radius: 16px;
           border-left: 4px solid #DA552F;
+          transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+          box-shadow: 0 4px 16px rgba(0, 0, 0, 0.06);
+        }
+        
+        .insight-item:hover {
+          transform: translateY(-3px);
+          box-shadow: 0 8px 24px rgba(218, 85, 47, 0.15);
         }
         
         .insight-label {
@@ -704,16 +889,30 @@ app.get('/', (req, res) => {
         
         .insight-status {
           display: inline-block;
-          padding: 4px 8px;
-          border-radius: 4px;
+          padding: 6px 12px;
+          border-radius: 8px;
           font-size: 12px;
-          font-weight: 600;
+          font-weight: 700;
           margin-top: 8px;
+          backdrop-filter: blur(5px);
+          -webkit-backdrop-filter: blur(5px);
         }
         
-        .insight-status.good { background: #d1fae5; color: #065f46; }
-        .insight-status.warning { background: #fef3c7; color: #92400e; }
-        .insight-status.bad { background: #fee2e2; color: #991b1b; }
+        .insight-status.good { 
+          background: linear-gradient(135deg, #d1fae5 0%, #a7f3d0 100%); 
+          color: #065f46; 
+          box-shadow: 0 2px 8px rgba(16, 185, 129, 0.2);
+        }
+        .insight-status.warning { 
+          background: linear-gradient(135deg, #fef3c7 0%, #fde68a 100%); 
+          color: #92400e; 
+          box-shadow: 0 2px 8px rgba(245, 158, 11, 0.2);
+        }
+        .insight-status.bad { 
+          background: linear-gradient(135deg, #fee2e2 0%, #fecaca 100%); 
+          color: #991b1b; 
+          box-shadow: 0 2px 8px rgba(239, 68, 68, 0.2);
+        }
         
         @media (max-width: 768px) {
           .filters-grid {
@@ -741,7 +940,28 @@ app.get('/', (req, res) => {
         <div class="top-bar-content">
           <div class="logo">
             <div class="logo-icon">🚀</div>
-            <h1>Product<span>Hunt</span> Analytics</h1>
+            <h1>Product<span>Hunter</span></h1>
+          </div>
+        </div>
+      </div>
+      
+      <div class="hero">
+        <div class="hero-content">
+          <h2>Predict. Optimize. Launch. Win.</h2>
+          <p>AI-powered analytics and insights to maximize your ProductHunt launch success. Get data-driven recommendations, generate professional assets, and launch with confidence.</p>
+          <div class="hero-stats">
+            <div class="hero-stat">
+              <span class="number" id="heroProducts">--</span>
+              <span class="label">Products Analyzed</span>
+            </div>
+            <div class="hero-stat">
+              <span class="number" id="heroCategories">--</span>
+              <span class="label">Categories Tracked</span>
+            </div>
+            <div class="hero-stat">
+              <span class="number">AI</span>
+              <span class="label">Powered Predictions</span>
+            </div>
           </div>
         </div>
       </div>
@@ -1288,6 +1508,10 @@ app.get('/', (req, res) => {
           document.getElementById('totalProducts').textContent = totalProducts;
           document.getElementById('totalUpvotes').textContent = totalUpvotes.toLocaleString();
           document.getElementById('totalCategories').textContent = categories.size;
+          
+          // Update hero stats
+          document.getElementById('heroProducts').textContent = totalProducts;
+          document.getElementById('heroCategories').textContent = categories.size;
         }
         
         function updateCategoryFilter() {

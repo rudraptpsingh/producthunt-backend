@@ -1615,6 +1615,13 @@ app.get('/', (req, res) => {
         setInterval(updateLaunchTimers, 1000);
         updateLaunchTimers(); // Initial call
         
+        // Auto-refresh Hunt Weather every minute
+        setInterval(() => {
+          if (allProducts.length > 0) {
+            updatePredictor();
+          }
+        }, 60000); // 60 seconds
+        
         // Dashboard data
         let allProducts = [];
         let filteredProducts = [];

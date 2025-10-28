@@ -4,7 +4,7 @@
 ProductHunter is an AI-powered analytics platform designed to maximize ProductHunt success for Makers. It offers real-time insights, trend visualization, an AI-powered Hunt Weather system, and professional hunt asset generation. The platform uses authentic ProductHunt terminology (Hunt, Maker, Hunting) throughout to feel native to the PH community and help users predict, optimize, and win their ProductHunt hunts through data-driven recommendations and asset creation.
 
 ### Recent Changes
-*   **October 28, 2025:** Complete UI redesign to match ProductHunt's aesthetic - white backgrounds (#FFFFFF), signature orange (#DA552F), clean borders, minimal shadows. Rebranded from "Launch" to "Hunt" terminology throughout. Updated hero with "Analyze. Hunt. Win." tagline and award badges. Optimized for mobile with responsive design (typography, spacing, touch-friendly buttons). **Added Google Analytics 4 (GA4)** tracking to match top ProductHunt winners' analytics stack - tracks feature views, dashboard loads, hunt analysis, and asset generation with event-based monitoring.
+*   **October 28, 2025:** Complete UI redesign to match ProductHunt's aesthetic - white backgrounds (#FFFFFF), signature orange (#DA552F), clean borders, minimal shadows. Rebranded from "Launch" to "Hunt" terminology throughout. Updated hero with "Analyze. Hunt. Win." tagline and award badges. Optimized for mobile with responsive design (typography, spacing, touch-friendly buttons). **Added Google Analytics 4 (GA4)** tracking to match top ProductHunt winners' analytics stack - tracks feature views, dashboard loads, hunt analysis, and asset generation with event-based monitoring. **Implemented auto-refresh for Hunt Weather** - score and recommendations now update every 60 seconds to reflect real-time changes in optimal hunt timing.
 
 ### User Preferences
 *   Use ProductHunt-specific terminology: "Hunt" (not "Launch"), "Maker" (product creator), "Hunter" (discovers products), "Hunting" (discovering/upvoting)
@@ -21,7 +21,8 @@ ProductHunter is built with Node.js (CommonJS) and uses the Express.js framework
 **Technical Implementations:**
 *   **Hunt Score Algorithm:** A weighted algorithm considering Category Hotness (35%), Best Day Alignment (25%), Best Time Alignment (20%), and Competition Level (20%).
 *   **Personalized Analysis Algorithm:** Scores Maker inputs based on Tagline Length Optimization (25%), Category Performance (30%), Hunt Day Timing (25%), and Hunt Time Optimization (20%).
-*   **Real-Time Hunt Timers:** Four synchronized clocks displaying user local time, PST time (ProductHunt timezone), countdown to today's hunt end (11:59 PM PST), and countdown to next hunt start (12:01 AM PST tomorrow).
+*   **Real-Time Hunt Timers:** Four synchronized clocks displaying user local time, PST time (ProductHunt timezone), countdown to today's hunt end (11:59 PM PST), and countdown to next hunt start (12:01 AM PST tomorrow). Updates every second.
+*   **Auto-Refresh Hunt Weather:** Hunt Weather score and recommendations automatically recalculate every 60 seconds to provide up-to-date insights as time progresses and optimal hunt windows change.
 *   **Data Handling:** Requires a minimum of 3 products for predictions, with confidence levels for data sufficiency. All calculations use real ProductHunt data and are performed client-side.
 
 ### External Dependencies

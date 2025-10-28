@@ -1375,7 +1375,7 @@ app.get('/', (req, res) => {
               </div>
             </div>
             <div class="chart-card">
-              <h3>📈 Hunt Activity Over Time</h3>
+              <h3>📈 Hunt Activity by Hour (PST)</h3>
               <div class="chart-container">
                 <canvas id="launchActivityChart"></canvas>
               </div>
@@ -2009,55 +2009,49 @@ app.get('/', (req, res) => {
         function updateLaunchActivityChart() {
           const ctx = document.getElementById('launchActivityChart');
           if (!ctx) {
-            console.error('Launch Activity chart canvas not found');
+            console.error('Hunt Activity chart canvas not found');
             return;
           }
           
           if (charts.launchActivity) charts.launchActivity.destroy();
           
-          const dateCounts = {};
+          // Group by hour of the day for more granular view
+          const hourCounts = {};
           filteredProducts.forEach(product => {
             if (!product.createdAt) return;
             
-            // Parse date more robustly
-            let dateStr;
-            if (product.createdAt.includes('T')) {
-              dateStr = product.createdAt.split('T')[0];
-            } else {
-              // Handle case where createdAt is already just a date
-              dateStr = product.createdAt.substring(0, 10);
+            try {
+              const date = new Date(product.createdAt);
+              const hour = date.getHours();
+              hourCounts[hour] = (hourCounts[hour] || 0) + 1;
+            } catch (e) {
+              console.error('Error parsing date:', e);
             }
-            
-            dateCounts[dateStr] = (dateCounts[dateStr] || 0) + 1;
           });
           
-          const sortedDates = Object.entries(dateCounts)
-            .sort((a, b) => a[0].localeCompare(b[0])); // Sort by date string
+          // Create 24-hour array (0-23)
+          const hours = Array.from({length: 24}, (_, i) => i);
+          const counts = hours.map(hour => hourCounts[hour] || 0);
           
-          // Format dates for display (e.g., "Jan 15")
-          const formatDate = (dateStr) => {
-            try {
-              const date = new Date(dateStr + 'T00:00:00'); // Add time to ensure consistent parsing
-              if (isNaN(date.getTime())) return dateStr; // Fallback to original string
-              return date.toLocaleDateString('en-US', { month: 'short', day: 'numeric' });
-            } catch (e) {
-              return dateStr;
-            }
+          // Format hour for display (e.g., "12 AM", "1 PM")
+          const formatHour = (hour) => {
+            if (hour === 0) return '12 AM';
+            if (hour < 12) return hour + ' AM';
+            if (hour === 12) return '12 PM';
+            return (hour - 12) + ' PM';
           };
           
           charts.launchActivity = new Chart(ctx, {
-            type: 'line',
+            type: 'bar',
             data: {
-              labels: sortedDates.map(([date]) => formatDate(date)),
+              labels: hours.map(hour => formatHour(hour)),
               datasets: [{
                 label: 'Products Hunted',
-                data: sortedDates.map(([, count]) => count),
+                data: counts,
+                backgroundColor: 'rgba(218, 85, 47, 0.7)',
                 borderColor: '#DA552F',
-                backgroundColor: 'rgba(218, 85, 47, 0.1)',
-                tension: 0.4,
-                fill: true,
-                pointRadius: 4,
-                pointHoverRadius: 6
+                borderWidth: 1,
+                borderRadius: 4
               }]
             },
             options: {
@@ -2068,8 +2062,11 @@ app.get('/', (req, res) => {
                 tooltip: {
                   callbacks: {
                     title: (context) => {
-                      const index = context[0].dataIndex;
-                      return sortedDates[index][0]; // Show full date on hover
+                      const hour = hours[context[0].dataIndex];
+                      return formatHour(hour);
+                    },
+                    label: (context) => {
+                      return context.parsed.y + ' products hunted';
                     }
                   }
                 }
@@ -2084,8 +2081,10 @@ app.get('/', (req, res) => {
                 },
                 x: {
                   ticks: {
-                    maxRotation: 45,
-                    minRotation: 45
+                    maxRotation: 90,
+                    minRotation: 45,
+                    autoSkip: true,
+                    maxTicksLimit: 12
                   }
                 }
               }

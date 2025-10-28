@@ -1922,72 +1922,68 @@ app.get('/', (req, res) => {
         </div>
         
         <div id="dashboard" style="display: none;">
-          <div class="predictor-card" id="predictorCard">
-            <div class="predictor-header">
-              <h2>🌤️ Hunt Weather</h2>
-              <p>Real-time insights based on today's top 20 product launches to maximize your hunt success</p>
-            </div>
-            
-            <div class="launch-timers">
-              <div class="timer-item">
-                <div class="timer-label">● Your Time</div>
-                <div class="timer-value" id="userTime">--:--:--</div>
-                <div class="timer-subtitle" id="userTimezone">--</div>
-              </div>
-              <div class="timer-item">
-                <div class="timer-label">◷ PST Time</div>
-                <div class="timer-value" id="pstTime">--:--:--</div>
-                <div class="timer-subtitle">Pacific Time</div>
-              </div>
-              <div class="timer-item">
-                <div class="timer-label">◐ Today's Hunt Ends</div>
-                <div class="timer-value" id="todayEnds">--:--:--</div>
-                <div class="timer-subtitle">Time Remaining</div>
-              </div>
-              <div class="timer-item">
-                <div class="timer-label">▲ Next Hunt Starts</div>
-                <div class="timer-value" id="nextLaunch">--:--:--</div>
-                <div class="timer-subtitle">12:01 AM PST Tomorrow</div>
-              </div>
-            </div>
-            
-            <div class="score-display">
-              <div class="score-circle" id="scoreCircle">
-                <span id="scoreValue">--</span>
-              </div>
-              <div class="score-label" id="scoreLabel">Calculating...</div>
-              <div class="momentum-indicator" id="momentumIndicator"></div>
-            </div>
-            
-            <div class="recommendations-grid" id="recommendationsGrid">
-              <div class="recommendation-item">
-                <div class="rec-label">◆ Category</div>
-                <div class="rec-value" id="recCategory">--</div>
-                <div class="rec-impact" id="recCategoryImpact">--</div>
-              </div>
-              <div class="recommendation-item">
-                <div class="rec-label">◷ Best Day</div>
-                <div class="rec-value" id="recDay">--</div>
-                <div class="rec-impact" id="recDayImpact">--</div>
-              </div>
-              <div class="recommendation-item">
-                <div class="rec-label">◐ Best Time</div>
-                <div class="rec-value" id="recTime">--</div>
-                <div class="rec-impact" id="recTimeImpact">--</div>
-              </div>
-              <div class="recommendation-item">
-                <div class="rec-label">● Competition</div>
-                <div class="rec-value" id="recCompetition">--</div>
-                <div class="rec-impact" id="recCompetitionImpact">--</div>
-              </div>
-            </div>
-          </div>
-          
           <div class="command-center-card" id="commandCenterCard">
             <div class="command-center-header">
-              <h2>🚀 Launch Day Command Center</h2>
-              <p>Real-time leaderboard and actionable insights for today's top 20 products</p>
+              <h2>🌤️ Hunt Weather & Command Center</h2>
+              <p>Real-time insights and tactical dashboard for today's top 20 products</p>
               <div class="auto-refresh-badge">Auto-refreshing every 30s</div>
+            </div>
+            
+            <!-- Hunt Weather Section -->
+            <div class="predictor-section" id="predictorCard">
+              <div class="launch-timers">
+                <div class="timer-item">
+                  <div class="timer-label">● Your Time</div>
+                  <div class="timer-value" id="userTime">--:--:--</div>
+                  <div class="timer-subtitle" id="userTimezone">--</div>
+                </div>
+                <div class="timer-item">
+                  <div class="timer-label">◷ PST Time</div>
+                  <div class="timer-value" id="pstTime">--:--:--</div>
+                  <div class="timer-subtitle">Pacific Time</div>
+                </div>
+                <div class="timer-item">
+                  <div class="timer-label">◐ Today's Hunt Ends</div>
+                  <div class="timer-value" id="todayEnds">--:--:--</div>
+                  <div class="timer-subtitle">Time Remaining</div>
+                </div>
+                <div class="timer-item">
+                  <div class="timer-label">▲ Next Hunt Starts</div>
+                  <div class="timer-value" id="nextLaunch">--:--:--</div>
+                  <div class="timer-subtitle">12:01 AM PST Tomorrow</div>
+                </div>
+              </div>
+              
+              <div class="score-display">
+                <div class="score-circle" id="scoreCircle">
+                  <span id="scoreValue">--</span>
+                </div>
+                <div class="score-label" id="scoreLabel">Calculating...</div>
+                <div class="momentum-indicator" id="momentumIndicator"></div>
+              </div>
+              
+              <div class="recommendations-grid" id="recommendationsGrid">
+                <div class="recommendation-item">
+                  <div class="rec-label">◆ Category</div>
+                  <div class="rec-value" id="recCategory">--</div>
+                  <div class="rec-impact" id="recCategoryImpact">--</div>
+                </div>
+                <div class="recommendation-item">
+                  <div class="rec-label">◷ Best Day</div>
+                  <div class="rec-value" id="recDay">--</div>
+                  <div class="rec-impact" id="recDayImpact">--</div>
+                </div>
+                <div class="recommendation-item">
+                  <div class="rec-label">◐ Best Time</div>
+                  <div class="rec-value" id="recTime">--</div>
+                  <div class="rec-impact" id="recTimeImpact">--</div>
+                </div>
+                <div class="recommendation-item">
+                  <div class="rec-label">● Competition</div>
+                  <div class="rec-value" id="recCompetition">--</div>
+                  <div class="rec-impact" id="recCompetitionImpact">--</div>
+                </div>
+              </div>
             </div>
             
             <div class="command-center-grid">

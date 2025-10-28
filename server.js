@@ -2187,6 +2187,38 @@ app.get('/', (req, res) => {
               <h3 style="margin-bottom: 20px; color: #1a1a1a;">✦ Your Launch Assets</h3>
               <div id="generatedAssets"></div>
             </div>
+            
+            <!-- Social Templates Section -->
+            <div class="templates-section" style="margin-top: 40px;">
+              <h3>📝 One-Click Templates</h3>
+              <p style="font-size: 14px; color: #666; margin-bottom: 20px;">Pre-written templates for your launch day outreach</p>
+              <div class="templates-grid">
+                <div class="template-card">
+                  <h4>🐦 Twitter Post</h4>
+                  <textarea id="twitterTemplate" readonly></textarea>
+                  <button class="copy-btn" onclick="copyTemplate('twitter')">📋 Copy to Clipboard</button>
+                </div>
+                <div class="template-card">
+                  <h4>💼 LinkedIn Post</h4>
+                  <textarea id="linkedinTemplate" readonly></textarea>
+                  <button class="copy-btn" onclick="copyTemplate('linkedin')">📋 Copy to Clipboard</button>
+                </div>
+                <div class="template-card">
+                  <h4>📧 Email Outreach</h4>
+                  <textarea id="emailTemplate" readonly></textarea>
+                  <button class="copy-btn" onclick="copyTemplate('email')">📋 Copy to Clipboard</button>
+                </div>
+              </div>
+            </div>
+            
+            <!-- Competitor Analysis Section -->
+            <div class="competitor-analysis" id="competitorAnalysis" style="margin-top: 40px;">
+              <h3>🎯 Competitor Analysis</h3>
+              <p style="font-size: 14px; color: #666; margin-bottom: 20px;">Track top products and identify opportunities</p>
+              <div id="competitorInsights">
+                <div class="loading-placeholder">Analysis will appear here once dashboard loads</div>
+              </div>
+            </div>
           </div>
         </div>
       </div>

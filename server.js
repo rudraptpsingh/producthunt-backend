@@ -108,7 +108,7 @@ app.get('/', (req, res) => {
         .hero h2 {
           font-size: 56px;
           font-weight: 900;
-          margin-bottom: 0;
+          margin-bottom: 24px;
           line-height: 1.1;
           position: relative;
           z-index: 1;
@@ -192,6 +192,68 @@ app.get('/', (req, res) => {
         
         .slider-dot:hover {
           background: rgba(255, 255, 255, 0.7);
+        }
+        
+        .ph-badges {
+          display: flex;
+          justify-content: center;
+          align-items: center;
+          gap: 16px;
+          flex-wrap: wrap;
+          margin-bottom: 8px;
+          position: relative;
+          z-index: 1;
+        }
+        
+        .ph-badge {
+          background: rgba(255, 255, 255, 0.2);
+          backdrop-filter: blur(10px);
+          -webkit-backdrop-filter: blur(10px);
+          border: 2px solid rgba(255, 255, 255, 0.4);
+          padding: 8px 16px;
+          border-radius: 10px;
+          display: flex;
+          align-items: center;
+          gap: 6px;
+          font-size: 12px;
+          font-weight: 700;
+          color: white;
+          transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+          box-shadow: 0 4px 15px rgba(0, 0, 0, 0.15);
+        }
+        
+        .ph-badge:hover {
+          background: rgba(255, 255, 255, 0.3);
+          transform: translateY(-2px) scale(1.05);
+          box-shadow: 0 6px 20px rgba(0, 0, 0, 0.2);
+        }
+        
+        .ph-badge-icon {
+          font-size: 16px;
+        }
+        
+        .hero-tagline {
+          font-size: 15px;
+          opacity: 0.9;
+          margin-bottom: 32px;
+          position: relative;
+          z-index: 1;
+          font-weight: 500;
+        }
+        
+        @media (max-width: 768px) {
+          .ph-badges {
+            gap: 8px;
+          }
+          
+          .ph-badge {
+            font-size: 10px;
+            padding: 6px 12px;
+          }
+          
+          .ph-badge-icon {
+            font-size: 14px;
+          }
         }
         
         .container {
@@ -998,6 +1060,27 @@ app.get('/', (req, res) => {
       <div class="hero">
         <div class="hero-content">
           <h2>🚀 Predict. Optimize. Launch. Win. 🏆</h2>
+          
+          <div class="ph-badges">
+            <div class="ph-badge">
+              <span class="ph-badge-icon">🏆</span>
+              <span>Product of the Day</span>
+            </div>
+            <div class="ph-badge">
+              <span class="ph-badge-icon">⭐</span>
+              <span>Product of the Week</span>
+            </div>
+            <div class="ph-badge">
+              <span class="ph-badge-icon">💎</span>
+              <span>Product of the Month</span>
+            </div>
+            <div class="ph-badge">
+              <span class="ph-badge-icon">🐱</span>
+              <span>Golden Kitty</span>
+            </div>
+          </div>
+          
+          <p class="hero-tagline">Awards you can win on ProductHunt</p>
           
           <div class="features-slider">
             <div class="features-track" id="featuresTrack">

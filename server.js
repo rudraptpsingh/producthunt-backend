@@ -3998,13 +3998,19 @@ app.post('/api/track-hunt', async (req, res) => {
   try {
     const { url } = req.body;
     
-    if (!url || !url.includes('producthunt.com/posts/')) {
+    if (!url || !url.includes('producthunt.com')) {
       return res.status(400).json({ error: 'Invalid ProductHunt URL' });
     }
     
-    // Extract product slug from URL
-    const urlParts = url.split('/posts/');
-    const slug = urlParts[1].split('?')[0].split('/')[0].trim();
+    // Extract product slug from URL - handle both /posts/ and /products/ formats
+    let slug = null;
+    if (url.includes('/posts/')) {
+      const urlParts = url.split('/posts/');
+      slug = urlParts[1].split('?')[0].split('/')[0].trim();
+    } else if (url.includes('/products/')) {
+      const urlParts = url.split('/products/');
+      slug = urlParts[1].split('?')[0].split('/')[0].trim();
+    }
     
     if (!slug) {
       return res.status(400).json({ error: 'Could not extract product slug from URL' });

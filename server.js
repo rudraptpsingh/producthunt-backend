@@ -1987,10 +1987,18 @@ app.get('/', (req, res) => {
             <div class="command-center-header">
               <h2>🚀 Launch Day Command Center</h2>
               <p>Real-time leaderboard and actionable insights for today's top 20 products</p>
-              <div class="auto-refresh-badge">Auto-refreshing every 30s</div>
+              <div class="auto-refresh-badge" id="autoRefreshBadge" style="display: none;">Auto-refreshing every 30s</div>
             </div>
             
-            <div class="command-center-grid">
+            <!-- Load button (shown initially) -->
+            <div id="commandCenterLoadButton" class="command-center-load" style="text-align: center; padding: 60px 20px;">
+              <button onclick="loadCommandCenter()" class="cta-button" style="font-size: 18px; padding: 16px 32px;">
+                🚀 Load Command Center
+              </button>
+              <p style="margin-top: 16px; color: #666; font-size: 14px;">Click to analyze top 20 products and get real-time insights</p>
+            </div>
+            
+            <div class="command-center-grid" id="commandCenterContent" style="display: none;">
               <div class="cc-section leaderboard-section">
                 <h3>📊 Live Leaderboard - Top 20</h3>
                 <div class="leaderboard-table" id="leaderboardTable">
@@ -2203,10 +2211,10 @@ app.get('/', (req, res) => {
       <div class="feedback-modal" id="feedbackModal" onclick="if(event.target === this) closeFeedbackModal()">
         <div class="feedback-content">
           <button class="feedback-close" onclick="closeFeedbackModal()">×</button>
-          <h3>We'd Love Your Feedback!</h3>
+          <h3>We&apos;d Love Your Feedback!</h3>
           <p>Help us improve HuntProductHunt for the Maker community</p>
           <div class="feedback-options">
-            <a href="mailto:cosmorudyrp@gmail.com?subject=HuntProductHunt Feedback&body=Hi! I'd like to share my feedback about HuntProductHunt:%0D%0A%0D%0A" class="feedback-btn">
+            <a href="mailto:cosmorudyrp@gmail.com?subject=HuntProductHunt Feedback&body=Hi! I&apos;d like to share my feedback about HuntProductHunt:%0D%0A%0D%0A" class="feedback-btn">
               <span class="feedback-icon">✉</span>
               <span>Send Email Feedback</span>
             </a>
@@ -2332,13 +2340,6 @@ app.get('/', (req, res) => {
           }
         }, 60000); // 60 seconds
         
-        // Auto-refresh Command Center every 30 seconds
-        setInterval(() => {
-          if (allProducts.length > 0) {
-            updateCommandCenter();
-          }
-        }, 30000); // 30 seconds
-        
         // Dashboard data
         let allProducts = [];
         let filteredProducts = [];
@@ -2347,6 +2348,7 @@ app.get('/', (req, res) => {
         let showAllProducts = false;
         const INITIAL_PRODUCTS_COUNT = 3;
         let sortDirection = 'desc';
+        let commandCenterInterval = null; // Will start when user loads Command Center
         
         async function loadDashboardData() {
           try {
@@ -2764,7 +2766,7 @@ app.get('/', (req, res) => {
         
         function updateDashboard() {
           updatePredictor();
-          updateCommandCenter();
+          // Command Center loads on-demand only (user clicks button)
           updateStats();
           updateCategoryFilter();
           updateCharts();
@@ -3014,6 +3016,38 @@ app.get('/', (req, res) => {
           });
           
           competitorInsights.innerHTML = html;
+        }
+        
+        // Load Command Center on-demand
+        function loadCommandCenter() {
+          if (allProducts.length === 0) {
+            alert('Please wait for dashboard data to load first');
+            return;
+          }
+          
+          // Track event
+          if (typeof gtag === 'function') {
+            gtag('event', 'load_command_center', {
+              'product_count': allProducts.length
+            });
+          }
+          
+          // Hide load button, show content
+          document.getElementById('commandCenterLoadButton').style.display = 'none';
+          document.getElementById('commandCenterContent').style.display = 'grid';
+          document.getElementById('autoRefreshBadge').style.display = 'block';
+          
+          // Initial load
+          updateCommandCenter();
+          
+          // Start auto-refresh interval if not already running
+          if (!commandCenterInterval) {
+            commandCenterInterval = setInterval(() => {
+              if (allProducts.length > 0) {
+                updateCommandCenter();
+              }
+            }, 30000); // 30 seconds
+          }
         }
         
         function copyTemplate(type) {

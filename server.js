@@ -542,6 +542,64 @@ app.get('/', (req, res) => {
           font-weight: 600;
         }
         
+        .momentum-indicator {
+          margin-top: 8px;
+          display: inline-flex;
+          align-items: center;
+          gap: 6px;
+          font-size: 13px;
+          font-weight: 600;
+          transition: all 0.3s ease;
+        }
+        
+        .momentum-arrow {
+          font-size: 16px;
+          font-weight: 700;
+        }
+        
+        .momentum-building {
+          color: #10B981;
+        }
+        
+        .momentum-building .momentum-arrow {
+          animation: pulse-green 2s ease-in-out infinite;
+        }
+        
+        .momentum-peak {
+          color: #F59E0B;
+        }
+        
+        .momentum-peak .momentum-arrow {
+          animation: pulse-orange 1.5s ease-in-out infinite;
+        }
+        
+        .momentum-declining {
+          color: #EF4444;
+        }
+        
+        .momentum-declining .momentum-arrow {
+          animation: pulse-red 2s ease-in-out infinite;
+        }
+        
+        .momentum-stable {
+          color: #6B7280;
+        }
+        
+        @keyframes pulse-green {
+          0%, 100% { opacity: 1; }
+          50% { opacity: 0.6; }
+        }
+        
+        @keyframes pulse-orange {
+          0%, 100% { opacity: 1; transform: scale(1); }
+          50% { opacity: 0.8; transform: scale(1.15); }
+        }
+        
+        @keyframes pulse-red {
+          0%, 100% { opacity: 1; }
+          50% { opacity: 0.6; }
+        }
+        
         .score-high { background: #10B981; border-color: #D1FAE5; }
         .score-medium { background: #F59E0B; border-color: #FEF3C7; }
         .score-low { background: #EF4444; border-color: #FEE2E2; }
@@ -1422,6 +1480,7 @@ app.get('/', (req, res) => {
                 <span id="scoreValue">--</span>
               </div>
               <div class="score-label" id="scoreLabel">Calculating...</div>
+              <div class="momentum-indicator" id="momentumIndicator"></div>
             </div>
             
             <div class="recommendations-grid" id="recommendationsGrid">
@@ -1992,6 +2051,7 @@ app.get('/', (req, res) => {
             categoryHotness: hotnessIndicator,
             bestDay: bestDay,
             bestTime: formatTime(bestHour),
+            bestHour: bestHour,
             competition: competitionLevel,
             confidence: analysisProducts.length >= 10 ? 'High' : analysisProducts.length >= 5 ? 'Medium' : 'Low',
             impacts: {
@@ -2001,6 +2061,81 @@ app.get('/', (req, res) => {
               competition: competitionImpact
             }
           };
+        }
+        
+        function calculateMomentum(prediction) {
+          const now = new Date();
+          const pstTime = new Date(now.toLocaleString('en-US', { timeZone: 'America/Los_Angeles' }));
+          const currentHour = pstTime.getHours();
+          const currentDay = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'][pstTime.getDay()];
+          const hoursUntilEndOfDay = 24 - currentHour;
+          
+          // Calculate time momentum (approaching or leaving optimal time)
+          const optimalHour = prediction.bestHour || 0;
+          let hourDistance = Math.abs(currentHour - optimalHour);
+          if (hourDistance > 12) hourDistance = 24 - hourDistance; // Wrap around midnight
+          
+          // Check if we're in peak window (within 2 hours of optimal)
+          const inPeakWindow = hourDistance <= 2;
+          
+          // Check if approaching or leaving peak
+          const nextHour = (currentHour + 1) % 24;
+          let nextDistance = Math.abs(nextHour - optimalHour);
+          if (nextDistance > 12) nextDistance = 24 - nextDistance;
+          const approaching = nextDistance < hourDistance;
+          
+          // Day alignment
+          const onOptimalDay = currentDay === prediction.bestDay;
+          
+          // Determine momentum
+          let momentum = {
+            class: '',
+            text: '',
+            icon: ''
+          };
+          
+          // Peak window - in optimal time
+          if (inPeakWindow && onOptimalDay) {
+            momentum = {
+              class: 'momentum-peak',
+              text: 'PEAK WINDOW',
+              arrow: '▲'
+            };
+          }
+          // Building momentum - approaching optimal time
+          else if (approaching && hourDistance <= 6) {
+            momentum = {
+              class: 'momentum-building',
+              text: 'TRENDING UP',
+              arrow: '▲'
+            };
+          }
+          // Late in the day - window closing
+          else if (hoursUntilEndOfDay <= 4 && currentHour >= 20) {
+            momentum = {
+              class: 'momentum-declining',
+              text: 'CLOSING SOON',
+              arrow: '▼'
+            };
+          }
+          // Moving away from optimal
+          else if (!approaching && hourDistance >= 4) {
+            momentum = {
+              class: 'momentum-declining',
+              text: 'TRENDING DOWN',
+              arrow: '▼'
+            };
+          }
+          // Stable conditions
+          else {
+            momentum = {
+              class: 'momentum-stable',
+              text: 'STABLE',
+              arrow: '—'
+            };
+          }
+          
+          return momentum;
         }
         
         function updatePredictor() {
@@ -2040,6 +2175,17 @@ app.get('/', (req, res) => {
           
           document.getElementById('recCompetition').textContent = prediction.competition;
           document.getElementById('recCompetitionImpact').textContent = prediction.impacts.competition;
+          
+          // Update momentum indicator
+          const momentum = calculateMomentum(prediction);
+          const momentumIndicator = document.getElementById('momentumIndicator');
+          if (prediction.score > 0) {
+            momentumIndicator.innerHTML = \`<span class="momentum-arrow">\${momentum.arrow}</span><span>\${momentum.text}</span>\`;
+            momentumIndicator.className = 'momentum-indicator ' + momentum.class;
+          } else {
+            momentumIndicator.innerHTML = '';
+            momentumIndicator.className = 'momentum-indicator';
+          }
         }
         
         function updateDashboard() {

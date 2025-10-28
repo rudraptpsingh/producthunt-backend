@@ -105,13 +105,22 @@ app.get('/', (req, res) => {
           margin: 0 auto;
         }
         
+        .hero-title-row {
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          gap: 20px;
+          flex-wrap: wrap;
+          margin-bottom: 12px;
+          position: relative;
+          z-index: 1;
+        }
+        
         .hero h2 {
           font-size: 56px;
           font-weight: 900;
-          margin-bottom: 24px;
+          margin: 0;
           line-height: 1.1;
-          position: relative;
-          z-index: 1;
           text-shadow: 0 4px 30px rgba(0, 0, 0, 0.2);
           letter-spacing: -1px;
           background: linear-gradient(to bottom, #ffffff 0%, #f0f0ff 100%);
@@ -196,49 +205,47 @@ app.get('/', (req, res) => {
         
         .ph-badges {
           display: flex;
-          justify-content: center;
           align-items: center;
-          gap: 16px;
+          gap: 12px;
           flex-wrap: wrap;
-          margin-bottom: 8px;
-          position: relative;
-          z-index: 1;
         }
         
         .ph-badge {
-          background: rgba(255, 255, 255, 0.2);
+          background: rgba(255, 255, 255, 0.25);
           backdrop-filter: blur(10px);
           -webkit-backdrop-filter: blur(10px);
-          border: 2px solid rgba(255, 255, 255, 0.4);
-          padding: 8px 16px;
-          border-radius: 10px;
+          border: 2px solid rgba(255, 255, 255, 0.5);
+          padding: 10px 18px;
+          border-radius: 12px;
           display: flex;
           align-items: center;
-          gap: 6px;
-          font-size: 12px;
+          gap: 8px;
+          font-size: 14px;
           font-weight: 700;
           color: white;
           transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-          box-shadow: 0 4px 15px rgba(0, 0, 0, 0.15);
+          box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+          white-space: nowrap;
         }
         
         .ph-badge:hover {
-          background: rgba(255, 255, 255, 0.3);
-          transform: translateY(-2px) scale(1.05);
-          box-shadow: 0 6px 20px rgba(0, 0, 0, 0.2);
+          background: rgba(255, 255, 255, 0.35);
+          transform: translateY(-3px) scale(1.08);
+          box-shadow: 0 8px 25px rgba(0, 0, 0, 0.25);
         }
         
         .ph-badge-icon {
-          font-size: 16px;
+          font-size: 18px;
         }
         
         .hero-tagline {
-          font-size: 15px;
-          opacity: 0.9;
+          font-size: 14px;
+          opacity: 0.85;
           margin-bottom: 32px;
           position: relative;
           z-index: 1;
           font-weight: 500;
+          text-align: center;
         }
         
         @media (max-width: 768px) {
@@ -1042,7 +1049,20 @@ app.get('/', (req, res) => {
           }
           
           .hero h2 {
-            font-size: 36px;
+            font-size: 32px;
+          }
+          
+          .hero-title-row {
+            gap: 12px;
+          }
+          
+          .ph-badge {
+            font-size: 11px;
+            padding: 8px 14px;
+          }
+          
+          .ph-badge-icon {
+            font-size: 14px;
           }
         }
       </style>
@@ -1059,28 +1079,29 @@ app.get('/', (req, res) => {
       
       <div class="hero">
         <div class="hero-content">
-          <h2>🚀 Predict. Optimize. Launch. Win. 🏆</h2>
-          
-          <div class="ph-badges">
-            <div class="ph-badge">
-              <span class="ph-badge-icon">🏆</span>
-              <span>Product of the Day</span>
-            </div>
-            <div class="ph-badge">
-              <span class="ph-badge-icon">⭐</span>
-              <span>Product of the Week</span>
-            </div>
-            <div class="ph-badge">
-              <span class="ph-badge-icon">💎</span>
-              <span>Product of the Month</span>
-            </div>
-            <div class="ph-badge">
-              <span class="ph-badge-icon">🐱</span>
-              <span>Golden Kitty</span>
+          <div class="hero-title-row">
+            <h2>🚀 Predict. Optimize. Launch. Win. 🏆</h2>
+            <div class="ph-badges">
+              <div class="ph-badge">
+                <span class="ph-badge-icon">🏆</span>
+                <span>Product of the Day</span>
+              </div>
+              <div class="ph-badge">
+                <span class="ph-badge-icon">⭐</span>
+                <span>Product of the Week</span>
+              </div>
+              <div class="ph-badge">
+                <span class="ph-badge-icon">💎</span>
+                <span>Product of the Month</span>
+              </div>
+              <div class="ph-badge">
+                <span class="ph-badge-icon">🐱</span>
+                <span>Golden Kitty</span>
+              </div>
             </div>
           </div>
           
-          <p class="hero-tagline">Awards you can win on ProductHunt</p>
+          <p class="hero-tagline">Win these awards on ProductHunt with data-driven insights</p>
           
           <div class="features-slider">
             <div class="features-track" id="featuresTrack">

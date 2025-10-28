@@ -311,74 +311,6 @@ app.get('/', (req, res) => {
           color: #da552f;
         }
         
-        .filters-section {
-          background: rgba(255, 255, 255, 0.9);
-          backdrop-filter: blur(10px);
-          -webkit-backdrop-filter: blur(10px);
-          border: 1px solid rgba(255, 255, 255, 0.18);
-          border-radius: 16px;
-          padding: 24px;
-          margin-bottom: 24px;
-          box-shadow: 0 4px 20px rgba(0, 0, 0, 0.06);
-        }
-        
-        .filters-grid {
-          display: grid;
-          grid-template-columns: 1fr 1fr auto;
-          gap: 12px;
-          align-items: end;
-        }
-        
-        .filter-group label {
-          display: block;
-          font-weight: 600;
-          margin-bottom: 6px;
-          color: #1a1a1a;
-          font-size: 14px;
-        }
-        
-        .filter-group input,
-        .filter-group select {
-          width: 100%;
-          padding: 12px 16px;
-          border: 2px solid #e8e7e6;
-          border-radius: 12px;
-          font-size: 14px;
-          transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-          font-family: 'Inter', sans-serif;
-          background: white;
-        }
-        
-        .filter-group input:focus,
-        .filter-group select:focus {
-          outline: none;
-          border-color: #da552f;
-          box-shadow: 0 0 0 4px rgba(218, 85, 47, 0.1);
-          transform: translateY(-1px);
-        }
-        
-        .refresh-btn {
-          background: linear-gradient(135deg, #da552f 0%, #ff6b47 100%);
-          color: white;
-          border: none;
-          padding: 12px 24px;
-          border-radius: 12px;
-          cursor: pointer;
-          font-size: 14px;
-          font-weight: 600;
-          transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-          box-shadow: 0 4px 12px rgba(218, 85, 47, 0.25);
-        }
-        
-        .refresh-btn:hover {
-          transform: translateY(-2px);
-          box-shadow: 0 8px 20px rgba(218, 85, 47, 0.35);
-        }
-        
-        .refresh-btn:active {
-          transform: translateY(0);
-        }
-        
         .charts-grid {
           display: grid;
           grid-template-columns: repeat(3, 1fr);
@@ -1531,24 +1463,6 @@ app.get('/', (req, res) => {
             </div>
           </div>
           
-          <div class="filters-section">
-            <div class="filters-grid">
-              <div class="filter-group">
-                <label for="searchInput">Search Products</label>
-                <input type="text" id="searchInput" placeholder="Search by name or tagline...">
-              </div>
-              <div class="filter-group">
-                <label for="categoryFilter">Category</label>
-                <select id="categoryFilter">
-                  <option value="">All Categories</option>
-                </select>
-              </div>
-              <div class="filter-group">
-                <button class="refresh-btn" onclick="loadDashboardData()">Refresh</button>
-              </div>
-            </div>
-          </div>
-          
           <div class="charts-grid">
             <div class="chart-card">
               <h3>📊 Top Categories by Product Count</h3>
@@ -1891,19 +1805,8 @@ app.get('/', (req, res) => {
         }
         
         function applyFilters() {
-          const searchTerm = document.getElementById('searchInput').value.toLowerCase();
-          const categoryFilter = document.getElementById('categoryFilter').value;
-          
-          filteredProducts = allProducts.filter(product => {
-            const matchesSearch = !searchTerm || 
-              product.name.toLowerCase().includes(searchTerm) ||
-              (product.tagline && product.tagline.toLowerCase().includes(searchTerm));
-            
-            const matchesCategory = !categoryFilter || product.allCategories.includes(categoryFilter);
-            
-            return matchesSearch && matchesCategory;
-          });
-          
+          // No filtering - just use all products
+          filteredProducts = [...allProducts];
           sortProducts();
         }
         
@@ -1926,18 +1829,14 @@ app.get('/', (req, res) => {
         }
         
         function calculateLaunchScore() {
-          const targetCategory = document.getElementById('categoryFilter').value || null;
-          
-          // Use filtered products for analysis (respects search/filter)
-          const analysisProducts = targetCategory 
-            ? allProducts.filter(p => p.allCategories.includes(targetCategory))
-            : allProducts;
+          // Use all products for analysis
+          const analysisProducts = allProducts;
           
           if (analysisProducts.length < 3) {
             // Low confidence - not enough data
             return {
               score: 0,
-              category: targetCategory || 'All Categories',
+              category: 'All Categories',
               categoryHotness: 'Low Data',
               bestDay: '--',
               bestTime: '--',
@@ -2056,36 +1955,32 @@ app.get('/', (req, res) => {
           if (categoryScore < 50) hotnessIndicator = '❄️ COOL';
           else if (categoryScore < 70) hotnessIndicator = '🌤️ WARM';
           
-          // Find hottest category if no specific category is selected
-          let displayCategory = targetCategory;
-          if (!displayCategory) {
-            // Calculate hottest category based on avg upvotes and recency
-            const categoryStats = {};
-            allProducts.forEach(p => {
-              p.allCategories.forEach(cat => {
-                if (!categoryStats[cat]) {
-                  categoryStats[cat] = { total: 0, count: 0, recent: 0 };
-                }
-                categoryStats[cat].total += p.votesCount;
-                categoryStats[cat].count++;
-                const age = (now - new Date(p.createdAt).getTime()) / dayMs;
-                if (age <= 14) categoryStats[cat].recent++;
-              });
-            });
-            
-            let hottestCategory = 'Productivity';
-            let hottestScore = 0;
-            Object.entries(categoryStats).forEach(([cat, stats]) => {
-              const avgUpvotes = stats.total / stats.count;
-              const recentRatio = stats.recent / stats.count;
-              const score = avgUpvotes * 0.6 + recentRatio * 40; // Weighted score
-              if (score > hottestScore) {
-                hottestScore = score;
-                hottestCategory = cat;
+          // Find hottest category based on avg upvotes and recency
+          const categoryStats = {};
+          allProducts.forEach(p => {
+            p.allCategories.forEach(cat => {
+              if (!categoryStats[cat]) {
+                categoryStats[cat] = { total: 0, count: 0, recent: 0 };
               }
+              categoryStats[cat].total += p.votesCount;
+              categoryStats[cat].count++;
+              const age = (now - new Date(p.createdAt).getTime()) / dayMs;
+              if (age <= 14) categoryStats[cat].recent++;
             });
-            displayCategory = hottestCategory;
-          }
+          });
+          
+          let hottestCategory = 'Productivity';
+          let hottestScore = 0;
+          Object.entries(categoryStats).forEach(([cat, stats]) => {
+            const avgUpvotes = stats.total / stats.count;
+            const recentRatio = stats.recent / stats.count;
+            const score = avgUpvotes * 0.6 + recentRatio * 40; // Weighted score
+            if (score > hottestScore) {
+              hottestScore = score;
+              hottestCategory = cat;
+            }
+          });
+          const displayCategory = hottestCategory;
           
           // Calculate impact predictions
           const dayImpact = \`+\${Math.round(dayScore / 10)}% better results\`;
@@ -2167,27 +2062,18 @@ app.get('/', (req, res) => {
         
         function updateCategoryFilter() {
           const categories = new Set(allProducts.flatMap(p => p.allCategories));
-          const categoryFilter = document.getElementById('categoryFilter');
           const appCategory = document.getElementById('appCategory');
-          const currentValue = categoryFilter.value;
           const currentAppValue = appCategory.value;
           
-          categoryFilter.innerHTML = '<option value="">All Categories</option>';
           appCategory.innerHTML = '<option value="">Select a category</option>';
           
           Array.from(categories).sort().forEach(cat => {
-            const option1 = document.createElement('option');
-            option1.value = cat;
-            option1.textContent = cat;
-            categoryFilter.appendChild(option1);
-            
-            const option2 = document.createElement('option');
-            option2.value = cat;
-            option2.textContent = cat;
-            appCategory.appendChild(option2);
+            const option = document.createElement('option');
+            option.value = cat;
+            option.textContent = cat;
+            appCategory.appendChild(option);
           });
           
-          categoryFilter.value = currentValue;
           appCategory.value = currentAppValue;
         }
         
@@ -2426,16 +2312,6 @@ app.get('/', (req, res) => {
             document.getElementById('productsGrid').scrollIntoView({ behavior: 'smooth', block: 'start' });
           }
         }
-        
-        document.getElementById('searchInput').addEventListener('input', () => {
-          applyFilters();
-          updateDashboard();
-        });
-        
-        document.getElementById('categoryFilter').addEventListener('change', () => {
-          applyFilters();
-          updateDashboard();
-        });
         
         async function analyzeUserLaunch() {
           // Get form values

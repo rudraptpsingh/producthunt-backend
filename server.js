@@ -633,6 +633,41 @@ app.get('/', (req, res) => {
         .score-medium { background: linear-gradient(135deg, #f59e0b 0%, #d97706 100%); }
         .score-low { background: linear-gradient(135deg, #ef4444 0%, #dc2626 100%); }
         
+        .launch-timers {
+          display: grid;
+          grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+          gap: 16px;
+          margin-bottom: 32px;
+          padding: 24px;
+          background: rgba(255, 255, 255, 0.1);
+          border-radius: 16px;
+          border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+        
+        .timer-item {
+          text-align: center;
+        }
+        
+        .timer-label {
+          font-size: 12px;
+          text-transform: uppercase;
+          letter-spacing: 0.5px;
+          opacity: 0.8;
+          margin-bottom: 8px;
+        }
+        
+        .timer-value {
+          font-size: 20px;
+          font-weight: 700;
+          font-family: 'Courier New', monospace;
+        }
+        
+        .timer-subtitle {
+          font-size: 11px;
+          opacity: 0.7;
+          margin-top: 4px;
+        }
+        
         .recommendations-grid {
           display: grid;
           grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
@@ -1148,6 +1183,29 @@ app.get('/', (req, res) => {
               <p>AI-powered insights to maximize your ProductHunt launch success</p>
             </div>
             
+            <div class="launch-timers">
+              <div class="timer-item">
+                <div class="timer-label">🌎 Your Time</div>
+                <div class="timer-value" id="userTime">--:--:--</div>
+                <div class="timer-subtitle" id="userTimezone">--</div>
+              </div>
+              <div class="timer-item">
+                <div class="timer-label">🕐 PST Time</div>
+                <div class="timer-value" id="pstTime">--:--:--</div>
+                <div class="timer-subtitle">Pacific Time</div>
+              </div>
+              <div class="timer-item">
+                <div class="timer-label">⏳ Today's Launch Ends</div>
+                <div class="timer-value" id="todayEnds">--:--:--</div>
+                <div class="timer-subtitle">Time Remaining</div>
+              </div>
+              <div class="timer-item">
+                <div class="timer-label">🚀 Next Launch Starts</div>
+                <div class="timer-value" id="nextLaunch">--:--:--</div>
+                <div class="timer-subtitle">12:01 AM PST Tomorrow</div>
+              </div>
+            </div>
+            
             <div class="score-display">
               <div class="score-circle" id="scoreCircle">
                 <span id="scoreValue">--</span>
@@ -1379,6 +1437,67 @@ app.get('/', (req, res) => {
         
         // Start slider when page loads
         startSliderAutoRotation();
+        
+        // Launch Timers
+        function updateLaunchTimers() {
+          const now = new Date();
+          
+          // User's local time
+          const userTimeStr = now.toLocaleTimeString('en-US', { 
+            hour12: false, 
+            hour: '2-digit', 
+            minute: '2-digit', 
+            second: '2-digit' 
+          });
+          const userTimezone = Intl.DateTimeFormat().resolvedOptions().timeZone;
+          document.getElementById('userTime').textContent = userTimeStr;
+          document.getElementById('userTimezone').textContent = userTimezone;
+          
+          // PST Time (UTC-8 or UTC-7 depending on DST)
+          const pstTime = new Date(now.toLocaleString('en-US', { timeZone: 'America/Los_Angeles' }));
+          const pstTimeStr = pstTime.toLocaleTimeString('en-US', { 
+            hour12: false, 
+            hour: '2-digit', 
+            minute: '2-digit', 
+            second: '2-digit' 
+          });
+          document.getElementById('pstTime').textContent = pstTimeStr;
+          
+          // Today's launch ends at 11:59:59 PM PST
+          const todayEndPST = new Date(pstTime);
+          todayEndPST.setHours(23, 59, 59, 999);
+          const timeToEnd = todayEndPST - pstTime;
+          
+          if (timeToEnd > 0) {
+            const hoursToEnd = Math.floor(timeToEnd / (1000 * 60 * 60));
+            const minutesToEnd = Math.floor((timeToEnd % (1000 * 60 * 60)) / (1000 * 60));
+            const secondsToEnd = Math.floor((timeToEnd % (1000 * 60)) / 1000);
+            document.getElementById('todayEnds').textContent = 
+              \`\${String(hoursToEnd).padStart(2, '0')}:\${String(minutesToEnd).padStart(2, '0')}:\${String(secondsToEnd).padStart(2, '0')}\`;
+          } else {
+            document.getElementById('todayEnds').textContent = '00:00:00';
+          }
+          
+          // Next launch starts at 12:01 AM PST tomorrow
+          const nextLaunchPST = new Date(pstTime);
+          nextLaunchPST.setDate(nextLaunchPST.getDate() + 1);
+          nextLaunchPST.setHours(0, 1, 0, 0);
+          const timeToNext = nextLaunchPST - pstTime;
+          
+          if (timeToNext > 0) {
+            const hoursToNext = Math.floor(timeToNext / (1000 * 60 * 60));
+            const minutesToNext = Math.floor((timeToNext % (1000 * 60 * 60)) / (1000 * 60));
+            const secondsToNext = Math.floor((timeToNext % (1000 * 60)) / 1000);
+            document.getElementById('nextLaunch').textContent = 
+              \`\${String(hoursToNext).padStart(2, '0')}:\${String(minutesToNext).padStart(2, '0')}:\${String(secondsToNext).padStart(2, '0')}\`;
+          } else {
+            document.getElementById('nextLaunch').textContent = '00:00:00';
+          }
+        }
+        
+        // Update timers every second
+        setInterval(updateLaunchTimers, 1000);
+        updateLaunchTimers(); // Initial call
         
         // Dashboard data
         let allProducts = [];

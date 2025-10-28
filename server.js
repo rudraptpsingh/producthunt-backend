@@ -1141,8 +1141,8 @@ app.get('/', (req, res) => {
           <div class="features-slider">
             <div class="features-track" id="featuresTrack">
               <div class="feature-slide">
-                <span class="feature-icon">🎯</span>
-                <h3 class="feature-title">Launch Score Predictor</h3>
+                <span class="feature-icon">⛅</span>
+                <h3 class="feature-title">Launch Weather</h3>
                 <p class="feature-description">AI-powered scoring system analyzing category trends, optimal timing, and competition levels to predict your launch success potential</p>
               </div>
               <div class="feature-slide">
@@ -1179,7 +1179,7 @@ app.get('/', (req, res) => {
         <div id="dashboard" style="display: none;">
           <div class="predictor-card" id="predictorCard">
             <div class="predictor-header">
-              <h2>🎯 Launch Score Predictor</h2>
+              <h2>⛅ Launch Weather</h2>
               <p>AI-powered insights to maximize your ProductHunt launch success</p>
             </div>
             

@@ -171,28 +171,34 @@ app.get('/', (req, res) => {
         
         .charts-grid {
           display: grid;
-          grid-template-columns: repeat(auto-fit, minmax(500px, 1fr));
-          gap: 16px;
+          grid-template-columns: repeat(3, 1fr);
+          gap: 12px;
           margin-bottom: 20px;
+        }
+        
+        @media (max-width: 1200px) {
+          .charts-grid {
+            grid-template-columns: 1fr;
+          }
         }
         
         .chart-card {
           background: white;
           border: 1px solid #e8e7e6;
           border-radius: 8px;
-          padding: 16px;
+          padding: 14px;
         }
         
         .chart-card h3 {
-          font-size: 16px;
+          font-size: 14px;
           font-weight: 600;
-          margin-bottom: 16px;
+          margin-bottom: 12px;
           color: #1a1a1a;
         }
         
         .chart-container {
           position: relative;
-          height: 240px;
+          height: 220px;
         }
         
         .section-header {
@@ -1362,13 +1368,27 @@ app.get('/', (req, res) => {
         
         function updateLaunchActivityChart() {
           const ctx = document.getElementById('launchActivityChart');
+          if (!ctx) {
+            console.error('Launch Activity chart canvas not found');
+            return;
+          }
+          
           if (charts.launchActivity) charts.launchActivity.destroy();
           
           const dateCounts = {};
           filteredProducts.forEach(product => {
-            // Use ISO date format (YYYY-MM-DD) for consistent sorting
-            const date = product.createdAt.split('T')[0];
-            dateCounts[date] = (dateCounts[date] || 0) + 1;
+            if (!product.createdAt) return;
+            
+            // Parse date more robustly
+            let dateStr;
+            if (product.createdAt.includes('T')) {
+              dateStr = product.createdAt.split('T')[0];
+            } else {
+              // Handle case where createdAt is already just a date
+              dateStr = product.createdAt.substring(0, 10);
+            }
+            
+            dateCounts[dateStr] = (dateCounts[dateStr] || 0) + 1;
           });
           
           const sortedDates = Object.entries(dateCounts)
@@ -1376,8 +1396,13 @@ app.get('/', (req, res) => {
           
           // Format dates for display (e.g., "Jan 15")
           const formatDate = (dateStr) => {
-            const date = new Date(dateStr);
-            return date.toLocaleDateString('en-US', { month: 'short', day: 'numeric' });
+            try {
+              const date = new Date(dateStr + 'T00:00:00'); // Add time to ensure consistent parsing
+              if (isNaN(date.getTime())) return dateStr; // Fallback to original string
+              return date.toLocaleDateString('en-US', { month: 'short', day: 'numeric' });
+            } catch (e) {
+              return dateStr;
+            }
           };
           
           charts.launchActivity = new Chart(ctx, {
@@ -1413,7 +1438,14 @@ app.get('/', (req, res) => {
                 y: { 
                   beginAtZero: true,
                   ticks: {
-                    stepSize: 1 // Show whole numbers only
+                    stepSize: 1,
+                    precision: 0
+                  }
+                },
+                x: {
+                  ticks: {
+                    maxRotation: 45,
+                    minRotation: 45
                   }
                 }
               }

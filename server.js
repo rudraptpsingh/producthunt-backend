@@ -1,17 +1,26 @@
 const express = require('express');
 const cors = require('cors');
 const fetch = require('node-fetch');
+const OpenAI = require('openai');
 
 const app = express();
 const PORT = process.env.PORT || 5000;
 
 // Get ProductHunt token from environment variable
 const PH_TOKEN = process.env.PH_TOKEN;
+const OPENAI_API_KEY = process.env.OPENAI_API_KEY;
 
 if (!PH_TOKEN) {
   console.error('ERROR: PH_TOKEN environment variable is not set!');
   console.error('Please set your ProductHunt API token in the Secrets tab');
 }
+
+if (!OPENAI_API_KEY) {
+  console.error('WARNING: OPENAI_API_KEY not set. AI features will not work.');
+}
+
+// Initialize OpenAI client
+const openai = new OpenAI({ apiKey: OPENAI_API_KEY });
 
 // Enable CORS for all routes
 app.use(cors());
@@ -2424,7 +2433,7 @@ app.get('/', (req, res) => {
           updateDashboard();
         });
         
-        function analyzeUserLaunch() {
+        async function analyzeUserLaunch() {
           // Get form values
           const appName = document.getElementById('appName').value.trim();
           const category = document.getElementById('appCategory').value;
@@ -2438,240 +2447,86 @@ app.get('/', (req, res) => {
             return;
           }
           
-          // Calculate optimal tagline length from data
-          const taglineLengths = allProducts
-            .filter(p => p.tagline)
-            .map(p => ({ length: p.tagline.length, votes: p.votesCount }));
-          
-          const avgTaglineLength = taglineLengths.reduce((sum, t) => sum + t.length, 0) / taglineLengths.length;
-          const topPerformers = taglineLengths
-            .sort((a, b) => b.votes - a.votes)
-            .slice(0, 5);
-          const optimalLength = topPerformers.reduce((sum, t) => sum + t.length, 0) / topPerformers.length;
-          
-          // Analyze category
-          const categoryProducts = allProducts.filter(p => p.allCategories.includes(category));
-          const categoryAvgUpvotes = categoryProducts.reduce((sum, p) => sum + p.votesCount, 0) / categoryProducts.length;
-          
-          // Analyze day (if specified)
-          const days = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
-          const dayStats = {};
-          allProducts.forEach(p => {
-            const dayNum = new Date(p.createdAt).getDay();
-            const dayName = days[dayNum];
-            if (!dayStats[dayName]) dayStats[dayName] = { total: 0, count: 0 };
-            dayStats[dayName].total += p.votesCount;
-            dayStats[dayName].count++;
-          });
-          
-          let bestDay = 'Tuesday';
-          let bestDayAvg = 0;
-          Object.entries(dayStats).forEach(([day, stats]) => {
-            const avg = stats.total / stats.count;
-            if (avg > bestDayAvg) {
-              bestDayAvg = avg;
-              bestDay = day;
-            }
-          });
-          
-          // Analyze time (if specified)
-          const timeStats = {};
-          allProducts.forEach(p => {
-            const hour = new Date(p.createdAt).getHours();
-            if (!timeStats[hour]) timeStats[hour] = { total: 0, count: 0 };
-            timeStats[hour].total += p.votesCount;
-            timeStats[hour].count++;
-          });
-          
-          let bestHour = 0;
-          let bestTimeAvg = 0;
-          Object.entries(timeStats).forEach(([hour, stats]) => {
-            const avg = stats.total / stats.count;
-            if (avg > bestTimeAvg) {
-              bestTimeAvg = avg;
-              bestHour = parseInt(hour);
-            }
-          });
-          
-          // Calculate scores for each factor
-          const taglineLengthDiff = Math.abs(tagline.length - optimalLength);
-          const taglineScore = Math.max(0, 100 - (taglineLengthDiff / optimalLength * 100));
-          
-          const categoryScore = Math.min(100, (categoryAvgUpvotes / 100) * 100);
-          
-          let dayScore = 50;
-          if (plannedDay) {
-            const plannedDayAvg = dayStats[plannedDay] ? dayStats[plannedDay].total / dayStats[plannedDay].count : 0;
-            dayScore = Math.min(100, (plannedDayAvg / bestDayAvg) * 100);
-          } else {
-            dayScore = 75; // No penalty if not specified
-          }
-          
-          let timeScore = 50;
-          if (plannedTime) {
-            const plannedHour = parseInt(plannedTime);
-            const plannedTimeAvg = timeStats[plannedHour] ? timeStats[plannedHour].total / timeStats[plannedHour].count : 0;
-            timeScore = Math.min(100, (plannedTimeAvg / bestTimeAvg) * 100);
-          } else {
-            timeScore = 75; // No penalty if not specified
-          }
-          
-          // Final weighted score
-          const finalScore = Math.round(
-            taglineScore * 0.25 +
-            categoryScore * 0.30 +
-            dayScore * 0.25 +
-            timeScore * 0.20
-          );
-          
-          // Display results
+          // Show loading state
           const resultsDiv = document.getElementById('analysisResults');
           const scoreDiv = document.getElementById('userScore');
           const labelDiv = document.getElementById('userScoreLabel');
           const insightsDiv = document.getElementById('userInsights');
           
-          // Update score
-          scoreDiv.textContent = finalScore;
-          scoreDiv.className = 'result-score ' + 
-            (finalScore >= 75 ? 'high' : finalScore >= 50 ? 'medium' : 'low');
-          
-          if (finalScore >= 75) {
-            labelDiv.textContent = '🎉 Excellent! Your launch setup looks great!';
-          } else if (finalScore >= 50) {
-            labelDiv.textContent = '👍 Good setup! Consider our recommendations below.';
-          } else {
-            labelDiv.textContent = '⚠️ Several areas could be optimized for better results.';
-          }
-          
-          // Generate insights
-          const insights = [];
-          
-          // Tagline insight
-          const taglineStatus = taglineLengthDiff < optimalLength * 0.2 ? 'good' : 
-                                taglineLengthDiff < optimalLength * 0.5 ? 'warning' : 'bad';
-          insights.push({
-            label: 'Tagline Length',
-            value: \`\${tagline.length} characters\`,
-            recommendation: \`Optimal length is around \${Math.round(optimalLength)} characters. \${
-              tagline.length < optimalLength * 0.8 ? 'Consider adding more detail.' :
-              tagline.length > optimalLength * 1.3 ? 'Try to be more concise.' :
-              'Great length!'
-            }\`,
-            status: taglineStatus,
-            statusText: tagline.length >= optimalLength * 0.8 && tagline.length <= optimalLength * 1.3 ? 
-                       'Optimal' : 'Needs improvement'
-          });
-          
-          // Category insight
-          const categoryPercentile = (categoryAvgUpvotes / 100) * 100;
-          const categoryStatus = categoryPercentile >= 70 ? 'good' : categoryPercentile >= 40 ? 'warning' : 'bad';
-          insights.push({
-            label: 'Category Performance',
-            value: category,
-            recommendation: \`Avg upvotes in this category: \${Math.round(categoryAvgUpvotes)}. \${
-              categoryPercentile >= 70 ? 'This is a hot category! 🔥' :
-              categoryPercentile >= 40 ? 'Moderate competition expected.' :
-              'Consider a different category or standout positioning.'
-            }\`,
-            status: categoryStatus,
-            statusText: categoryPercentile >= 70 ? 'Hot category' : categoryPercentile >= 40 ? 'Moderate' : 'Competitive'
-          });
-          
-          // Day insight
-          if (plannedDay) {
-            const isDayOptimal = plannedDay === bestDay;
-            const dayDiff = ((dayStats[plannedDay]?.total / dayStats[plannedDay]?.count) / bestDayAvg * 100) || 0;
-            insights.push({
-              label: 'Hunt Day',
-              value: plannedDay,
-              recommendation: \`Best day is \${bestDay}. \${
-                isDayOptimal ? 'Perfect choice! 🎯' :
-                dayDiff >= 80 ? 'Good choice, close to optimal.' :
-                \`Consider switching to \${bestDay} for +\${Math.round(100 - dayDiff)}% better results.\`
-              }\`,
-              status: dayDiff >= 80 ? 'good' : dayDiff >= 60 ? 'warning' : 'bad',
-              statusText: isDayOptimal ? 'Optimal' : dayDiff >= 80 ? 'Good' : 'Suboptimal'
-            });
-          } else {
-            insights.push({
-              label: 'Hunt Day',
-              value: 'Not specified',
-              recommendation: \`We recommend \${bestDay} for best results based on historical data.\`,
-              status: 'warning',
-              statusText: 'Recommendation: ' + bestDay
-            });
-          }
-          
-          // Time insight
-          if (plannedTime) {
-            const formatTime = (hour) => {
-              const h = parseInt(hour);
-              const period = h >= 12 ? 'PM' : 'AM';
-              const displayHour = h === 0 ? 12 : h > 12 ? h - 12 : h;
-              return \`\${displayHour}:00 \${period}\`;
-            };
-            
-            const isTimeOptimal = parseInt(plannedTime) === bestHour;
-            const timeDiff = ((timeStats[plannedTime]?.total / timeStats[plannedTime]?.count) / bestTimeAvg * 100) || 0;
-            insights.push({
-              label: 'Hunt Time',
-              value: formatTime(plannedTime),
-              recommendation: \`Best time is \${formatTime(bestHour)}. \${
-                isTimeOptimal ? 'Perfect timing! ⏰' :
-                timeDiff >= 80 ? 'Good timing, close to peak.' :
-                \`Consider \${formatTime(bestHour)} for better visibility.\`
-              }\`,
-              status: timeDiff >= 80 ? 'good' : timeDiff >= 60 ? 'warning' : 'bad',
-              statusText: isTimeOptimal ? 'Optimal' : timeDiff >= 80 ? 'Good' : 'Suboptimal'
-            });
-          } else {
-            const formatTime = (hour) => {
-              const period = hour >= 12 ? 'PM' : 'AM';
-              const displayHour = hour === 0 ? 12 : hour > 12 ? hour - 12 : hour;
-              return \`\${displayHour}:00 \${period}\`;
-            };
-            
-            insights.push({
-              label: 'Hunt Time',
-              value: 'Not specified',
-              recommendation: \`We recommend \${formatTime(bestHour)} PST for maximum visibility.\`,
-              status: 'warning',
-              statusText: 'Recommendation: ' + formatTime(bestHour)
-            });
-          }
-          
-          // Render insights
-          insightsDiv.innerHTML = insights.map(insight => \`
-            <div class="insight-item">
-              <div class="insight-label">\${insight.label}</div>
-              <div class="insight-value">\${insight.value}</div>
-              <div class="insight-recommendation">\${insight.recommendation}</div>
-              <span class="insight-status \${insight.status}">\${insight.statusText}</span>
-            </div>
-          \`).join('');
-          
-          // Track hunt analysis
-          if (typeof gtag === 'function') {
-            gtag('event', 'analyze_hunt', {
-              'category': category,
-              'score': finalScore,
-              'has_planned_day': plannedDay ? 1 : 0,
-              'has_planned_time': plannedTime ? 1 : 0
-            });
-          }
-          
-          // Show results
           resultsDiv.classList.add('show');
-          
-          // Scroll to results
+          scoreDiv.textContent = '...';
+          scoreDiv.className = 'result-score';
+          labelDiv.textContent = '🤖 AI is analyzing your hunt strategy...';
+          insightsDiv.innerHTML = '<div style="text-align: center; padding: 40px; color: #666;">Analyzing with AI... This may take a few seconds.</div>';
           resultsDiv.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+          
+          try {
+            // Call AI endpoint with dashboard data for context
+            const response = await fetch('/api/analyze-hunt', {
+              method: 'POST',
+              headers: { 'Content-Type': 'application/json' },
+              body: JSON.stringify({
+                appName,
+                category,
+                tagline,
+                plannedDay,
+                plannedTime,
+                dashboardData: allProducts.slice(0, 20) // Send recent products for context
+              })
+            });
+            
+            if (!response.ok) {
+              throw new Error('AI analysis failed');
+            }
+            
+            const analysis = await response.json();
+            
+            // Display AI analysis results
+            scoreDiv.textContent = analysis.score || 0;
+            scoreDiv.className = 'result-score ' + 
+              (analysis.score >= 75 ? 'high' : analysis.score >= 50 ? 'medium' : 'low');
+            
+            labelDiv.textContent = analysis.scoreLabel || 'Analysis Complete';
+            
+            // Render AI-generated insights
+            insightsDiv.innerHTML = analysis.insights.map(insight => \`
+              <div class="insight-item">
+                <div class="insight-label">\${insight.label}</div>
+                <div class="insight-value">\${insight.value}</div>
+                <div class="insight-recommendation">\${insight.recommendation}</div>
+                <span class="insight-status \${insight.status}">\${insight.statusText}</span>
+              </div>
+            \`).join('');
+            
+            // Track hunt analysis
+            if (typeof gtag === 'function') {
+              gtag('event', 'analyze_hunt_ai', {
+                'category': category,
+                'score': analysis.score,
+                'has_planned_day': plannedDay ? 1 : 0,
+                'has_planned_time': plannedTime ? 1 : 0
+              });
+            }
+            
+          } catch (error) {
+            console.error('AI Analysis Error:', error);
+            scoreDiv.textContent = '!';
+            scoreDiv.className = 'result-score low';
+            labelDiv.textContent = '❌ AI analysis failed';
+            insightsDiv.innerHTML = \`
+              <div style="text-align: center; padding: 40px; color: #da552f;">
+                <p>Unable to analyze your hunt. Please try again.</p>
+                <p style="font-size: 14px; color: #666; margin-top: 10px;">Error: \${error.message}</p>
+              </div>
+            \`;
+          }
         }
         
-        function generateLaunchAssets() {
-          // Get form values (using same fields as analyze)
+        async function generateLaunchAssets() {
+          // Get form values
           const appName = document.getElementById('appName').value.trim();
           const category = document.getElementById('appCategory').value;
-          const keyFeatures = document.getElementById('appTagline').value.trim(); // Using tagline field for features
+          const keyFeatures = document.getElementById('appTagline').value.trim();
           const targetAudience = document.getElementById('targetAudience').value.trim();
           
           // Validation
@@ -2680,264 +2535,68 @@ app.get('/', (req, res) => {
             return;
           }
           
-          // Get category data for insights
-          const categoryProducts = allProducts.filter(p => 
-            p.allCategories && p.allCategories.includes(category)
-          );
-          
-          const topProductsInCategory = categoryProducts
-            .sort((a, b) => b.votesCount - a.votesCount)
-            .slice(0, 5);
-          
-          // Calculate optimal tagline length from top products
-          const taglineLengths = topProductsInCategory
-            .filter(p => p.tagline)
-            .map(p => p.tagline.length);
-          const avgTaglineLength = taglineLengths.length > 0 
-            ? Math.round(taglineLengths.reduce((sum, l) => sum + l, 0) / taglineLengths.length)
-            : 50;
-          
-          // Generate assets based on data
-          const assets = [];
-          
-          // 1. Optimized Tagline
-          const taglineTemplate = generateTagline(appName, keyFeatures, targetAudience, avgTaglineLength);
-          assets.push({
-            title: '💡 Optimized Tagline (60 chars max)',
-            content: taglineTemplate,
-            meta: \`Based on top \${category} products with avg length of \${avgTaglineLength} characters\`
-          });
-          
-          // 2. Product Description
-          const description = generateDescription(appName, keyFeatures, targetAudience, category);
-          assets.push({
-            title: '📄 Product Description',
-            content: description,
-            meta: 'Compelling, benefit-driven description for your ProductHunt post'
-          });
-          
-          // 3. First Comment (Maker Introduction)
-          const firstComment = generateFirstComment(appName, keyFeatures, category);
-          assets.push({
-            title: '👋 First Comment (Maker Introduction)',
-            content: firstComment,
-            meta: '70% of top products include a personal first comment from the maker'
-          });
-          
-          // 4. Social Media Post
-          const socialPost = generateSocialPost(appName, keyFeatures);
-          assets.push({
-            title: '🐦 Social Media Post Template',
-            content: socialPost,
-            meta: 'Use this for Twitter/X, LinkedIn, and other social platforms'
-          });
-          
-          // 5. Hunt Day Tips
-          const launchTips = generateLaunchTips(category, topProductsInCategory);
-          assets.push({
-            title: '🎯 Category-Specific Hunt Tips',
-            content: launchTips,
-            meta: \`Based on successful \${category} hunts by top Makers\`
-          });
-          
-          // Display assets
+          // Show loading state
           const resultsDiv = document.getElementById('assetsResults');
           const assetsDiv = document.getElementById('generatedAssets');
           
-          assetsDiv.innerHTML = assets.map((asset, index) => \`
-            <div class="asset-card">
-              <div class="asset-header">
-                <div class="asset-title">\${asset.title}</div>
-                <button class="copy-btn" onclick="copyToClipboard(event, \${index}, 'asset-content-\${index}')">
-                  📋 Copy
-                </button>
-              </div>
-              <div class="asset-content" id="asset-content-\${index}">\${asset.content}</div>
-              <div class="asset-meta">\${asset.meta}</div>
-            </div>
-          \`).join('');
-          
-          // Track asset generation
-          if (typeof gtag === 'function') {
-            gtag('event', 'generate_assets', {
-              'category': category,
-              'assets_count': assets.length,
-              'has_target_audience': targetAudience ? 1 : 0
-            });
-          }
-          
           resultsDiv.classList.add('show');
+          assetsDiv.innerHTML = '<div style="text-align: center; padding: 60px; color: #666;"><div style="font-size: 48px; margin-bottom: 20px;">🤖</div><div style="font-size: 18px; font-weight: 600; margin-bottom: 10px;">AI is crafting your hunt assets...</div><div style="font-size: 14px; color: #999;">This may take 10-15 seconds</div></div>';
           resultsDiv.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
-        }
-        
-        function generateTagline(appName, features, audience, targetLength) {
-          // Extract key features/benefits
-          const featureList = features.split(/[,.\\n]/).map(f => f.trim()).filter(f => f);
-          const mainFeature = featureList[0] || 'achieve better results';
           
-          // Use proven ProductHunt tagline patterns from top performers
-          const patterns = [
-            // Pattern 1: Action + Outcome (e.g., "Build stunning AI Apps with ease")
-            () => {
-              const action = mainFeature.toLowerCase().includes('build') || mainFeature.toLowerCase().includes('create') 
-                ? mainFeature : \`Create \${mainFeature}\`;
-              return audience ? \`\${action} for \${audience}\` : \`\${action} with ease\`;
-            },
-            // Pattern 2: Identity Statement (e.g., "The AI code editor built for...")
-            () => {
-              return audience ? \`The \${mainFeature} built for \${audience}\` : \`The smart way to \${mainFeature}\`;
-            },
-            // Pattern 3: Smart Assistant (e.g., "Your smart X for Y success")
-            () => {
-              return audience ? \`Your smart \${mainFeature} for \${audience}\` : \`Smart \${mainFeature} for better results\`;
+          try {
+            // Call AI endpoint
+            const response = await fetch('/api/generate-assets', {
+              method: 'POST',
+              headers: { 'Content-Type': 'application/json' },
+              body: JSON.stringify({
+                appName,
+                category,
+                keyFeatures,
+                targetAudience
+              })
+            });
+            
+            if (!response.ok) {
+              throw new Error('AI generation failed');
             }
-          ];
-          
-          // Try each pattern and pick the best fit
-          let tagline = patterns[0]();
-          for (const pattern of patterns) {
-            const candidate = pattern();
-            if (candidate.length <= 60 && candidate.length >= 30) {
-              tagline = candidate;
-              break;
+            
+            const result = await response.json();
+            const assets = result.assets || [];
+            
+            // Display AI-generated assets
+            assetsDiv.innerHTML = assets.map((asset, index) => \`
+              <div class="asset-card">
+                <div class="asset-header">
+                  <div class="asset-title">\${asset.title}</div>
+                  <button class="copy-btn" onclick="copyToClipboard(event, \${index}, 'asset-content-\${index}')">
+                    📋 Copy
+                  </button>
+                </div>
+                <div class="asset-content" id="asset-content-\${index}">\${asset.content}</div>
+                <div class="asset-meta">\${asset.meta}</div>
+              </div>
+            \`).join('');
+            
+            // Track asset generation
+            if (typeof gtag === 'function') {
+              gtag('event', 'generate_assets_ai', {
+                'category': category,
+                'assets_count': assets.length,
+                'has_target_audience': targetAudience ? 1 : 0
+              });
             }
+            
+          } catch (error) {
+            console.error('AI Asset Generation Error:', error);
+            assetsDiv.innerHTML = \`
+              <div style="text-align: center; padding: 60px; color: #da552f;">
+                <div style="font-size: 48px; margin-bottom: 20px;">❌</div>
+                <div style="font-size: 18px; font-weight: 600; margin-bottom: 10px;">AI generation failed</div>
+                <div style="font-size: 14px; color: #666;">Error: \${error.message}</div>
+                <div style="font-size: 14px; color: #999; margin-top: 15px;">Please try again or check your OpenAI API key.</div>
+              </div>
+            \`;
           }
-          
-          // Ensure it's under 60 characters (ProductHunt limit)
-          if (tagline.length > 60) {
-            tagline = tagline.substring(0, 57) + '...';
-          }
-          
-          return tagline;
-        }
-        
-        function generateDescription(appName, features, audience, category) {
-          const featureList = features.split(/[,.\\n]/).map(f => f.trim()).filter(f => f);
-          const audienceText = audience ? \`\${audience}\` : 'teams and individuals';
-          
-          // Use problem-first approach (top performer pattern)
-          // Format: What it is + Who it's for + How it works + Key benefits
-          // Keep under 260 characters for ProductHunt best practices
-          
-          const mainFeatures = featureList.slice(0, 3);
-          const featureText = mainFeatures.length > 1 
-            ? mainFeatures.slice(0, -1).join(', ') + ', and ' + mainFeatures[mainFeatures.length - 1]
-            : mainFeatures[0];
-          
-          let description = \`\${appName} helps \${audienceText} \${featureText}. \\n\\nBuilt for the modern \${category} workflow, it combines power and simplicity to deliver results faster. \\n\\nKey benefits:\\n\`;
-          
-          featureList.slice(0, 3).forEach(feature => {
-            description += \`• \${feature}\\n\`;
-          });
-          
-          description += \`\\nGet started in minutes—no complex setup required.\`;
-          
-          return description;
-        }
-        
-        function generateFirstComment(appName, features, category) {
-          const featureList = features.split(/[,.\\n]/).map(f => f.trim()).filter(f => f);
-          const keyBenefits = featureList.slice(0, 4).map(f => '✅ ' + f).join('\\n');
-          
-          // Use proven maker comment template from top performers
-          // Include: Introduction, Problem, Solution, Benefits, Offer, CTA
-          return \`👋 Hey Product Hunt!
-
-[Your Name] here, founder of \${appName}. 
-
-**The Problem:**
-We noticed that many \${category} users struggle with [describe the pain point your features solve]. This was costing time, money, and frustration.
-
-**Why we built \${appName}:**
-After talking to 100+ users, we realized existing solutions were either too complex, too expensive, or simply didn't work. So we built something different.
-
-**What we do:**
-\${appName} is designed to solve this with:
-
-\${keyBenefits}
-
-**Who it's for:**
-Perfect for anyone in the \${category} space who wants better results without the hassle.
-
-**Product Hunt Exclusive:**
-🎁 Use code "PRODUCTHUNT" for 30% off your first month (limited to first 100 users!)
-
-We're here all day to answer questions and would love your feedback. What features would you want to see next? 
-
-Thanks for checking us out! 🚀\`;
-        }
-        
-        function generateSocialPost(appName, features) {
-          const mainFeature = features.split(/[,.\\n]/).map(f => f.trim()).filter(f => f)[0];
-          
-          // Use proven social post format from top Makers
-          // Keep it compelling, 1-2 sentences, minimal hashtags, direct link
-          return \`🚀 We just hunted \${appName} on Product Hunt!
-
-\${mainFeature} - would love your feedback and support!
-
-[Add your Product Hunt link here]
-
-Your upvote and comments mean the world to us 🙏\`;
-        }
-        
-        function generateLaunchTips(category, topProducts) {
-          const avgUpvotes = topProducts.length > 0 
-            ? Math.round(topProducts.reduce((sum, p) => sum + p.votesCount, 0) / topProducts.length)
-            : 0;
-          
-          // Use insights from top ProductHunt performers 2024-2025
-          return \`📊 **Category Benchmarks (\${category}):**
-• Top 5 products average: \${avgUpvotes} upvotes
-• Target for Product of the Day: 200+ upvotes
-• Expected traffic (#1 spot): 10,000+ visitors
-
-⏰ **Hunt Timing (Critical!):**
-• **Hunt at 12:01 AM PST** (Pacific Time) - gives you full 24 hours
-• **Win the first 4 hours** = dominate the entire day
-• Best days: Tuesday-Thursday (high traffic) OR Sunday (less competition)
-• Avoid Mondays (everyone hunts) and major tech event days
-
-🎯 **Proven Success Strategies:**
-
-**Pre-Hunt (4 weeks before):**
-• Create ProductHunt "Coming Soon" teaser page to collect supporters
-• Engage with PH community (upvote/comment on other products daily)
-• Build support list: customers, email subscribers, social followers
-• Prepare all assets: gallery images (1270×760px), demo video (<90sec), first comment
-
-**Hunt Day Execution:**
-• Post your first comment IMMEDIATELY when product goes live
-• Reply to EVERY comment within minutes (engagement = visibility)
-• DM supporters personally (not mass email) with direct link
-• Send outreach in waves (avoid sudden vote spikes)
-• Monitor real-time with Hunted.Space or Product Wars
-• Final push in last 2-4 hours
-
-**What Top Makers Do:**
-✅ 70% of top products have Maker first comment
-✅ Personal DMs > mass social posts (more effective)
-✅ Long-time PH users have more voting weight
-✅ Respond to comments with personality (not corporate speak)
-✅ Ask for feedback and comments (not just upvotes)
-
-**What to Avoid:**
-❌ No fake upvotes (penalty/disqualification)
-❌ Don't hunt without existing community
-❌ Don't ignore comments or respond slowly
-❌ Don't use shortened links or UTM parameters
-❌ Don't treat PH as primary growth channel (it's a PR event)
-
-**Expected Results:**
-• 50% see registration increases
-• 42% see sales increase
-• Primary benefits: exposure, early adopters, social proof, feedback
-• PH badge for homepage credibility
-
-🔥 **2024-2025 Trending Categories:**
-AI Agents, AI Coding Tools, AI Video, No-Code, Productivity, Developer Tools
-
-Good luck! Win those first 4 hours! 🚀\`;
         }
         
         function copyToClipboard(event, index, elementId) {
@@ -3075,8 +2734,190 @@ app.get('/api/dashboard-data', async (req, res) => {
   }
 });
 
+// AI-powered hunt analysis endpoint
+app.post('/api/analyze-hunt', async (req, res) => {
+  try {
+    if (!OPENAI_API_KEY) {
+      return res.status(503).json({
+        error: 'OpenAI API key not configured',
+        message: 'Please set OPENAI_API_KEY in environment variables'
+      });
+    }
+
+    const { appName, category, tagline, plannedDay, plannedTime, dashboardData } = req.body;
+
+    if (!appName || !category || !tagline) {
+      return res.status(400).json({
+        error: 'Missing required fields',
+        message: 'appName, category, and tagline are required'
+      });
+    }
+
+    // Prepare context from dashboard data for AI
+    const contextData = dashboardData ? JSON.stringify(dashboardData).substring(0, 3000) : 'No data available';
+
+    const prompt = `You are a ProductHunt launch expert analyzing a product launch strategy. Based on real ProductHunt data and best practices, provide a comprehensive analysis.
+
+Product Details:
+- Name: ${appName}
+- Category: ${category}
+- Tagline: ${tagline}
+- Planned Day: ${plannedDay || 'Not specified'}
+- Planned Time: ${plannedTime || 'Not specified'}
+
+ProductHunt Data Context (recent products):
+${contextData}
+
+Provide a detailed analysis with:
+1. Overall launch readiness score (0-100)
+2. Tagline analysis (length, clarity, impact)
+3. Category competitiveness and recommendations
+4. Optimal day/time recommendations
+5. Specific actionable improvements
+
+Respond in JSON format with this structure:
+{
+  "score": number (0-100),
+  "scoreLabel": "Excellent/Good/Needs Improvement",
+  "insights": [
+    {
+      "label": "Tagline Analysis",
+      "value": "current value",
+      "recommendation": "detailed recommendation",
+      "status": "good/warning/bad",
+      "statusText": "status description"
+    }
+  ]
+}`;
+
+    const completion = await openai.chat.completions.create({
+      model: "gpt-4o-mini", // Cost-effective model
+      messages: [
+        {
+          role: "system",
+          content: "You are an expert ProductHunt launch strategist with deep knowledge of what makes products successful on ProductHunt."
+        },
+        {
+          role: "user",
+          content: prompt
+        }
+      ],
+      response_format: { type: "json_object" },
+      temperature: 0.7,
+      max_tokens: 1500
+    });
+
+    const analysis = JSON.parse(completion.choices[0].message.content);
+    res.json(analysis);
+
+  } catch (error) {
+    console.error('Error in AI hunt analysis:', error);
+    res.status(500).json({
+      error: 'AI analysis failed',
+      message: error.message
+    });
+  }
+});
+
+// AI-powered hunt assets generation endpoint
+app.post('/api/generate-assets', async (req, res) => {
+  try {
+    if (!OPENAI_API_KEY) {
+      return res.status(503).json({
+        error: 'OpenAI API key not configured',
+        message: 'Please set OPENAI_API_KEY in environment variables'
+      });
+    }
+
+    const { appName, category, keyFeatures, targetAudience } = req.body;
+
+    if (!appName || !category || !keyFeatures) {
+      return res.status(400).json({
+        error: 'Missing required fields',
+        message: 'appName, category, and keyFeatures are required'
+      });
+    }
+
+    const prompt = `You are a professional ProductHunt copywriter who has helped launch dozens of successful products, including Golden Kitty Award winners.
+
+Create compelling ProductHunt launch assets for:
+- Product Name: ${appName}
+- Category: ${category}
+- Key Features: ${keyFeatures}
+- Target Audience: ${targetAudience || 'General users'}
+
+Generate the following assets based on proven patterns from top ProductHunt launches:
+
+1. **Optimized Tagline** (under 60 characters, punchy, benefit-driven)
+2. **Product Description** (2-3 paragraphs, problem-solution-benefits format)
+3. **First Comment** (Maker introduction - warm, personal, includes problem statement, solution overview, key benefits, exclusive offer for PH community)
+4. **Social Media Post** (Twitter/X optimized, engaging, call-to-action)
+5. **Launch Day Tips** (Category-specific timing, engagement strategies, benchmarks)
+
+Respond in JSON format:
+{
+  "assets": [
+    {
+      "title": "💡 Optimized Tagline",
+      "content": "the tagline text",
+      "meta": "insight about why this tagline works"
+    },
+    {
+      "title": "📄 Product Description", 
+      "content": "the description text",
+      "meta": "best practices used"
+    },
+    {
+      "title": "👋 First Comment (Maker Introduction)",
+      "content": "the first comment text",
+      "meta": "engagement tips"
+    },
+    {
+      "title": "🐦 Social Media Post Template",
+      "content": "the social post text",
+      "meta": "platform recommendations"
+    },
+    {
+      "title": "🎯 Hunt Day Success Tips",
+      "content": "actionable launch day tips",
+      "meta": "timing and strategy insights"
+    }
+  ]
+}`;
+
+    const completion = await openai.chat.completions.create({
+      model: "gpt-4o-mini", // Cost-effective model
+      messages: [
+        {
+          role: "system",
+          content: "You are an expert ProductHunt copywriter and launch strategist. You understand what makes products go viral on ProductHunt and how to craft compelling copy that converts."
+        },
+        {
+          role: "user",
+          content: prompt
+        }
+      ],
+      response_format: { type: "json_object" },
+      temperature: 0.8,
+      max_tokens: 2000
+    });
+
+    const result = JSON.parse(completion.choices[0].message.content);
+    res.json(result);
+
+  } catch (error) {
+    console.error('Error in AI asset generation:', error);
+    res.status(500).json({
+      error: 'AI generation failed',
+      message: error.message
+    });
+  }
+});
+
 app.listen(PORT, '0.0.0.0', () => {
   console.log(`ProductHunt proxy server running on port ${PORT}`);
   console.log(`API endpoint: /api/producthunt`);
   console.log(`Dashboard endpoint: /api/dashboard-data`);
+  console.log(`AI Hunt Analysis: /api/analyze-hunt`);
+  console.log(`AI Asset Generation: /api/generate-assets`);
 });

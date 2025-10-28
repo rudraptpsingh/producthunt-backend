@@ -550,6 +550,12 @@ app.get('/', (req, res) => {
           font-size: 13px;
           font-weight: 600;
           transition: all 0.3s ease;
+          cursor: help;
+          position: relative;
+        }
+        
+        .momentum-indicator:hover {
+          opacity: 0.8;
         }
         
         .momentum-arrow {
@@ -2099,7 +2105,8 @@ app.get('/', (req, res) => {
             momentum = {
               class: 'momentum-peak',
               text: 'PEAK WINDOW',
-              arrow: '▲'
+              arrow: '▲',
+              tooltip: "You're in the optimal time window right now - ideal conditions for launching!"
             };
           }
           // Building momentum - approaching optimal time
@@ -2107,7 +2114,8 @@ app.get('/', (req, res) => {
             momentum = {
               class: 'momentum-building',
               text: 'TRENDING UP',
-              arrow: '▲'
+              arrow: '▲',
+              tooltip: 'Conditions are improving - approaching optimal launch time'
             };
           }
           // Late in the day - window closing
@@ -2115,7 +2123,8 @@ app.get('/', (req, res) => {
             momentum = {
               class: 'momentum-declining',
               text: 'CLOSING SOON',
-              arrow: '▼'
+              arrow: '▼',
+              tooltip: "Late in the day - today's hunt window is closing soon"
             };
           }
           // Moving away from optimal
@@ -2123,7 +2132,8 @@ app.get('/', (req, res) => {
             momentum = {
               class: 'momentum-declining',
               text: 'TRENDING DOWN',
-              arrow: '▼'
+              arrow: '▼',
+              tooltip: 'Moving away from optimal launch conditions'
             };
           }
           // Stable conditions
@@ -2131,7 +2141,8 @@ app.get('/', (req, res) => {
             momentum = {
               class: 'momentum-stable',
               text: 'STABLE',
-              arrow: '—'
+              arrow: '—',
+              tooltip: 'Conditions are steady - no significant changes expected soon'
             };
           }
           
@@ -2182,9 +2193,11 @@ app.get('/', (req, res) => {
           if (prediction.score > 0) {
             momentumIndicator.innerHTML = \`<span class="momentum-arrow">\${momentum.arrow}</span><span>\${momentum.text}</span>\`;
             momentumIndicator.className = 'momentum-indicator ' + momentum.class;
+            momentumIndicator.title = momentum.tooltip;
           } else {
             momentumIndicator.innerHTML = '';
             momentumIndicator.className = 'momentum-indicator';
+            momentumIndicator.title = '';
           }
         }
         

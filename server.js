@@ -4011,9 +4011,9 @@ app.post('/api/track-hunt', async (req, res) => {
     }
     
     // Get today's date in ProductHunt's timezone (PST)
-    const now = new Date();
+    const nowDate = new Date();
     const pstOffset = -8 * 60; // PST is UTC-8
-    const pstTime = new Date(now.getTime() + (pstOffset + now.getTimezoneOffset()) * 60000);
+    const pstTime = new Date(nowDate.getTime() + (pstOffset + nowDate.getTimezoneOffset()) * 60000);
     const todayDate = pstTime.toISOString().split('T')[0]; // YYYY-MM-DD format
     
     // Fetch today's products with date filter
@@ -4082,8 +4082,8 @@ app.post('/api/track-hunt', async (req, res) => {
     
     // Calculate velocity
     const createdAt = new Date(trackedProduct.createdAt);
-    const now = new Date();
-    const hoursLive = (now - createdAt) / (1000 * 60 * 60);
+    const currentTime = new Date();
+    const hoursLive = (currentTime - createdAt) / (1000 * 60 * 60);
     const velocity = hoursLive > 0 ? Math.round(trackedProduct.votesCount / hoursLive) : 0;
     trackedProduct.velocity = velocity + '/hr';
     

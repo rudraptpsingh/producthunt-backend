@@ -173,14 +173,14 @@ app.get('/', (req, res) => {
           display: grid;
           grid-template-columns: repeat(auto-fit, minmax(500px, 1fr));
           gap: 16px;
-          margin-bottom: 24px;
+          margin-bottom: 20px;
         }
         
         .chart-card {
           background: white;
           border: 1px solid #e8e7e6;
           border-radius: 8px;
-          padding: 20px;
+          padding: 16px;
         }
         
         .chart-card h3 {
@@ -192,7 +192,7 @@ app.get('/', (req, res) => {
         
         .chart-container {
           position: relative;
-          height: 280px;
+          height: 240px;
         }
         
         .section-header {
@@ -210,14 +210,14 @@ app.get('/', (req, res) => {
         
         .products-grid {
           display: grid;
-          gap: 12px;
+          gap: 10px;
         }
         
         .product-card {
           background: white;
           border: 1px solid #e8e7e6;
           border-radius: 8px;
-          padding: 16px;
+          padding: 12px;
           transition: border-color 0.2s ease, box-shadow 0.2s ease;
           cursor: pointer;
         }
@@ -957,7 +957,7 @@ app.get('/', (req, res) => {
         let charts = {};
         let sortColumn = 'votesCount';
         let showAllProducts = false;
-        const INITIAL_PRODUCTS_COUNT = 6;
+        const INITIAL_PRODUCTS_COUNT = 3;
         let sortDirection = 'desc';
         
         async function loadDashboardData() {

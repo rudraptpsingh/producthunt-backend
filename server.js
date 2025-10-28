@@ -1889,17 +1889,41 @@ app.get('/', (req, res) => {
         }
         
         function generateTagline(appName, features, audience, targetLength) {
-          // Extract first feature/benefit
+          // Extract key features/benefits
           const featureList = features.split(/[,.\\n]/).map(f => f.trim()).filter(f => f);
-          const mainFeature = featureList[0] || 'your productivity';
+          const mainFeature = featureList[0] || 'achieve better results';
           
-          // Create concise tagline
-          const audienceText = audience ? \` for \${audience}\` : '';
-          let tagline = \`\${mainFeature}\${audienceText}\`.trim();
+          // Use proven ProductHunt tagline patterns from top performers
+          const patterns = [
+            // Pattern 1: Action + Outcome (e.g., "Build stunning AI Apps with ease")
+            () => {
+              const action = mainFeature.toLowerCase().includes('build') || mainFeature.toLowerCase().includes('create') 
+                ? mainFeature : \`Create \${mainFeature}\`;
+              return audience ? \`\${action} for \${audience}\` : \`\${action} with ease\`;
+            },
+            // Pattern 2: Identity Statement (e.g., "The AI code editor built for...")
+            () => {
+              return audience ? \`The \${mainFeature} built for \${audience}\` : \`The smart way to \${mainFeature}\`;
+            },
+            // Pattern 3: Smart Assistant (e.g., "Your smart X for Y success")
+            () => {
+              return audience ? \`Your smart \${mainFeature} for \${audience}\` : \`Smart \${mainFeature} for better results\`;
+            }
+          ];
           
-          // Ensure it's under 60 characters
-          if (tagline.length > 58) {
-            tagline = tagline.substring(0, 55) + '...';
+          // Try each pattern and pick the best fit
+          let tagline = patterns[0]();
+          for (const pattern of patterns) {
+            const candidate = pattern();
+            if (candidate.length <= 60 && candidate.length >= 30) {
+              tagline = candidate;
+              break;
+            }
+          }
+          
+          // Ensure it's under 60 characters (ProductHunt limit)
+          if (tagline.length > 60) {
+            tagline = tagline.substring(0, 57) + '...';
           }
           
           return tagline;
@@ -1907,48 +1931,72 @@ app.get('/', (req, res) => {
         
         function generateDescription(appName, features, audience, category) {
           const featureList = features.split(/[,.\\n]/).map(f => f.trim()).filter(f => f);
-          const audienceText = audience ? \` designed for \${audience}\` : '';
+          const audienceText = audience ? \`\${audience}\` : 'teams and individuals';
           
-          let description = \`\${appName} is a \${category} product\${audienceText} that helps you:\\n\\n\`;
+          // Use problem-first approach (top performer pattern)
+          // Format: What it is + Who it's for + How it works + Key benefits
+          // Keep under 260 characters for ProductHunt best practices
           
-          featureList.slice(0, 4).forEach(feature => {
-            description += \`✨ \${feature}\\n\`;
+          const mainFeatures = featureList.slice(0, 3);
+          const featureText = mainFeatures.length > 1 
+            ? mainFeatures.slice(0, -1).join(', ') + ', and ' + mainFeatures[mainFeatures.length - 1]
+            : mainFeatures[0];
+          
+          let description = \`\${appName} helps \${audienceText} \${featureText}. \\n\\nBuilt for the modern \${category} workflow, it combines power and simplicity to deliver results faster. \\n\\nKey benefits:\\n\`;
+          
+          featureList.slice(0, 3).forEach(feature => {
+            description += \`• \${feature}\\n\`;
           });
           
-          description += \`\\nPerfect for anyone looking to streamline their workflow and achieve better results.\`;
+          description += \`\\nGet started in minutes—no complex setup required.\`;
           
           return description;
         }
         
         function generateFirstComment(appName, features, category) {
-          const featureList = features.split(/[,.\\n]/).map(f => f.trim()).filter(f => f).slice(0, 3).map(f => '• ' + f).join('\\n');
+          const featureList = features.split(/[,.\\n]/).map(f => f.trim()).filter(f => f);
+          const keyBenefits = featureList.slice(0, 4).map(f => '✅ ' + f).join('\\n');
           
-          return \`Hey Product Hunt! 👋
+          // Use proven maker comment template from top performers
+          // Include: Introduction, Problem, Solution, Benefits, Offer, CTA
+          return \`👋 Hey Product Hunt!
 
-I'm excited to share \${appName} with you all today!
+[Your Name] here, founder of \${appName}. 
 
-We built this because we saw a real need in the \${category} space. After months of development and testing, we're thrilled to finally launch here.
+**The Problem:**
+We noticed that many \${category} users struggle with [describe the pain point your features solve]. This was costing time, money, and frustration.
 
-What makes \${appName} different:
-\${featureList}
+**Why we built \${appName}:**
+After talking to 100+ users, we realized existing solutions were either too complex, too expensive, or simply didn't work. So we built something different.
 
-We'd love to hear your feedback and answer any questions you have. This community has been incredibly inspiring to us, and we're grateful to be here.
+**What we do:**
+\${appName} is designed to solve this with:
 
-Try it out and let us know what you think! 🚀\`;
+\${keyBenefits}
+
+**Who it's for:**
+Perfect for anyone in the \${category} space who wants better results without the hassle.
+
+**Product Hunt Exclusive:**
+🎁 Use code "PRODUCTHUNT" for 30% off your first month (limited to first 100 users!)
+
+We're here all day to answer questions and would love your feedback. What features would you want to see next? 
+
+Thanks for checking us out! 🚀\`;
         }
         
         function generateSocialPost(appName, features) {
           const mainFeature = features.split(/[,.\\n]/).map(f => f.trim()).filter(f => f)[0];
           
-          return \`🚀 We just launched on @ProductHunt!
+          // Use proven social post format from top performers
+          // Keep it compelling, 1-2 sentences, minimal hashtags, direct link
+          return \`🚀 We just launched \${appName} on Product Hunt!
 
-\${appName} - \${mainFeature}
+\${mainFeature} - would love your feedback and support!
 
-Check it out and let us know what you think! Your support means the world to us. 🙏
+[Add your Product Hunt link here]
 
-[Your ProductHunt Link Here]
-
-#ProductHunt #Launch #NewProduct\`;
+Your upvote and comments mean the world to us 🙏\`;
         }
         
         function generateLaunchTips(category, topProducts) {
@@ -1956,31 +2004,58 @@ Check it out and let us know what you think! Your support means the world to us.
             ? Math.round(topProducts.reduce((sum, p) => sum + p.votesCount, 0) / topProducts.length)
             : 0;
           
-          return \`Based on successful \${category} launches:
+          // Use insights from top ProductHunt performers 2024-2025
+          return \`📊 **Category Benchmarks (\${category}):**
+• Top 5 products average: \${avgUpvotes} upvotes
+• Target for Product of the Day: 200+ upvotes
+• Expected traffic (#1 spot): 10,000+ visitors
 
-📊 Category Benchmarks:
-• Average upvotes for top products: \${avgUpvotes}
-• Total products in category: \${topProducts.length} in our dataset
+⏰ **Launch Timing (Critical!):**
+• **Launch at 12:01 AM PST** (Pacific Time) - gives you full 24 hours
+• **Win the first 4 hours** = dominate the entire day
+• Best days: Tuesday-Thursday (high traffic) OR Sunday (less competition)
+• Avoid Mondays (everyone launches) and major tech event days
 
-⏰ Launch Timing:
-• Best time: 12:01 AM PST (maximize 24-hour cycle)
-• Be ready to respond to comments within minutes
+🎯 **Proven Success Strategies:**
 
-🎯 Success Strategies:
-• Respond to EVERY comment personally and quickly
-• Have your "first comment" ready to post immediately
-• Share with your network, but ask for comments (not upvotes)
-• Use high-quality visuals (240×240px thumbnail minimum)
-• Include a demo video if possible (53% of top products do)
+**Pre-Launch (4 weeks before):**
+• Create ProductHunt "Coming Soon" teaser page to collect supporters
+• Engage with PH community (upvote/comment on other products daily)
+• Build support list: customers, email subscribers, social followers
+• Prepare all assets: gallery images (1270×760px), demo video (<90sec), first comment
 
-📝 Pre-Launch Checklist:
-• Complete your ProductHunt profile
-• Engage with the community beforehand
-• Prepare 2+ gallery images (1270×760px)
-• Test all links thoroughly
-• Brief your team on launch day responsibilities
+**Launch Day Execution:**
+• Post your first comment IMMEDIATELY when product goes live
+• Reply to EVERY comment within minutes (engagement = visibility)
+• DM supporters personally (not mass email) with direct link
+• Send outreach in waves (avoid sudden vote spikes)
+• Monitor real-time with Hunted.Space or Product Wars
+• Final push in last 2-4 hours
 
-Good luck with your launch! 🚀\`;
+**What Top Launchers Do:**
+✅ 70% of top products have maker first comment
+✅ Personal DMs > mass social posts (more effective)
+✅ Long-time PH users have more voting weight
+✅ Respond to comments with personality (not corporate speak)
+✅ Ask for feedback and comments (not just upvotes)
+
+**What to Avoid:**
+❌ No fake upvotes (penalty/disqualification)
+❌ Don't launch without existing community
+❌ Don't ignore comments or respond slowly
+❌ Don't use shortened links or UTM parameters
+❌ Don't treat PH as primary growth channel (it's a PR event)
+
+**Expected Results:**
+• 50% see registration increases
+• 42% see sales increase
+• Primary benefits: exposure, early adopters, social proof, feedback
+• PH badge for homepage credibility
+
+🔥 **2024-2025 Trending Categories:**
+AI Agents, AI Coding Tools, AI Video, No-Code, Productivity, Developer Tools
+
+Good luck! Win those first 4 hours! 🚀\`;
         }
         
         function copyToClipboard(index, elementId) {

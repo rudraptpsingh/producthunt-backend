@@ -65,10 +65,10 @@ Personalized launch analysis tool where users input their app details and receiv
 - **Search & Filters**: Real-time product search and category filtering
 - **Chart Visualizations** (Chart.js):
   - Top Categories by Product Count (Bar Chart)
-  - Category Distribution (Pie Chart)
-  - Launch Activity Over Time (Line Chart)
+  - Launch Activity Over Time (Line Chart with improved date formatting)
   - Average Upvotes by Category (Bar Chart)
 - **Product Cards**: Clean ProductHunt-style cards with click-to-view functionality
+- **Show More/Less**: Initially displays 6 products with expandable button to view all
 
 ### 🎨 Design System
 - **Color Palette**:
@@ -159,6 +159,13 @@ User-specific weighted scoring algorithm:
 - No external API calls for analysis (all client-side)
 
 ## Recent Changes
+
+### 2025-10-28: UX Improvements & Chart Optimization
+- Removed redundant Category Distribution pie chart (streamlined to 3 focused charts)
+- Added "Show More/Less" toggle for products section (initially shows 6, expandable to all)
+- Improved Launch Activity Over Time chart with better date parsing and formatting
+- Moved "Analyze Your Launch" section to bottom for better page flow
+- Enhanced button styling with ProductHunt-branded hover effects
 
 ### 2025-10-28: "Analyze Your Launch" Feature
 - Added personalized launch analyzer with input form

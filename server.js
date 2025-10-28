@@ -776,6 +776,373 @@ app.get('/', (req, res) => {
           font-weight: 700;
         }
         
+        /* Command Center Styles */
+        .command-center-card {
+          background: #FFFFFF;
+          border-radius: 8px;
+          padding: 32px;
+          margin-bottom: 32px;
+          box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+          border: 1px solid #E5E5E5;
+        }
+        
+        .command-center-header {
+          text-align: center;
+          margin-bottom: 32px;
+          position: relative;
+        }
+        
+        .command-center-header h2 {
+          font-size: 24px;
+          margin: 0 0 8px 0;
+          font-weight: 700;
+          color: #1A1A1A;
+        }
+        
+        .command-center-header p {
+          color: #666;
+          margin: 0;
+        }
+        
+        .auto-refresh-badge {
+          display: inline-block;
+          background: linear-gradient(135deg, #10B981 0%, #059669 100%);
+          color: white;
+          padding: 6px 16px;
+          border-radius: 20px;
+          font-size: 12px;
+          font-weight: 600;
+          margin-top: 12px;
+          animation: pulse 2s ease-in-out infinite;
+        }
+        
+        @keyframes pulse {
+          0%, 100% { opacity: 1; }
+          50% { opacity: 0.7; }
+        }
+        
+        .command-center-grid {
+          display: grid;
+          grid-template-columns: 1.5fr 1fr;
+          gap: 24px;
+          margin-bottom: 32px;
+        }
+        
+        .cc-section {
+          background: #F8F8F8;
+          border: 1px solid #E5E5E5;
+          border-radius: 8px;
+          padding: 20px;
+        }
+        
+        .cc-section h3 {
+          font-size: 16px;
+          font-weight: 700;
+          color: #1A1A1A;
+          margin: 0 0 16px 0;
+        }
+        
+        .leaderboard-table {
+          max-height: 600px;
+          overflow-y: auto;
+        }
+        
+        .leaderboard-row {
+          display: grid;
+          grid-template-columns: 40px 2fr 100px 80px 80px 120px;
+          gap: 12px;
+          padding: 12px;
+          background: white;
+          border: 1px solid #E5E5E5;
+          border-radius: 6px;
+          margin-bottom: 8px;
+          align-items: center;
+          transition: all 0.2s;
+        }
+        
+        .leaderboard-row:hover {
+          transform: translateX(4px);
+          box-shadow: 0 2px 8px rgba(218, 85, 47, 0.1);
+        }
+        
+        .lb-rank {
+          font-size: 18px;
+          font-weight: 700;
+          color: #DA552F;
+          text-align: center;
+        }
+        
+        .lb-rank.top-3 {
+          font-size: 22px;
+        }
+        
+        .lb-product {
+          font-weight: 600;
+          color: #1A1A1A;
+          overflow: hidden;
+          text-overflow: ellipsis;
+          white-space: nowrap;
+        }
+        
+        .lb-category {
+          font-size: 12px;
+          color: #666;
+          background: #F0F0F0;
+          padding: 4px 8px;
+          border-radius: 4px;
+          text-align: center;
+        }
+        
+        .lb-upvotes {
+          font-size: 16px;
+          font-weight: 700;
+          color: #DA552F;
+          text-align: center;
+        }
+        
+        .lb-comments {
+          font-size: 14px;
+          color: #666;
+          text-align: center;
+        }
+        
+        .lb-velocity {
+          font-size: 12px;
+          font-weight: 600;
+          text-align: center;
+          padding: 4px 8px;
+          border-radius: 4px;
+        }
+        
+        .velocity-high {
+          background: #D1FAE5;
+          color: #065F46;
+        }
+        
+        .velocity-medium {
+          background: #FEF3C7;
+          color: #92400E;
+        }
+        
+        .velocity-low {
+          background: #FEE2E2;
+          color: #991B1B;
+        }
+        
+        .engagement-windows {
+          display: flex;
+          flex-direction: column;
+          gap: 12px;
+        }
+        
+        .engagement-window {
+          background: white;
+          border: 2px solid #E5E5E5;
+          border-radius: 6px;
+          padding: 12px;
+        }
+        
+        .engagement-window.optimal {
+          border-color: #10B981;
+          background: #ECFDF5;
+        }
+        
+        .ew-time {
+          font-size: 16px;
+          font-weight: 700;
+          color: #1A1A1A;
+          margin-bottom: 4px;
+        }
+        
+        .ew-label {
+          font-size: 13px;
+          color: #666;
+        }
+        
+        .ew-status {
+          display: inline-block;
+          font-size: 11px;
+          font-weight: 600;
+          padding: 3px 8px;
+          border-radius: 12px;
+          margin-top: 6px;
+          background: #10B981;
+          color: white;
+        }
+        
+        .action-suggestions {
+          display: flex;
+          flex-direction: column;
+          gap: 10px;
+        }
+        
+        .action-item {
+          background: white;
+          border-left: 4px solid #DA552F;
+          padding: 12px;
+          border-radius: 4px;
+          font-size: 14px;
+          line-height: 1.5;
+        }
+        
+        .action-item.urgent {
+          border-left-color: #EF4444;
+          background: #FEF2F2;
+        }
+        
+        .action-item.opportunity {
+          border-left-color: #10B981;
+          background: #F0FDF4;
+        }
+        
+        .templates-section {
+          margin-bottom: 32px;
+        }
+        
+        .templates-section h3 {
+          font-size: 18px;
+          font-weight: 700;
+          color: #1A1A1A;
+          margin: 0 0 20px 0;
+        }
+        
+        .templates-grid {
+          display: grid;
+          grid-template-columns: repeat(3, 1fr);
+          gap: 20px;
+        }
+        
+        .template-card {
+          background: #F8F8F8;
+          border: 1px solid #E5E5E5;
+          border-radius: 8px;
+          padding: 20px;
+        }
+        
+        .template-card h4 {
+          font-size: 15px;
+          font-weight: 700;
+          color: #1A1A1A;
+          margin: 0 0 12px 0;
+        }
+        
+        .template-card textarea {
+          width: 100%;
+          min-height: 120px;
+          padding: 12px;
+          border: 1px solid #E5E5E5;
+          border-radius: 6px;
+          font-size: 13px;
+          line-height: 1.6;
+          resize: vertical;
+          font-family: inherit;
+          background: white;
+          color: #1A1A1A;
+        }
+        
+        .copy-btn {
+          width: 100%;
+          margin-top: 12px;
+          padding: 10px;
+          background: #DA552F;
+          color: white;
+          border: none;
+          border-radius: 6px;
+          font-size: 14px;
+          font-weight: 600;
+          cursor: pointer;
+          transition: all 0.2s;
+        }
+        
+        .copy-btn:hover {
+          background: #c44a28;
+          transform: translateY(-1px);
+          box-shadow: 0 2px 8px rgba(218, 85, 47, 0.3);
+        }
+        
+        .copy-btn:active {
+          transform: translateY(0);
+        }
+        
+        .copy-btn.copied {
+          background: #10B981;
+        }
+        
+        .competitor-analysis h3 {
+          font-size: 18px;
+          font-weight: 700;
+          color: #1A1A1A;
+          margin: 0 0 20px 0;
+        }
+        
+        .competitor-insights {
+          display: grid;
+          grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+          gap: 16px;
+        }
+        
+        .competitor-card {
+          background: #F8F8F8;
+          border: 1px solid #E5E5E5;
+          border-radius: 8px;
+          padding: 16px;
+        }
+        
+        .competitor-card.catchable {
+          border-color: #10B981;
+          background: #ECFDF5;
+        }
+        
+        .competitor-card.out-of-reach {
+          border-color: #EF4444;
+          background: #FEF2F2;
+        }
+        
+        .comp-rank {
+          font-size: 24px;
+          font-weight: 700;
+          color: #DA552F;
+          margin-bottom: 8px;
+        }
+        
+        .comp-name {
+          font-size: 15px;
+          font-weight: 600;
+          color: #1A1A1A;
+          margin-bottom: 8px;
+        }
+        
+        .comp-gap {
+          font-size: 13px;
+          color: #666;
+          margin-bottom: 8px;
+        }
+        
+        .comp-action {
+          font-size: 12px;
+          font-weight: 600;
+          padding: 6px 12px;
+          border-radius: 4px;
+          display: inline-block;
+        }
+        
+        .comp-action.can-catch {
+          background: #10B981;
+          color: white;
+        }
+        
+        .comp-action.monitor {
+          background: #F59E0B;
+          color: white;
+        }
+        
+        .loading-placeholder {
+          text-align: center;
+          padding: 40px;
+          color: #999;
+          font-style: italic;
+        }
+        
         .confidence-badge {
           display: inline-block;
           background: rgba(255, 255, 255, 0.2);
@@ -1532,12 +1899,18 @@ app.get('/', (req, res) => {
                 <h3 class="feature-title">Analytics Dashboard</h3>
                 <p class="feature-description">Real-time ProductHunt trends, category insights, and hunt activity visualization to help you make informed decisions</p>
               </div>
+              <div class="feature-slide">
+                <span class="feature-icon">🚀</span>
+                <h3 class="feature-title">Launch Day Command Center</h3>
+                <p class="feature-description">Real-time dashboard tracking top 20 products with competitor analysis, engagement timing alerts, and one-click social templates to maximize your launch success</p>
+              </div>
             </div>
             <div class="slider-dots" id="sliderDots">
               <button class="slider-dot active" onclick="goToSlide(0)"></button>
               <button class="slider-dot" onclick="goToSlide(1)"></button>
               <button class="slider-dot" onclick="goToSlide(2)"></button>
               <button class="slider-dot" onclick="goToSlide(3)"></button>
+              <button class="slider-dot" onclick="goToSlide(4)"></button>
             </div>
           </div>
         </div>
@@ -1606,6 +1979,63 @@ app.get('/', (req, res) => {
                 <div class="rec-label">● Competition</div>
                 <div class="rec-value" id="recCompetition">--</div>
                 <div class="rec-impact" id="recCompetitionImpact">--</div>
+              </div>
+            </div>
+          </div>
+          
+          <div class="command-center-card" id="commandCenterCard">
+            <div class="command-center-header">
+              <h2>🚀 Launch Day Command Center</h2>
+              <p>Real-time leaderboard and actionable insights for today's top 20 products</p>
+              <div class="auto-refresh-badge">Auto-refreshing every 30s</div>
+            </div>
+            
+            <div class="command-center-grid">
+              <div class="cc-section leaderboard-section">
+                <h3>📊 Live Leaderboard - Top 20</h3>
+                <div class="leaderboard-table" id="leaderboardTable">
+                  <div class="loading-placeholder">Loading leaderboard...</div>
+                </div>
+              </div>
+              
+              <div class="cc-section engagement-section">
+                <h3>⏰ Optimal Engagement Windows</h3>
+                <div class="engagement-windows" id="engagementWindows">
+                  <div class="loading-placeholder">Calculating...</div>
+                </div>
+                
+                <h3 style="margin-top: 24px;">💡 Action Suggestions</h3>
+                <div class="action-suggestions" id="actionSuggestions">
+                  <div class="loading-placeholder">Analyzing...</div>
+                </div>
+              </div>
+            </div>
+            
+            <div class="templates-section">
+              <h3>📝 One-Click Templates</h3>
+              <div class="templates-grid">
+                <div class="template-card">
+                  <h4>🐦 Twitter Post</h4>
+                  <textarea id="twitterTemplate" readonly></textarea>
+                  <button class="copy-btn" onclick="copyTemplate('twitter')">📋 Copy to Clipboard</button>
+                </div>
+                <div class="template-card">
+                  <h4>💼 LinkedIn Post</h4>
+                  <textarea id="linkedinTemplate" readonly></textarea>
+                  <button class="copy-btn" onclick="copyTemplate('linkedin')">📋 Copy to Clipboard</button>
+                </div>
+                <div class="template-card">
+                  <h4>📧 Email Outreach</h4>
+                  <textarea id="emailTemplate" readonly></textarea>
+                  <button class="copy-btn" onclick="copyTemplate('email')">📋 Copy to Clipboard</button>
+                </div>
+              </div>
+            </div>
+            
+            <div class="competitor-analysis" id="competitorAnalysis">
+              <h3>🎯 Competitor Analysis</h3>
+              <div class="competitor-insights" id="competitorInsights">
+                <div class="loading-placeholder">Analyzing competition...</div>
               </div>
             </div>
           </div>
@@ -1809,7 +2239,7 @@ app.get('/', (req, res) => {
           });
           
           // Track feature view
-          const features = ['Hunt Weather', 'Analyze Your Hunt', 'Generate Hunt Assets', 'Analytics Dashboard'];
+          const features = ['Hunt Weather', 'Analyze Your Hunt', 'Generate Hunt Assets', 'Analytics Dashboard', 'Launch Day Command Center'];
           if (typeof gtag === 'function') {
             gtag('event', 'view_feature', {
               'feature_name': features[index],
@@ -1901,6 +2331,13 @@ app.get('/', (req, res) => {
             updatePredictor();
           }
         }, 60000); // 60 seconds
+        
+        // Auto-refresh Command Center every 30 seconds
+        setInterval(() => {
+          if (allProducts.length > 0) {
+            updateCommandCenter();
+          }
+        }, 30000); // 30 seconds
         
         // Dashboard data
         let allProducts = [];
@@ -2327,10 +2764,289 @@ app.get('/', (req, res) => {
         
         function updateDashboard() {
           updatePredictor();
+          updateCommandCenter();
           updateStats();
           updateCategoryFilter();
           updateCharts();
           updateTable();
+        }
+        
+        function updateCommandCenter() {
+          const top20 = allProducts.slice(0, 20);
+          
+          // Update leaderboard
+          updateLeaderboard(top20);
+          
+          // Update engagement windows
+          updateEngagementWindows();
+          
+          // Update action suggestions
+          updateActionSuggestions(top20);
+          
+          // Update social templates
+          updateSocialTemplates(top20);
+          
+          // Update competitor analysis
+          updateCompetitorAnalysis(top20);
+        }
+        
+        function updateLeaderboard(top20) {
+          const leaderboardTable = document.getElementById('leaderboardTable');
+          if (!leaderboardTable) return;
+          
+          if (top20.length === 0) {
+            leaderboardTable.innerHTML = '<div class="loading-placeholder">No products available</div>';
+            return;
+          }
+          
+          let html = '';
+          top20.forEach((product, index) => {
+            const rank = index + 1;
+            const velocity = calculateVelocity(product, index);
+            const velocityClass = velocity.class;
+            const velocityLabel = velocity.label;
+            const rankClass = rank <= 3 ? 'top-3' : '';
+            
+            html += '<div class="leaderboard-row">' +
+              '<div class="lb-rank ' + rankClass + '">#' + rank + '</div>' +
+              '<div class="lb-product">' + product.name + '</div>' +
+              '<div class="lb-category">' + product.category + '</div>' +
+              '<div class="lb-upvotes">▲ ' + product.votesCount + '</div>' +
+              '<div class="lb-comments">💬 ' + product.commentsCount + '</div>' +
+              '<div class="lb-velocity ' + velocityClass + '">' + velocityLabel + '</div>' +
+              '</div>';
+          });
+          
+          leaderboardTable.innerHTML = html;
+        }
+        
+        function calculateVelocity(product, index) {
+          // Simple velocity calculation based on upvotes per hour
+          const createdAt = new Date(product.createdAt);
+          const now = new Date();
+          const hoursLive = Math.max((now - createdAt) / (1000 * 60 * 60), 1);
+          const upvotesPerHour = product.votesCount / hoursLive;
+          
+          if (upvotesPerHour > 30) {
+            return { class: 'velocity-high', label: '🔥 HOT' };
+          } else if (upvotesPerHour > 15) {
+            return { class: 'velocity-medium', label: '📈 Rising' };
+          } else {
+            return { class: 'velocity-low', label: '📉 Slow' };
+          }
+        }
+        
+        function updateEngagementWindows() {
+          const engagementWindows = document.getElementById('engagementWindows');
+          if (!engagementWindows) return;
+          
+          const now = new Date();
+          const pstNow = new Date(now.toLocaleString('en-US', { timeZone: 'America/Los_Angeles' }));
+          const currentHour = pstNow.getHours();
+          
+          // Define optimal engagement windows (PST)
+          const windows = [
+            { start: 6, end: 9, label: 'Morning Peak (6-9 AM PST)', optimal: currentHour >= 6 && currentHour < 9 },
+            { start: 12, end: 14, label: 'Lunch Window (12-2 PM PST)', optimal: currentHour >= 12 && currentHour < 14 },
+            { start: 17, end: 19, label: 'Evening Peak (5-7 PM PST)', optimal: currentHour >= 17 && currentHour < 19 }
+          ];
+          
+          let html = '';
+          windows.forEach(window => {
+            const status = window.optimal ? 'ACTIVE NOW' : 'Upcoming';
+            const optimalClass = window.optimal ? 'optimal' : '';
+            const statusHtml = window.optimal ? '<div class="ew-status">' + status + '</div>' : '';
+            
+            html += '<div class="engagement-window ' + optimalClass + '">' +
+              '<div class="ew-time">' + window.label + '</div>' +
+              '<div class="ew-label">High engagement from US makers & hunters</div>' +
+              statusHtml +
+              '</div>';
+          });
+          
+          engagementWindows.innerHTML = html;
+        }
+        
+        function updateActionSuggestions(top20) {
+          const actionSuggestions = document.getElementById('actionSuggestions');
+          if (!actionSuggestions) return;
+          
+          const now = new Date();
+          const pstNow = new Date(now.toLocaleString('en-US', { timeZone: 'America/Los_Angeles' }));
+          const currentHour = pstNow.getHours();
+          const hoursRemaining = 24 - currentHour;
+          
+          let suggestions = [];
+          
+          // Time-based suggestions
+          if (hoursRemaining < 6) {
+            suggestions.push({
+              type: 'urgent',
+              text: '⏰ Only ' + hoursRemaining + ' hours left! Push for final upvotes via Twitter, email lists, and Slack communities.'
+            });
+          }
+          
+          if (currentHour >= 6 && currentHour < 9) {
+            suggestions.push({
+              type: 'opportunity',
+              text: '🌅 Peak morning window active! Post on Twitter and LinkedIn now for maximum visibility.'
+            });
+          }
+          
+          if (currentHour >= 17 && currentHour < 19) {
+            suggestions.push({
+              type: 'opportunity',
+              text: '🌆 Evening peak active! Engage with commenters and share progress updates on social media.'
+            });
+          }
+          
+          // Position-based suggestions
+          if (top20.length > 0) {
+            const avgUpvotes = top20.reduce((sum, p) => sum + p.votesCount, 0) / top20.length;
+            suggestions.push({
+              type: 'normal',
+              text: '📊 Average upvotes for top 20: ' + Math.round(avgUpvotes) + '. Aim to stay above this benchmark.'
+            });
+          }
+          
+          // General suggestions
+          suggestions.push({
+            type: 'normal',
+            text: '💬 Respond to every comment within 10 minutes - engagement drives more visibility.'
+          });
+          
+          suggestions.push({
+            type: 'normal',
+            text: '🔗 Share your ProductHunt link in your email signature and bio for passive upvotes.'
+          });
+          
+          let html = '';
+          suggestions.forEach(sug => {
+            const className = sug.type === 'urgent' ? 'urgent' : (sug.type === 'opportunity' ? 'opportunity' : '');
+            html += '<div class="action-item ' + className + '">' + sug.text + '</div>';
+          });
+          
+          actionSuggestions.innerHTML = html;
+        }
+        
+        function updateSocialTemplates(top20) {
+          const twitterTemplate = document.getElementById('twitterTemplate');
+          const linkedinTemplate = document.getElementById('linkedinTemplate');
+          const emailTemplate = document.getElementById('emailTemplate');
+          
+          if (!twitterTemplate || !linkedinTemplate || !emailTemplate) return;
+          
+          const topProduct = top20[0];
+          const productName = topProduct ? topProduct.name : '[Your Product]';
+          
+          // Twitter template
+          twitterTemplate.value = "🚀 We're live on @ProductHunt today!\n\n" +
+            productName + " helps [describe your value proposition in one line].\n\n" +
+            "We'd love your support! \n\n" +
+            "Check it out and let us know what you think 👇\n" +
+            "[Your PH Link]\n\n" +
+            "#ProductHunt #Startup #Launch";
+          
+          // LinkedIn template
+          linkedinTemplate.value = "Exciting news! We just launched " + productName + " on ProductHunt! 🚀\n\n" +
+            "After months of hard work, we're thrilled to share [brief description of what your product does and the problem it solves].\n\n" +
+            "What makes us different:\n" +
+            "• [Key feature 1]\n" +
+            "• [Key feature 2]\n" +
+            "• [Key feature 3]\n\n" +
+            "We'd be incredibly grateful for your support! Your upvote and feedback would mean the world to our team.\n\n" +
+            "Check us out: [Your ProductHunt Link]\n\n" +
+            "#ProductHunt #ProductLaunch #Innovation #Startup";
+          
+          // Email template
+          emailTemplate.value = "Subject: We're live on ProductHunt - would love your support! 🚀\n\n" +
+            "Hi [Name],\n\n" +
+            "I wanted to personally reach out because we just launched " + productName + " on ProductHunt today!\n\n" +
+            "[Brief personal note about your relationship with the recipient]\n\n" +
+            "We've built [product description] to help [target audience] [solve specific problem].\n\n" +
+            "Your support would mean everything to us. If you have 30 seconds, would you mind:\n" +
+            "1. Checking out our launch: [Your PH Link]\n" +
+            "2. Leaving an upvote if you find it valuable\n" +
+            "3. Sharing any feedback you might have\n\n" +
+            "Thank you so much for being part of our journey!\n\n" +
+            "Best,\n" +
+            "[Your Name]";
+        }
+        
+        function updateCompetitorAnalysis(top20) {
+          const competitorInsights = document.getElementById('competitorInsights');
+          if (!competitorInsights) return;
+          
+          if (top20.length < 3) {
+            competitorInsights.innerHTML = '<div class="loading-placeholder">Not enough data for competitor analysis</div>';
+            return;
+          }
+          
+          // Show positions 1-5 as key competitors to track
+          const competitors = top20.slice(0, 5);
+          
+          let html = '';
+          competitors.forEach((product, index) => {
+            const rank = index + 1;
+            const nextProduct = top20[index + 1];
+            
+            if (nextProduct) {
+              const gap = product.votesCount - nextProduct.votesCount;
+              const catchable = gap <= 50;
+              const cardClass = catchable ? 'catchable' : 'out-of-reach';
+              const actionClass = catchable ? 'can-catch' : 'monitor';
+              const actionText = catchable ? ('💪 Gap: ' + gap + ' upvotes - Catchable!') : ('👀 Gap: ' + gap + ' upvotes - Monitor');
+              
+              html += '<div class="competitor-card ' + cardClass + '">' +
+                '<div class="comp-rank">#' + rank + '</div>' +
+                '<div class="comp-name">' + product.name + '</div>' +
+                '<div class="comp-gap">▲ ' + product.votesCount + ' upvotes</div>' +
+                '<div class="comp-action ' + actionClass + '">' + actionText + '</div>' +
+                '</div>';
+            } else {
+              html += '<div class="competitor-card">' +
+                '<div class="comp-rank">#' + rank + '</div>' +
+                '<div class="comp-name">' + product.name + '</div>' +
+                '<div class="comp-gap">▲ ' + product.votesCount + ' upvotes</div>' +
+                '<div class="comp-action can-catch">🏆 Top Position!</div>' +
+                '</div>';
+            }
+          });
+          
+          competitorInsights.innerHTML = html;
+        }
+        
+        function copyTemplate(type) {
+          let textarea;
+          let btnSelector;
+          
+          if (type === 'twitter') {
+            textarea = document.getElementById('twitterTemplate');
+            btnSelector = '.template-card:nth-child(1) .copy-btn';
+          } else if (type === 'linkedin') {
+            textarea = document.getElementById('linkedinTemplate');
+            btnSelector = '.template-card:nth-child(2) .copy-btn';
+          } else if (type === 'email') {
+            textarea = document.getElementById('emailTemplate');
+            btnSelector = '.template-card:nth-child(3) .copy-btn';
+          }
+          
+          if (!textarea) return;
+          
+          textarea.select();
+          document.execCommand('copy');
+          
+          const btn = document.querySelector(btnSelector);
+          if (btn) {
+            const originalText = btn.innerHTML;
+            btn.classList.add('copied');
+            btn.innerHTML = '✓ Copied!';
+            
+            setTimeout(() => {
+              btn.classList.remove('copied');
+              btn.innerHTML = originalText;
+            }, 2000);
+          }
         }
         
         function updateStats() {

@@ -82,7 +82,22 @@ app.get('/', (req, res) => {
         }
         
         .logo-icon {
-          font-size: 32px;
+          width: 40px;
+          height: 40px;
+          background: linear-gradient(135deg, #DA552F 0%, #ff6b47 100%);
+          border-radius: 8px;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          font-size: 24px;
+          color: white;
+          box-shadow: 0 2px 8px rgba(218, 85, 47, 0.25);
+          transition: all 0.3s ease;
+        }
+        
+        .logo-icon:hover {
+          transform: translateY(-2px);
+          box-shadow: 0 4px 12px rgba(218, 85, 47, 0.35);
         }
         
         .logo h1 {
@@ -1109,7 +1124,9 @@ app.get('/', (req, res) => {
           }
           
           .logo-icon {
-            font-size: 28px;
+            width: 36px;
+            height: 36px;
+            font-size: 20px;
           }
           
           .hero {
@@ -1425,7 +1442,7 @@ app.get('/', (req, res) => {
       <div class="top-bar">
         <div class="top-bar-content">
           <div class="logo">
-            <div class="logo-icon">▲</div>
+            <div class="logo-icon">🎯</div>
             <h1><span class="hunt">Hunt</span>Product<span class="ph">Hunt</span></h1>
           </div>
         </div>

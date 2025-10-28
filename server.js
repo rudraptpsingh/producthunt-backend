@@ -80,7 +80,7 @@ app.get('/', (req, res) => {
         
         .hero {
           background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-          padding: 64px 24px;
+          padding: 48px 24px 40px;
           margin-bottom: 48px;
           text-align: center;
           color: white;
@@ -106,46 +106,92 @@ app.get('/', (req, res) => {
         }
         
         .hero h2 {
-          font-size: 48px;
-          font-weight: 800;
-          margin-bottom: 20px;
-          line-height: 1.2;
+          font-size: 56px;
+          font-weight: 900;
+          margin-bottom: 0;
+          line-height: 1.1;
           position: relative;
           z-index: 1;
-          text-shadow: 0 2px 20px rgba(0, 0, 0, 0.1);
+          text-shadow: 0 4px 30px rgba(0, 0, 0, 0.2);
+          letter-spacing: -1px;
+          background: linear-gradient(to bottom, #ffffff 0%, #f0f0ff 100%);
+          -webkit-background-clip: text;
+          -webkit-text-fill-color: transparent;
+          background-clip: text;
+          animation: heroGlow 2s ease-in-out infinite alternate;
         }
         
-        .hero p {
-          font-size: 20px;
-          opacity: 0.95;
-          line-height: 1.6;
-          margin-bottom: 32px;
+        @keyframes heroGlow {
+          from { text-shadow: 0 4px 30px rgba(0, 0, 0, 0.2); }
+          to { text-shadow: 0 4px 40px rgba(255, 255, 255, 0.4), 0 0 60px rgba(255, 255, 255, 0.2); }
+        }
+        
+        .features-slider {
+          max-width: 800px;
+          margin: 32px auto 0;
           position: relative;
+          overflow: hidden;
           z-index: 1;
         }
         
-        .hero-stats {
+        .features-track {
           display: flex;
-          justify-content: center;
-          gap: 40px;
-          flex-wrap: wrap;
-          margin-top: 32px;
+          transition: transform 0.5s cubic-bezier(0.4, 0, 0.2, 1);
         }
         
-        .hero-stat {
+        .feature-slide {
+          min-width: 100%;
+          padding: 24px 24px;
           text-align: center;
         }
         
-        .hero-stat .number {
-          font-size: 32px;
-          font-weight: 700;
+        .feature-icon {
+          font-size: 48px;
+          margin-bottom: 16px;
           display: block;
-          margin-bottom: 4px;
         }
         
-        .hero-stat .label {
-          font-size: 14px;
+        .feature-title {
+          font-size: 24px;
+          font-weight: 800;
+          margin-bottom: 12px;
+          color: white;
+        }
+        
+        .feature-description {
+          font-size: 16px;
           opacity: 0.9;
+          line-height: 1.6;
+          max-width: 600px;
+          margin: 0 auto;
+        }
+        
+        .slider-dots {
+          display: flex;
+          justify-content: center;
+          gap: 10px;
+          margin-top: 24px;
+        }
+        
+        .slider-dot {
+          width: 10px;
+          height: 10px;
+          border-radius: 50%;
+          background: rgba(255, 255, 255, 0.4);
+          cursor: pointer;
+          transition: all 0.3s ease;
+          border: none;
+          padding: 0;
+        }
+        
+        .slider-dot.active {
+          background: white;
+          width: 32px;
+          border-radius: 5px;
+        }
+        
+        .slider-dot:hover {
+          background: rgba(255, 255, 255, 0.7);
         }
         
         .container {
@@ -932,6 +978,10 @@ app.get('/', (req, res) => {
             height: 120px;
             font-size: 42px;
           }
+          
+          .hero h2 {
+            font-size: 36px;
+          }
         }
       </style>
     </head>
@@ -947,20 +997,36 @@ app.get('/', (req, res) => {
       
       <div class="hero">
         <div class="hero-content">
-          <h2>Predict. Optimize. Launch. Win.</h2>
-          <p>AI-powered analytics and insights to maximize your ProductHunt launch success. Get data-driven recommendations, generate professional assets, and launch with confidence.</p>
-          <div class="hero-stats">
-            <div class="hero-stat">
-              <span class="number" id="heroProducts">--</span>
-              <span class="label">Products Analyzed</span>
+          <h2>🚀 Predict. Optimize. Launch. Win. 🏆</h2>
+          
+          <div class="features-slider">
+            <div class="features-track" id="featuresTrack">
+              <div class="feature-slide">
+                <span class="feature-icon">🎯</span>
+                <h3 class="feature-title">Launch Score Predictor</h3>
+                <p class="feature-description">AI-powered scoring system analyzing category trends, optimal timing, and competition levels to predict your launch success potential</p>
+              </div>
+              <div class="feature-slide">
+                <span class="feature-icon">📊</span>
+                <h3 class="feature-title">Analyze Your Launch</h3>
+                <p class="feature-description">Get personalized insights on your tagline, category choice, and launch timing with data-driven recommendations for improvement</p>
+              </div>
+              <div class="feature-slide">
+                <span class="feature-icon">✨</span>
+                <h3 class="feature-title">Generate Launch Assets</h3>
+                <p class="feature-description">Create professional taglines, descriptions, first comments, and social media posts based on proven patterns from top ProductHunt winners</p>
+              </div>
+              <div class="feature-slide">
+                <span class="feature-icon">📈</span>
+                <h3 class="feature-title">Analytics Dashboard</h3>
+                <p class="feature-description">Real-time ProductHunt trends, category insights, and launch activity visualization to help you make informed decisions</p>
+              </div>
             </div>
-            <div class="hero-stat">
-              <span class="number" id="heroCategories">--</span>
-              <span class="label">Categories Tracked</span>
-            </div>
-            <div class="hero-stat">
-              <span class="number">AI</span>
-              <span class="label">Powered Predictions</span>
+            <div class="slider-dots" id="sliderDots">
+              <button class="slider-dot active" onclick="goToSlide(0)"></button>
+              <button class="slider-dot" onclick="goToSlide(1)"></button>
+              <button class="slider-dot" onclick="goToSlide(2)"></button>
+              <button class="slider-dot" onclick="goToSlide(3)"></button>
             </div>
           </div>
         </div>
@@ -1178,6 +1244,39 @@ app.get('/', (req, res) => {
       </div>
       
       <script>
+        // Features slider functionality
+        let currentSlide = 0;
+        let sliderInterval;
+        
+        function goToSlide(index) {
+          currentSlide = index;
+          const track = document.getElementById('featuresTrack');
+          const dots = document.querySelectorAll('.slider-dot');
+          
+          track.style.transform = \`translateX(-\${currentSlide * 100}%)\`;
+          
+          dots.forEach((dot, i) => {
+            dot.classList.toggle('active', i === currentSlide);
+          });
+          
+          // Reset auto-rotation
+          clearInterval(sliderInterval);
+          startSliderAutoRotation();
+        }
+        
+        function nextSlide() {
+          currentSlide = (currentSlide + 1) % 4;
+          goToSlide(currentSlide);
+        }
+        
+        function startSliderAutoRotation() {
+          sliderInterval = setInterval(nextSlide, 4000);
+        }
+        
+        // Start slider when page loads
+        startSliderAutoRotation();
+        
+        // Dashboard data
         let allProducts = [];
         let filteredProducts = [];
         let charts = {};
@@ -1508,10 +1607,6 @@ app.get('/', (req, res) => {
           document.getElementById('totalProducts').textContent = totalProducts;
           document.getElementById('totalUpvotes').textContent = totalUpvotes.toLocaleString();
           document.getElementById('totalCategories').textContent = categories.size;
-          
-          // Update hero stats
-          document.getElementById('heroProducts').textContent = totalProducts;
-          document.getElementById('heroCategories').textContent = categories.size;
         }
         
         function updateCategoryFilter() {

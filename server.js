@@ -523,10 +523,26 @@ app.get('/', (req, res) => {
           justify-content: center;
           font-size: 56px;
           font-weight: 800;
-          border: 6px solid #FFF4F0;
+          border: 6px solid #E5E5E5;
           color: #FFFFFF;
           box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
           transition: all 0.3s ease;
+        }
+        
+        /* Score color states - Red/Amber/Green */
+        .score-circle.score-low {
+          background: linear-gradient(135deg, #EF4444 0%, #DC2626 100%);
+          border-color: #FCA5A5;
+        }
+        
+        .score-circle.score-medium {
+          background: linear-gradient(135deg, #F59E0B 0%, #D97706 100%);
+          border-color: #FCD34D;
+        }
+        
+        .score-circle.score-high {
+          background: linear-gradient(135deg, #10B981 0%, #059669 100%);
+          border-color: #6EE7B7;
         }
         
         .score-circle:hover {
@@ -565,6 +581,7 @@ app.get('/', (req, res) => {
         
         .momentum-building {
           color: #10B981;
+          font-weight: 700;
         }
         
         .momentum-building .momentum-arrow {
@@ -573,6 +590,7 @@ app.get('/', (req, res) => {
         
         .momentum-peak {
           color: #F59E0B;
+          font-weight: 700;
         }
         
         .momentum-peak .momentum-arrow {
@@ -581,6 +599,7 @@ app.get('/', (req, res) => {
         
         .momentum-declining {
           color: #EF4444;
+          font-weight: 700;
         }
         
         .momentum-declining .momentum-arrow {
@@ -589,6 +608,7 @@ app.get('/', (req, res) => {
         
         .momentum-stable {
           color: #6B7280;
+          font-weight: 600;
         }
         
         @keyframes pulse-green {
@@ -605,10 +625,6 @@ app.get('/', (req, res) => {
           0%, 100% { opacity: 1; }
           50% { opacity: 0.6; }
         }
-        
-        .score-high { background: #10B981; border-color: #D1FAE5; }
-        .score-medium { background: #F59E0B; border-color: #FEF3C7; }
-        .score-low { background: #EF4444; border-color: #FEE2E2; }
         
         .launch-timers {
           display: grid;
@@ -688,6 +704,38 @@ app.get('/', (req, res) => {
         .recommendation-item .rec-impact {
           font-size: 13px;
           opacity: 0.9;
+        }
+        
+        /* Impact color coding */
+        .impact-positive {
+          color: #10B981;
+          font-weight: 600;
+        }
+        
+        .impact-neutral {
+          color: #F59E0B;
+          font-weight: 600;
+        }
+        
+        .impact-negative {
+          color: #EF4444;
+          font-weight: 600;
+        }
+        
+        /* Category hotness indicators */
+        .hotness-hot {
+          color: #10B981;
+          font-weight: 700;
+        }
+        
+        .hotness-warm {
+          color: #F59E0B;
+          font-weight: 700;
+        }
+        
+        .hotness-cool {
+          color: #EF4444;
+          font-weight: 700;
         }
         
         .confidence-badge {
@@ -1388,19 +1436,19 @@ app.get('/', (req, res) => {
           <div class="hero-title-row">
             <div class="ph-badges">
               <div class="ph-badge">
-                <span class="ph-badge-icon">①</span>
+                <span class="ph-badge-icon">🏆</span>
                 <span>Product of the Day</span>
               </div>
               <div class="ph-badge">
-                <span class="ph-badge-icon">★</span>
+                <span class="ph-badge-icon">⭐</span>
                 <span>Product of the Week</span>
               </div>
               <div class="ph-badge">
-                <span class="ph-badge-icon">◆</span>
+                <span class="ph-badge-icon">💎</span>
                 <span>Product of the Month</span>
               </div>
               <div class="ph-badge">
-                <span class="ph-badge-icon">♦</span>
+                <span class="ph-badge-icon">🏅</span>
                 <span>Golden Kitty</span>
               </div>
             </div>
@@ -1416,7 +1464,7 @@ app.get('/', (req, res) => {
           <div class="features-slider">
             <div class="features-track" id="featuresTrack">
               <div class="feature-slide">
-                <span class="feature-icon">◐</span>
+                <span class="feature-icon">🌤️</span>
                 <h3 class="feature-title">Hunt Weather</h3>
                 <p class="feature-description">AI-powered scoring system analyzing category trends, optimal timing, and competition levels to predict your hunt success potential</p>
               </div>
@@ -1454,7 +1502,7 @@ app.get('/', (req, res) => {
         <div id="dashboard" style="display: none;">
           <div class="predictor-card" id="predictorCard">
             <div class="predictor-header">
-              <h2>◐ Hunt Weather</h2>
+              <h2>🌤️ Hunt Weather</h2>
               <p>Real-time insights based on today's top 20 product launches to maximize your hunt success</p>
             </div>
             
@@ -1823,24 +1871,24 @@ app.get('/', (req, res) => {
             if (!response.ok) {
               const errorData = await response.json();
               const errorMsg = errorData.error || 'Failed to fetch data from server';
-              document.getElementById('loading').innerHTML = '❌ Error: ' + errorMsg + '<br><small>Please check if PH_TOKEN is set correctly</small>';
+              document.getElementById('loading').innerHTML = '✕ Error: ' + errorMsg + '<br><small>Please check if PH_TOKEN is set correctly</small>';
               return;
             }
             
             const data = await response.json();
             
             if (data.error) {
-              document.getElementById('loading').innerHTML = '❌ Server Error: ' + data.error + '<br><small>Please check if PH_TOKEN is set correctly</small>';
+              document.getElementById('loading').innerHTML = '✕ Server Error: ' + data.error + '<br><small>Please check if PH_TOKEN is set correctly</small>';
               return;
             }
             
             if (data.errors) {
-              document.getElementById('loading').innerHTML = '❌ API Error: ' + JSON.stringify(data.errors);
+              document.getElementById('loading').innerHTML = '✕ API Error: ' + JSON.stringify(data.errors);
               return;
             }
             
             if (!data.data?.posts?.edges) {
-              document.getElementById('loading').innerHTML = '❌ No product data available<br><small>The API did not return expected data</small>';
+              document.getElementById('loading').innerHTML = '✕ No product data available<br><small>The API did not return expected data</small>';
               return;
             }
             
@@ -1865,7 +1913,7 @@ app.get('/', (req, res) => {
             document.getElementById('dashboard').style.display = 'block';
           } catch (error) {
             console.error('Error loading dashboard data:', error);
-            document.getElementById('loading').innerHTML = '❌ Failed to load dashboard data<br><small>' + error.message + '</small>';
+            document.getElementById('loading').innerHTML = '✕ Failed to load dashboard data<br><small>' + (error.message || 'Unknown error') + '</small>';
           }
         }
         
@@ -2015,10 +2063,10 @@ app.get('/', (req, res) => {
             competitionScore * weights.competition
           );
           
-          // Determine category hotness indicator
-          let hotnessIndicator = '▲ HOT';
-          if (categoryScore < 50) hotnessIndicator = '▼ COOL';
-          else if (categoryScore < 70) hotnessIndicator = '— WARM';
+          // Determine category hotness indicator with color class
+          let hotnessIndicator = '<span class="hotness-hot">▲ HOT</span>';
+          if (categoryScore < 50) hotnessIndicator = '<span class="hotness-cool">▼ COOL</span>';
+          else if (categoryScore < 70) hotnessIndicator = '<span class="hotness-warm">— WARM</span>';
           
           // Find hottest category based on avg upvotes and recency
           const categoryStats = {};
@@ -2149,6 +2197,20 @@ app.get('/', (req, res) => {
           return momentum;
         }
         
+        // Helper function to determine impact color class
+        function getImpactClass(impactText) {
+          const text = impactText.toLowerCase();
+          if (text.includes('excellent') || text.includes('perfect') || text.includes('ideal') || 
+              text.includes('strong') || text.includes('low competition')) {
+            return 'impact-positive';
+          } else if (text.includes('fierce') || text.includes('high') || text.includes('very competitive') ||
+                     text.includes('crowded') || text.includes('avoid')) {
+            return 'impact-negative';
+          } else {
+            return 'impact-neutral';
+          }
+        }
+        
         function updatePredictor() {
           const prediction = calculateLaunchScore();
           
@@ -2174,18 +2236,30 @@ app.get('/', (req, res) => {
             scoreLabel.textContent = 'Not Enough Data';
           }
           
-          // Update recommendations
-          document.getElementById('recCategory').textContent = prediction.category;
-          document.getElementById('recCategoryImpact').textContent = prediction.impacts.category;
+          // Update recommendations with color coding
+          const categoryEl = document.getElementById('recCategory');
+          const categoryImpactEl = document.getElementById('recCategoryImpact');
+          categoryEl.textContent = prediction.category;
+          categoryImpactEl.innerHTML = prediction.impacts.category;
+          categoryImpactEl.className = 'rec-impact';
           
-          document.getElementById('recDay').textContent = prediction.bestDay;
-          document.getElementById('recDayImpact').textContent = prediction.impacts.day;
+          const dayEl = document.getElementById('recDay');
+          const dayImpactEl = document.getElementById('recDayImpact');
+          dayEl.textContent = prediction.bestDay;
+          dayImpactEl.textContent = prediction.impacts.day;
+          dayImpactEl.className = getImpactClass(prediction.impacts.day);
           
-          document.getElementById('recTime').textContent = prediction.bestTime;
-          document.getElementById('recTimeImpact').textContent = prediction.impacts.time;
+          const timeEl = document.getElementById('recTime');
+          const timeImpactEl = document.getElementById('recTimeImpact');
+          timeEl.textContent = prediction.bestTime;
+          timeImpactEl.textContent = prediction.impacts.time;
+          timeImpactEl.className = getImpactClass(prediction.impacts.time);
           
-          document.getElementById('recCompetition').textContent = prediction.competition;
-          document.getElementById('recCompetitionImpact').textContent = prediction.impacts.competition;
+          const competitionEl = document.getElementById('recCompetition');
+          const competitionImpactEl = document.getElementById('recCompetitionImpact');
+          competitionEl.textContent = prediction.competition;
+          competitionImpactEl.textContent = prediction.impacts.competition;
+          competitionImpactEl.className = getImpactClass(prediction.impacts.competition);
           
           // Update momentum indicator
           const momentum = calculateMomentum(prediction);

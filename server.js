@@ -3,10 +3,10 @@ const cors = require('cors');
 const fetch = require('node-fetch');
 
 const app = express();
-const PORT = 3001;
+const PORT = process.env.PORT || 5000;
 
-// Your ProductHunt token
-const PH_TOKEN = '83vHxl0Vm4u6ywIYuH7HttXg-HLx23ADuKnoY5rQX6k';
+// Get ProductHunt token from environment variable
+const PH_TOKEN = process.env.PH_TOKEN;
 
 // Enable CORS for all routes
 app.use(cors());
@@ -46,7 +46,7 @@ app.post('/api/producthunt', async (req, res) => {
   }
 });
 
-app.listen(PORT, () => {
-  console.log(`ProductHunt proxy server running on http://localhost:${PORT}`);
-  console.log(`Frontend should use: http://localhost:${PORT}/api/producthunt`);
+app.listen(PORT, '0.0.0.0', () => {
+  console.log(`ProductHunt proxy server running on port ${PORT}`);
+  console.log(`API endpoint: /api/producthunt`);
 });

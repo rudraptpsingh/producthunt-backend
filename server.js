@@ -111,28 +111,9 @@ app.get('/', (req, res) => {
           justify-content: center;
           gap: 20px;
           flex-wrap: wrap;
-          margin-bottom: 12px;
+          margin-bottom: 20px;
           position: relative;
           z-index: 1;
-        }
-        
-        .hero h2 {
-          font-size: 56px;
-          font-weight: 900;
-          margin: 0;
-          line-height: 1.1;
-          text-shadow: 0 4px 30px rgba(0, 0, 0, 0.2);
-          letter-spacing: -1px;
-          background: linear-gradient(to bottom, #ffffff 0%, #f0f0ff 100%);
-          -webkit-background-clip: text;
-          -webkit-text-fill-color: transparent;
-          background-clip: text;
-          animation: heroGlow 2s ease-in-out infinite alternate;
-        }
-        
-        @keyframes heroGlow {
-          from { text-shadow: 0 4px 30px rgba(0, 0, 0, 0.2); }
-          to { text-shadow: 0 4px 40px rgba(255, 255, 255, 0.4), 0 0 60px rgba(255, 255, 255, 0.2); }
         }
         
         .features-slider {
@@ -236,6 +217,34 @@ app.get('/', (req, res) => {
         
         .ph-badge-icon {
           font-size: 18px;
+        }
+        
+        .hero-motto {
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          gap: 16px;
+          margin: 24px 0 16px;
+          position: relative;
+          z-index: 1;
+        }
+        
+        .hero-motto h2 {
+          font-size: 48px;
+          font-weight: 900;
+          margin: 0;
+          line-height: 1;
+          letter-spacing: -0.5px;
+        }
+        
+        .win-badge {
+          font-size: 42px;
+          animation: bounceWin 2s ease-in-out infinite;
+        }
+        
+        @keyframes bounceWin {
+          0%, 100% { transform: translateY(0) scale(1); }
+          50% { transform: translateY(-8px) scale(1.1); }
         }
         
         .hero-tagline {
@@ -1083,7 +1092,11 @@ app.get('/', (req, res) => {
             font-size: 42px;
           }
           
-          .hero h2 {
+          .hero-motto h2 {
+            font-size: 28px;
+          }
+          
+          .win-badge {
             font-size: 32px;
           }
           
@@ -1115,7 +1128,6 @@ app.get('/', (req, res) => {
       <div class="hero">
         <div class="hero-content">
           <div class="hero-title-row">
-            <h2>🚀 Predict. Optimize. Launch. Win. 🏆</h2>
             <div class="ph-badges">
               <div class="ph-badge">
                 <span class="ph-badge-icon">🏆</span>
@@ -1136,29 +1148,34 @@ app.get('/', (req, res) => {
             </div>
           </div>
           
-          <p class="hero-tagline">Win these awards on ProductHunt with data-driven insights</p>
+          <div class="hero-motto">
+            <h2>Analyze. Hunt. Win.</h2>
+            <div class="win-badge">🏆</div>
+          </div>
+          
+          <p class="hero-tagline">Data-driven insights to help Makers win on ProductHunt</p>
           
           <div class="features-slider">
             <div class="features-track" id="featuresTrack">
               <div class="feature-slide">
                 <span class="feature-icon">⛅</span>
-                <h3 class="feature-title">Launch Weather</h3>
-                <p class="feature-description">AI-powered scoring system analyzing category trends, optimal timing, and competition levels to predict your launch success potential</p>
+                <h3 class="feature-title">Hunt Weather</h3>
+                <p class="feature-description">AI-powered scoring system analyzing category trends, optimal timing, and competition levels to predict your hunt success potential</p>
               </div>
               <div class="feature-slide">
                 <span class="feature-icon">📊</span>
-                <h3 class="feature-title">Analyze Your Launch</h3>
-                <p class="feature-description">Get personalized insights on your tagline, category choice, and launch timing with data-driven recommendations for improvement</p>
+                <h3 class="feature-title">Analyze Your Hunt</h3>
+                <p class="feature-description">Get personalized insights on your tagline, category choice, and hunt timing with data-driven recommendations for Makers</p>
               </div>
               <div class="feature-slide">
                 <span class="feature-icon">✨</span>
-                <h3 class="feature-title">Generate Launch Assets</h3>
-                <p class="feature-description">Create professional taglines, descriptions, first comments, and social media posts based on proven patterns from top ProductHunt winners</p>
+                <h3 class="feature-title">Generate Hunt Assets</h3>
+                <p class="feature-description">Create professional taglines, descriptions, first comments, and social posts based on proven patterns from top Makers and Golden Kitty winners</p>
               </div>
               <div class="feature-slide">
                 <span class="feature-icon">📈</span>
                 <h3 class="feature-title">Analytics Dashboard</h3>
-                <p class="feature-description">Real-time ProductHunt trends, category insights, and launch activity visualization to help you make informed decisions</p>
+                <p class="feature-description">Real-time ProductHunt trends, category insights, and hunt activity visualization to help you make informed decisions</p>
               </div>
             </div>
             <div class="slider-dots" id="sliderDots">
@@ -1179,8 +1196,8 @@ app.get('/', (req, res) => {
         <div id="dashboard" style="display: none;">
           <div class="predictor-card" id="predictorCard">
             <div class="predictor-header">
-              <h2>⛅ Launch Weather</h2>
-              <p>AI-powered insights to maximize your ProductHunt launch success</p>
+              <h2>⛅ Hunt Weather</h2>
+              <p>Real-time insights to maximize your hunt success as a Maker</p>
             </div>
             
             <div class="launch-timers">
@@ -1195,12 +1212,12 @@ app.get('/', (req, res) => {
                 <div class="timer-subtitle">Pacific Time</div>
               </div>
               <div class="timer-item">
-                <div class="timer-label">⏳ Today's Launch Ends</div>
+                <div class="timer-label">⏳ Today's Hunt Ends</div>
                 <div class="timer-value" id="todayEnds">--:--:--</div>
                 <div class="timer-subtitle">Time Remaining</div>
               </div>
               <div class="timer-item">
-                <div class="timer-label">🚀 Next Launch Starts</div>
+                <div class="timer-label">🚀 Next Hunt Starts</div>
                 <div class="timer-value" id="nextLaunch">--:--:--</div>
                 <div class="timer-subtitle">12:01 AM PST Tomorrow</div>
               </div>
@@ -1278,7 +1295,7 @@ app.get('/', (req, res) => {
               </div>
             </div>
             <div class="chart-card">
-              <h3>📈 Launch Activity Over Time</h3>
+              <h3>📈 Hunt Activity Over Time</h3>
               <div class="chart-container">
                 <canvas id="launchActivityChart"></canvas>
               </div>
@@ -1336,7 +1353,7 @@ app.get('/', (req, res) => {
               </div>
               
               <div class="form-group">
-                <label for="plannedDay">Planned Launch Day (Optional)</label>
+                <label for="plannedDay">Planned Hunt Day (Optional)</label>
                 <select id="plannedDay">
                   <option value="">Not sure yet</option>
                   <option value="Sunday">Sunday</option>
@@ -1350,7 +1367,7 @@ app.get('/', (req, res) => {
               </div>
               
               <div class="form-group">
-                <label for="plannedTime">Planned Launch Time (Optional)</label>
+                <label for="plannedTime">Planned Hunt Time (Optional)</label>
                 <select id="plannedTime">
                   <option value="">Not sure yet</option>
                   <option value="0">12:00 AM</option>
@@ -1382,13 +1399,13 @@ app.get('/', (req, res) => {
             </div>
             
             <div class="action-buttons">
-              <button class="analyze-btn" onclick="analyzeUserLaunch()">📊 Analyze My Launch</button>
-              <button class="analyze-btn secondary" onclick="generateLaunchAssets()">✨ Generate Launch Assets</button>
+              <button class="analyze-btn" onclick="analyzeUserLaunch()">📊 Analyze My Hunt</button>
+              <button class="analyze-btn secondary" onclick="generateLaunchAssets()">✨ Generate Hunt Assets</button>
             </div>
             
             <div class="analysis-results" id="analysisResults">
               <div class="result-header">
-                <h3>Your Launch Analysis</h3>
+                <h3>Your Hunt Analysis</h3>
                 <div class="result-score" id="userScore">--</div>
                 <div id="userScoreLabel">--</div>
               </div>
@@ -2261,7 +2278,7 @@ app.get('/', (req, res) => {
             const isDayOptimal = plannedDay === bestDay;
             const dayDiff = ((dayStats[plannedDay]?.total / dayStats[plannedDay]?.count) / bestDayAvg * 100) || 0;
             insights.push({
-              label: 'Launch Day',
+              label: 'Hunt Day',
               value: plannedDay,
               recommendation: \`Best day is \${bestDay}. \${
                 isDayOptimal ? 'Perfect choice! 🎯' :
@@ -2273,7 +2290,7 @@ app.get('/', (req, res) => {
             });
           } else {
             insights.push({
-              label: 'Launch Day',
+              label: 'Hunt Day',
               value: 'Not specified',
               recommendation: \`We recommend \${bestDay} for best results based on historical data.\`,
               status: 'warning',
@@ -2293,7 +2310,7 @@ app.get('/', (req, res) => {
             const isTimeOptimal = parseInt(plannedTime) === bestHour;
             const timeDiff = ((timeStats[plannedTime]?.total / timeStats[plannedTime]?.count) / bestTimeAvg * 100) || 0;
             insights.push({
-              label: 'Launch Time',
+              label: 'Hunt Time',
               value: formatTime(plannedTime),
               recommendation: \`Best time is \${formatTime(bestHour)}. \${
                 isTimeOptimal ? 'Perfect timing! ⏰' :
@@ -2311,7 +2328,7 @@ app.get('/', (req, res) => {
             };
             
             insights.push({
-              label: 'Launch Time',
+              label: 'Hunt Time',
               value: 'Not specified',
               recommendation: \`We recommend \${formatTime(bestHour)} PST for maximum visibility.\`,
               status: 'warning',
@@ -2401,12 +2418,12 @@ app.get('/', (req, res) => {
             meta: 'Use this for Twitter/X, LinkedIn, and other social platforms'
           });
           
-          // 5. Launch Day Tips
+          // 5. Hunt Day Tips
           const launchTips = generateLaunchTips(category, topProductsInCategory);
           assets.push({
-            title: '🎯 Category-Specific Launch Tips',
+            title: '🎯 Category-Specific Hunt Tips',
             content: launchTips,
-            meta: \`Based on successful \${category} launches\`
+            meta: \`Based on successful \${category} hunts by top Makers\`
           });
           
           // Display assets
@@ -2530,9 +2547,9 @@ Thanks for checking us out! 🚀\`;
         function generateSocialPost(appName, features) {
           const mainFeature = features.split(/[,.\\n]/).map(f => f.trim()).filter(f => f)[0];
           
-          // Use proven social post format from top performers
+          // Use proven social post format from top Makers
           // Keep it compelling, 1-2 sentences, minimal hashtags, direct link
-          return \`🚀 We just launched \${appName} on Product Hunt!
+          return \`🚀 We just hunted \${appName} on Product Hunt!
 
 \${mainFeature} - would love your feedback and support!
 
@@ -2552,21 +2569,21 @@ Your upvote and comments mean the world to us 🙏\`;
 • Target for Product of the Day: 200+ upvotes
 • Expected traffic (#1 spot): 10,000+ visitors
 
-⏰ **Launch Timing (Critical!):**
-• **Launch at 12:01 AM PST** (Pacific Time) - gives you full 24 hours
+⏰ **Hunt Timing (Critical!):**
+• **Hunt at 12:01 AM PST** (Pacific Time) - gives you full 24 hours
 • **Win the first 4 hours** = dominate the entire day
 • Best days: Tuesday-Thursday (high traffic) OR Sunday (less competition)
-• Avoid Mondays (everyone launches) and major tech event days
+• Avoid Mondays (everyone hunts) and major tech event days
 
 🎯 **Proven Success Strategies:**
 
-**Pre-Launch (4 weeks before):**
+**Pre-Hunt (4 weeks before):**
 • Create ProductHunt "Coming Soon" teaser page to collect supporters
 • Engage with PH community (upvote/comment on other products daily)
 • Build support list: customers, email subscribers, social followers
 • Prepare all assets: gallery images (1270×760px), demo video (<90sec), first comment
 
-**Launch Day Execution:**
+**Hunt Day Execution:**
 • Post your first comment IMMEDIATELY when product goes live
 • Reply to EVERY comment within minutes (engagement = visibility)
 • DM supporters personally (not mass email) with direct link
@@ -2574,8 +2591,8 @@ Your upvote and comments mean the world to us 🙏\`;
 • Monitor real-time with Hunted.Space or Product Wars
 • Final push in last 2-4 hours
 
-**What Top Launchers Do:**
-✅ 70% of top products have maker first comment
+**What Top Makers Do:**
+✅ 70% of top products have Maker first comment
 ✅ Personal DMs > mass social posts (more effective)
 ✅ Long-time PH users have more voting weight
 ✅ Respond to comments with personality (not corporate speak)
@@ -2583,7 +2600,7 @@ Your upvote and comments mean the world to us 🙏\`;
 
 **What to Avoid:**
 ❌ No fake upvotes (penalty/disqualification)
-❌ Don't launch without existing community
+❌ Don't hunt without existing community
 ❌ Don't ignore comments or respond slowly
 ❌ Don't use shortened links or UTM parameters
 ❌ Don't treat PH as primary growth channel (it's a PR event)

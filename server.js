@@ -419,6 +419,41 @@ app.get('/', (req, res) => {
           margin-left: 8px;
         }
         
+        .show-more-container {
+          text-align: center;
+          margin: 24px 0;
+        }
+        
+        .show-more-btn {
+          background: white;
+          border: 2px solid #da552f;
+          color: #da552f;
+          padding: 12px 32px;
+          border-radius: 8px;
+          font-size: 16px;
+          font-weight: 600;
+          cursor: pointer;
+          transition: all 0.3s ease;
+          display: inline-flex;
+          align-items: center;
+          gap: 8px;
+        }
+        
+        .show-more-btn:hover {
+          background: #da552f;
+          color: white;
+          transform: translateY(-2px);
+          box-shadow: 0 4px 12px rgba(218, 85, 47, 0.3);
+        }
+        
+        .show-more-btn #showMoreIcon {
+          transition: transform 0.3s ease;
+        }
+        
+        .show-more-btn.expanded #showMoreIcon {
+          transform: rotate(180deg);
+        }
+        
         .analyzer-card {
           background: white;
           border: 1px solid #e8e7e6;
@@ -706,12 +741,6 @@ app.get('/', (req, res) => {
               </div>
             </div>
             <div class="chart-card">
-              <h3>🥧 Category Distribution</h3>
-              <div class="chart-container">
-                <canvas id="categoryPieChart"></canvas>
-              </div>
-            </div>
-            <div class="chart-card">
               <h3>📈 Launch Activity Over Time</h3>
               <div class="chart-container">
                 <canvas id="launchActivityChart"></canvas>
@@ -730,6 +759,13 @@ app.get('/', (req, res) => {
           </div>
           
           <div class="products-grid" id="productsGrid">
+          </div>
+          
+          <div class="show-more-container" id="showMoreContainer" style="display: none;">
+            <button class="show-more-btn" onclick="toggleProducts()">
+              <span id="showMoreText">Show More Products</span>
+              <span id="showMoreIcon">▼</span>
+            </button>
           </div>
           
           <div class="analyzer-card">
@@ -823,6 +859,8 @@ app.get('/', (req, res) => {
         let filteredProducts = [];
         let charts = {};
         let sortColumn = 'votesCount';
+        let showAllProducts = false;
+        const INITIAL_PRODUCTS_COUNT = 6;
         let sortDirection = 'desc';
         
         async function loadDashboardData() {
@@ -1192,7 +1230,6 @@ app.get('/', (req, res) => {
             .slice(0, 10);
           
           updateTopCategoriesChart(sortedCategories);
-          updateCategoryPieChart(sortedCategories);
           updateLaunchActivityChart();
           updateAvgUpvotesChart(sortedCategories);
         }
@@ -1221,38 +1258,6 @@ app.get('/', (req, res) => {
               },
               scales: {
                 y: { beginAtZero: true }
-              }
-            }
-          });
-        }
-        
-        function updateCategoryPieChart(categoryData) {
-          const ctx = document.getElementById('categoryPieChart');
-          if (charts.categoryPie) charts.categoryPie.destroy();
-          
-          const colors = [
-            '#667eea', '#da552f', '#2e7d32', '#1976d2', '#f57c00',
-            '#c62828', '#7b1fa2', '#0097a7', '#689f38', '#f06292'
-          ];
-          
-          charts.categoryPie = new Chart(ctx, {
-            type: 'pie',
-            data: {
-              labels: categoryData.map(([cat]) => cat),
-              datasets: [{
-                data: categoryData.map(([, data]) => data.count),
-                backgroundColor: colors,
-                borderWidth: 2,
-                borderColor: '#fff'
-              }]
-            },
-            options: {
-              responsive: true,
-              maintainAspectRatio: false,
-              plugins: {
-                legend: {
-                  position: 'right'
-                }
               }
             }
           });
@@ -1358,7 +1363,10 @@ app.get('/', (req, res) => {
           const grid = document.getElementById('productsGrid');
           grid.innerHTML = '';
           
-          filteredProducts.forEach((product, index) => {
+          // Determine how many products to show
+          const productsToShow = showAllProducts ? filteredProducts : filteredProducts.slice(0, INITIAL_PRODUCTS_COUNT);
+          
+          productsToShow.forEach((product, index) => {
             const card = document.createElement('div');
             card.className = 'product-card';
             card.onclick = () => window.open(product.url, '_blank');
@@ -1383,6 +1391,35 @@ app.get('/', (req, res) => {
             
             grid.appendChild(card);
           });
+          
+          // Show/hide the "Show More" button
+          const showMoreContainer = document.getElementById('showMoreContainer');
+          const showMoreBtn = document.querySelector('.show-more-btn');
+          const showMoreText = document.getElementById('showMoreText');
+          const showMoreIcon = document.getElementById('showMoreIcon');
+          
+          if (filteredProducts.length > INITIAL_PRODUCTS_COUNT) {
+            showMoreContainer.style.display = 'block';
+            if (showAllProducts) {
+              showMoreText.textContent = 'Show Less Products';
+              showMoreBtn.classList.add('expanded');
+            } else {
+              showMoreText.textContent = \`Show More Products (\${filteredProducts.length - INITIAL_PRODUCTS_COUNT} more)\`;
+              showMoreBtn.classList.remove('expanded');
+            }
+          } else {
+            showMoreContainer.style.display = 'none';
+          }
+        }
+        
+        function toggleProducts() {
+          showAllProducts = !showAllProducts;
+          updateTable();
+          
+          // Scroll to products section if collapsing
+          if (!showAllProducts) {
+            document.getElementById('productsGrid').scrollIntoView({ behavior: 'smooth', block: 'start' });
+          }
         }
         
         document.getElementById('searchInput').addEventListener('input', () => {

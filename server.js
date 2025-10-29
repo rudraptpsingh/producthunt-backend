@@ -212,47 +212,72 @@ app.get('/', (req, res) => {
           z-index: 1;
         }
         
-        .features-grid {
-          max-width: 1000px;
-          margin: 40px auto 0;
-          display: grid;
-          grid-template-columns: repeat(3, 1fr);
-          gap: 24px;
+        .features-slider {
+          max-width: 700px;
+          margin: 32px auto 0;
+          position: relative;
+          overflow: hidden;
           z-index: 1;
         }
         
-        .feature-card {
-          background: white;
-          border: 1px solid #E5E5E5;
-          border-radius: 12px;
-          padding: 24px;
-          text-align: center;
-          transition: all 0.3s ease;
+        .features-track {
+          display: flex;
+          transition: transform 0.5s cubic-bezier(0.4, 0, 0.2, 1);
         }
         
-        .feature-card:hover {
-          border-color: #DA552F;
-          box-shadow: 0 4px 12px rgba(218, 85, 47, 0.1);
-          transform: translateY(-2px);
+        .feature-slide {
+          min-width: 100%;
+          padding: 20px;
+          text-align: center;
         }
         
         .feature-icon {
-          font-size: 36px;
+          font-size: 40px;
           margin-bottom: 12px;
           display: block;
         }
         
         .feature-title {
-          font-size: 16px;
+          font-size: 18px;
           font-weight: 700;
           margin-bottom: 8px;
           color: #1A1A1A;
         }
         
         .feature-description {
-          font-size: 13px;
+          font-size: 14px;
           color: #666666;
-          line-height: 1.5;
+          line-height: 1.6;
+          max-width: 550px;
+          margin: 0 auto;
+        }
+        
+        .slider-dots {
+          display: flex;
+          justify-content: center;
+          gap: 8px;
+          margin-top: 24px;
+        }
+        
+        .slider-dot {
+          width: 10px;
+          height: 10px;
+          border-radius: 50%;
+          background: #D1D5DB;
+          cursor: pointer;
+          transition: all 0.3s ease;
+          border: none;
+          padding: 0;
+        }
+        
+        .slider-dot.active {
+          background: #DA552F;
+          transform: scale(1.2);
+          box-shadow: 0 0 0 3px rgba(218, 85, 47, 0.2);
+        }
+        
+        .slider-dot:hover {
+          background: #9CA3AF;
         }
         
         .hero-subtitle {
@@ -2297,26 +2322,20 @@ app.get('/', (req, res) => {
             padding: 12px 8px;
           }
           
-          .features-grid {
-            grid-template-columns: 1fr;
-            gap: 16px;
-            margin-top: 24px;
-          }
-          
-          .feature-card {
-            padding: 20px;
+          .feature-slide {
+            padding: 20px 16px;
           }
           
           .feature-icon {
-            font-size: 32px;
+            font-size: 36px;
           }
           
           .feature-title {
-            font-size: 15px;
+            font-size: 16px;
           }
           
           .feature-description {
-            font-size: 12px;
+            font-size: 13px;
           }
           
           .filters-grid {
@@ -3398,27 +3417,27 @@ app.get('/', (req, res) => {
               <div class="feature-slide">
                 <span class="feature-icon">🌤️</span>
                 <h3 class="feature-title">Hunt Weather</h3>
-                <p class="feature-description">AI-powered scoring system analyzing category trends, optimal timing, and competition levels to predict your hunt success potential</p>
+                <p class="feature-description">AI-powered scoring analyzing category trends, optimal timing, and competition to predict your success</p>
               </div>
               <div class="feature-slide">
-                <span class="feature-icon">▣</span>
-                <h3 class="feature-title">Analyze Your Hunt</h3>
-                <p class="feature-description">Get personalized insights on your tagline, category choice, and hunt timing with data-driven recommendations for Makers</p>
+                <span class="feature-icon">📊</span>
+                <h3 class="feature-title">Live Leaderboard</h3>
+                <p class="feature-description">Track top 20 products in real-time with velocity indicators and competitor analysis</p>
               </div>
               <div class="feature-slide">
-                <span class="feature-icon">✦</span>
-                <h3 class="feature-title">Generate Hunt Assets</h3>
-                <p class="feature-description">Create professional taglines, descriptions, first comments, and social posts based on proven patterns from top Makers and Golden Kitty winners</p>
+                <span class="feature-icon">🔍</span>
+                <h3 class="feature-title">Hunt Analysis</h3>
+                <p class="feature-description">Get AI-driven insights on your tagline, category, and timing with personalized recommendations</p>
               </div>
               <div class="feature-slide">
-                <span class="feature-icon">▦</span>
-                <h3 class="feature-title">Analytics Dashboard</h3>
-                <p class="feature-description">Real-time ProductHunt trends, category insights, and hunt activity visualization to help you make informed decisions</p>
+                <span class="feature-icon">✨</span>
+                <h3 class="feature-title">Asset Generator</h3>
+                <p class="feature-description">Create professional taglines, descriptions, and social posts based on top-performing hunts</p>
               </div>
               <div class="feature-slide">
-                <span class="feature-icon">🚀</span>
-                <h3 class="feature-title">Launch Day Command Center</h3>
-                <p class="feature-description">Real-time dashboard tracking top 20 products with competitor analysis, engagement timing alerts, and one-click social templates to maximize your launch success</p>
+                <span class="feature-icon">📍</span>
+                <h3 class="feature-title">Track Your Hunt</h3>
+                <p class="feature-description">Monitor your product's performance with real-time rank tracking and social share templates</p>
               </div>
             </div>
             <div class="slider-dots" id="sliderDots">

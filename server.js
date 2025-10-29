@@ -933,9 +933,9 @@ app.get('/', (req, res) => {
         
         .leaderboard-row {
           display: grid;
-          grid-template-columns: 40px 2fr 100px 80px 80px 120px 80px;
-          gap: 12px;
-          padding: 12px;
+          grid-template-columns: 45px 2fr 110px 70px 70px 100px 85px;
+          gap: 10px;
+          padding: 10px 12px;
           background: white;
           border: 1px solid #E5E5E5;
           border-radius: 6px;
@@ -951,18 +951,19 @@ app.get('/', (req, res) => {
         }
         
         .lb-rank {
-          font-size: 18px;
+          font-size: 16px;
           font-weight: 700;
           color: #DA552F;
           text-align: center;
         }
         
         .lb-rank.top-3 {
-          font-size: 22px;
+          font-size: 20px;
         }
         
         .lb-product {
           font-weight: 600;
+          font-size: 14px;
           color: #1A1A1A;
           overflow: hidden;
           text-overflow: ellipsis;
@@ -982,32 +983,43 @@ app.get('/', (req, res) => {
         }
         
         .lb-category {
-          font-size: 12px;
+          font-size: 11px;
           color: #666;
           background: #F0F0F0;
-          padding: 4px 8px;
+          padding: 3px 8px;
           border-radius: 4px;
           text-align: center;
+          white-space: nowrap;
+          overflow: hidden;
+          text-overflow: ellipsis;
         }
         
         .lb-upvotes {
-          font-size: 16px;
+          font-size: 14px;
           font-weight: 700;
           color: #DA552F;
           text-align: center;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          gap: 3px;
         }
         
         .lb-comments {
-          font-size: 14px;
+          font-size: 13px;
           color: #666;
           text-align: center;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          gap: 3px;
         }
         
         .lb-velocity {
-          font-size: 12px;
+          font-size: 11px;
           font-weight: 600;
           text-align: center;
-          padding: 4px 8px;
+          padding: 4px 6px;
           border-radius: 4px;
         }
         
@@ -1028,21 +1040,25 @@ app.get('/', (req, res) => {
         
         .engagement-windows {
           display: flex;
-          flex-direction: column;
-          gap: 12px;
+          flex-direction: row;
+          flex-wrap: wrap;
+          gap: 8px;
           max-width: 100%;
           overflow: hidden;
         }
         
         .engagement-window {
           background: white;
-          border: 2px solid #E5E5E5;
-          border-radius: 6px;
-          padding: 12px;
+          border: 1px solid #E5E5E5;
+          border-radius: 4px;
+          padding: 8px 12px;
+          font-size: 12px;
           word-wrap: break-word;
           overflow-wrap: break-word;
           max-width: 100%;
           box-sizing: border-box;
+          flex: 1 1 auto;
+          min-width: 140px;
         }
         
         .engagement-window.optimal {
@@ -1051,34 +1067,31 @@ app.get('/', (req, res) => {
         }
         
         .ew-time {
-          font-size: 16px;
+          font-size: 13px;
           font-weight: 700;
           color: #1A1A1A;
-          margin-bottom: 4px;
+          margin-bottom: 2px;
           word-wrap: break-word;
           overflow-wrap: break-word;
           word-break: break-word;
         }
         
         .ew-label {
-          font-size: 13px;
+          font-size: 11px;
           color: #666;
           word-break: break-word;
         }
         
         .ew-status {
-          word-break: break-word;
-        }
-        
-        .ew-status {
           display: inline-block;
-          font-size: 11px;
+          font-size: 10px;
           font-weight: 600;
-          padding: 3px 8px;
-          border-radius: 12px;
-          margin-top: 6px;
+          padding: 2px 6px;
+          border-radius: 10px;
+          margin-top: 4px;
           background: #10B981;
           color: white;
+          word-break: break-word;
         }
         
         .action-suggestions {
@@ -2264,37 +2277,40 @@ app.get('/', (req, res) => {
             min-height: 48px;
           }
           
-          /* Mobile-optimized leaderboard - Compact Flex Layout */
+          /* Mobile-optimized leaderboard - Compact 2-Row Layout */
           .leaderboard-table {
-            overflow-x: visible;
+            overflow-x: auto;
             overflow-y: auto;
+            -webkit-overflow-scrolling: touch;
           }
           
           .leaderboard-row {
-            display: flex;
-            flex-wrap: wrap;
-            padding: 10px;
-            gap: 6px;
+            display: grid;
+            grid-template-columns: 38px 1fr 55px 40px 60px 70px;
+            grid-template-rows: auto auto;
+            padding: 8px;
+            gap: 4px;
             min-width: auto;
             width: 100%;
-            align-items: flex-start;
+            align-items: center;
           }
           
           .lb-rank {
-            font-size: 18px;
+            grid-row: 1 / 3;
+            grid-column: 1;
+            font-size: 15px;
             font-weight: 700;
-            width: 45px;
-            flex-shrink: 0;
+            align-self: start;
           }
           
           .lb-product {
-            font-size: 15px;
+            grid-row: 1;
+            grid-column: 2 / 7;
+            font-size: 13px;
             font-weight: 600;
             word-wrap: break-word;
             overflow-wrap: break-word;
-            line-height: 1.3;
-            flex: 1 1 calc(100% - 55px);
-            min-width: 0;
+            line-height: 1.2;
           }
           
           .lb-product a {
@@ -2303,43 +2319,49 @@ app.get('/', (req, res) => {
           }
           
           .lb-category {
-            font-size: 11px;
+            grid-row: 2;
+            grid-column: 2;
+            font-size: 9px;
             background: #F3F4F6;
-            padding: 3px 8px;
+            padding: 2px 5px;
             border-radius: 3px;
             white-space: nowrap;
             overflow: hidden;
             text-overflow: ellipsis;
-            margin-left: 45px;
-            max-width: calc(100% - 55px);
           }
           
           .lb-upvotes {
-            font-size: 12px;
+            grid-row: 2;
+            grid-column: 3;
+            font-size: 11px;
             font-weight: 600;
             white-space: nowrap;
-            order: 3;
           }
           
           .lb-comments {
-            font-size: 12px;
+            grid-row: 2;
+            grid-column: 4;
+            font-size: 11px;
             font-weight: 600;
             white-space: nowrap;
-            margin-left: 8px;
-            order: 4;
           }
           
           .lb-velocity {
-            display: none;
+            grid-row: 2;
+            grid-column: 5;
+            font-size: 9px;
+            padding: 2px 4px;
+            border-radius: 3px;
+            white-space: nowrap;
           }
           
           .track-product-btn {
-            font-size: 12px;
-            padding: 6px 12px;
-            min-height: 36px;
+            grid-row: 2;
+            grid-column: 6;
+            font-size: 10px;
+            padding: 4px 6px;
+            min-height: 28px;
             white-space: nowrap;
-            margin-left: auto;
-            order: 5;
           }
           
           /* Modal optimization for mobile */
@@ -3041,7 +3063,7 @@ app.get('/', (req, res) => {
           <div class="command-center-card" id="commandCenterCard">
             <div class="command-center-header">
               <h2>🌤️ Hunt Weather & Command Center</h2>
-              <p>Real-time insights and tactical dashboard with live ProductHunt data</p>
+              <p>AI-powered hunt scoring, optimal timing insights, and live leaderboard tracking</p>
               <div class="auto-refresh-badge">Auto-refreshing every 30s</div>
             </div>
             
@@ -3115,26 +3137,22 @@ app.get('/', (req, res) => {
                   </div>
                 </div>
               </div>
-            </div>
-            
-            <div class="command-center-grid">
-              <div class="cc-section leaderboard-section">
-                <h3>📊 Live Leaderboard - <a href="https://www.producthunt.com" target="_blank" style="color: #DA552F; text-decoration: none; border-bottom: 1px solid #DA552F;">Top 20 Products</a></h3>
-                <div class="leaderboard-table" id="leaderboardTable">
-                  <div class="loading-placeholder">Loading leaderboard...</div>
-                </div>
-              </div>
               
-              <div class="cc-section engagement-section">
-                <h3>⏰ Optimal Engagement Windows</h3>
-                <div class="engagement-windows" id="engagementWindows">
+              <!-- Optimal Engagement Windows (non-intrusive) -->
+              <div style="margin-top: 20px; padding: 16px; background: #F8FAFC; border-radius: 8px; border-left: 3px solid #DA552F;">
+                <h4 style="font-size: 13px; font-weight: 600; color: #666; margin: 0 0 12px 0;">⏰ Best Times to Engage (PST)</h4>
+                <div class="engagement-windows" id="engagementWindows" style="display: flex; gap: 8px; flex-wrap: wrap;">
                   <div class="loading-placeholder">Calculating...</div>
                 </div>
-                
-                <h3 style="margin-top: 24px;">💡 Action Suggestions</h3>
-                <div class="action-suggestions" id="actionSuggestions">
-                  <div class="loading-placeholder">Analyzing...</div>
-                </div>
+              </div>
+            </div>
+            
+            <!-- Live Leaderboard Section (Full Width) -->
+            <div class="cc-section leaderboard-section" style="margin-top: 24px;">
+              <h3>📊 Live Leaderboard - <a href="https://www.producthunt.com" target="_blank" style="color: #DA552F; text-decoration: none; border-bottom: 1px solid #DA552F;">Top 20 Hunts Today</a></h3>
+              <p style="font-size: 13px; color: #666; margin: 8px 0 16px 0;">Real-time ranking of today's featured products with velocity tracking</p>
+              <div class="leaderboard-table" id="leaderboardTable">
+                <div class="loading-placeholder">Loading leaderboard...</div>
               </div>
             </div>
           </div>
@@ -3143,7 +3161,7 @@ app.get('/', (req, res) => {
           <div class="track-hunt-card" id="trackHuntCard">
             <div class="track-hunt-header">
               <h2>📍 Track My Hunt</h2>
-              <p>Enter your ProductHunt URL to get real-time tracking, social templates, and competitor insights</p>
+              <p>Monitor your hunt in real-time with live stats, social templates, and actionable recommendations</p>
             </div>
             
             <div class="url-input-section">
@@ -3204,9 +3222,18 @@ app.get('/', (req, res) => {
             <!-- Competitor Analysis Section -->
             <div class="competitor-analysis" id="trackCompetitorAnalysis" style="display: none; margin-top: 40px;">
               <h3>🎯 Competitor Analysis</h3>
-              <p style="font-size: 14px; color: #666; margin-bottom: 20px;">See how your product ranks against today's top hunts</p>
+              <p style="font-size: 14px; color: #666; margin-bottom: 20px;">Compare your ranking with nearby products</p>
               <div id="trackCompetitorInsights">
                 <!-- Will be populated dynamically -->
+              </div>
+            </div>
+            
+            <!-- Action Suggestions Section -->
+            <div id="trackActionSuggestions" style="display: none; margin-top: 32px;">
+              <h3>💡 Action Suggestions</h3>
+              <p style="font-size: 14px; color: #666; margin-bottom: 16px;">Smart recommendations to boost your hunt performance</p>
+              <div class="action-suggestions" id="actionSuggestions">
+                <div class="loading-placeholder">Analyzing...</div>
               </div>
             </div>
           </div>
@@ -4433,6 +4460,7 @@ Best,
             document.getElementById('productSummary').style.display = 'block';
             document.getElementById('trackTemplates').style.display = 'block';
             document.getElementById('trackCompetitorAnalysis').style.display = 'block';
+            document.getElementById('trackActionSuggestions').style.display = 'block';
             
             // Scroll to summary
             document.getElementById('productSummary').scrollIntoView({ behavior: 'smooth', block: 'start' });

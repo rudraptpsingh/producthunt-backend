@@ -5262,12 +5262,19 @@ Best,
         async function displayAIAnalysis(product, categoryStats) {
           const analysisContainer = document.getElementById('aiAnalysisContent');
           
-          // Show loading state
+          // Show loading state with spinner
           analysisContainer.innerHTML = \`
-            <div style="text-align: center; padding: 40px;">
-              <div style="font-size: 32px; margin-bottom: 12px;">🤖</div>
-              <div style="color: #6B7280; font-size: 14px;">AI is analyzing your hunt performance...</div>
+            <div style="text-align: center; padding: 50px 20px;">
+              <div style="width: 48px; height: 48px; margin: 0 auto 20px; border: 4px solid #F3F4F6; border-top: 4px solid #DA552F; border-radius: 50%; animation: spin 1s linear infinite;"></div>
+              <div style="color: #1A1A1A; font-size: 16px; font-weight: 600; margin-bottom: 8px;">🤖 AI Analysis in Progress</div>
+              <div style="color: #6B7280; font-size: 14px;">Comparing your hunt against category leaders and overall leaderboard...</div>
             </div>
+            <style>
+              @keyframes spin {
+                0% { transform: rotate(0deg); }
+                100% { transform: rotate(360deg); }
+              }
+            </style>
           \`;
           
           try {
@@ -5298,9 +5305,24 @@ Best,
             
             // Priority badge styling
             const priorityConfig = {
-              high: { bg: 'linear-gradient(135deg, #EF4444 0%, #DC2626 100%)', icon: '🔴', text: 'High Priority' },
-              medium: { bg: 'linear-gradient(135deg, #F59E0B 0%, #D97706 100%)', icon: '🟠', text: 'Medium Priority' },
-              low: { bg: 'linear-gradient(135deg, #10B981 0%, #059669 100%)', icon: '🟢', text: 'Low Priority' }
+              high: { 
+                bg: 'linear-gradient(135deg, #EF4444 0%, #DC2626 100%)', 
+                icon: '🔴', 
+                text: 'High Priority',
+                desc: 'Immediate action needed - critical opportunities or issues identified'
+              },
+              medium: { 
+                bg: 'linear-gradient(135deg, #F59E0B 0%, #D97706 100%)', 
+                icon: '🟠', 
+                text: 'Medium Priority',
+                desc: 'Important improvements recommended - act within a few hours'
+              },
+              low: { 
+                bg: 'linear-gradient(135deg, #10B981 0%, #059669 100%)', 
+                icon: '🟢', 
+                text: 'Low Priority',
+                desc: 'On track - minor optimizations suggested for best results'
+              }
             };
             
             const priority = priorityConfig[analysis.priority] || priorityConfig.medium;
@@ -5309,9 +5331,14 @@ Best,
               <div style="background: white; border-radius: 12px; padding: 0; overflow: hidden;">
                 
                 <!-- Priority Banner -->
-                <div style="background: \${priority.bg}; color: white; padding: 12px 20px; display: flex; align-items: center; gap: 8px; font-weight: 600; font-size: 13px;">
-                  <span>\${priority.icon}</span>
-                  <span>\${priority.text}</span>
+                <div style="background: \${priority.bg}; color: white; padding: 12px 20px;">
+                  <div style="display: flex; align-items: center; gap: 8px; font-weight: 600; font-size: 13px;">
+                    <span>\${priority.icon}</span>
+                    <span>\${priority.text}</span>
+                  </div>
+                  <div style="font-size: 11px; margin-top: 4px; opacity: 0.95; font-weight: 500;">
+                    \${priority.desc}
+                  </div>
                 </div>
                 
                 <!-- Analysis Content -->

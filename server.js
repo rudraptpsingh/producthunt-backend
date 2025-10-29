@@ -2248,6 +2248,16 @@ app.get('/', (req, res) => {
             position: relative;
           }
           
+          /* Hide desktop user menu elements on mobile */
+          .user-menu > .auth-buttons {
+            display: none !important;
+          }
+          
+          .user-menu > .user-info {
+            display: none !important;
+          }
+          
+          /* Mobile slide-out menu */
           .user-menu {
             position: fixed;
             top: 0;
@@ -2260,6 +2270,8 @@ app.get('/', (req, res) => {
             transition: right 0.3s ease;
             z-index: 1000;
             overflow-y: auto;
+            display: flex !important;
+            flex-direction: column;
           }
           
           .user-menu.mobile-open {
@@ -2267,11 +2279,24 @@ app.get('/', (req, res) => {
           }
           
           .mobile-nav-links {
-            display: flex;
+            display: flex !important;
             flex-direction: column;
             margin-bottom: 24px;
             padding-bottom: 24px;
             border-bottom: 2px solid #F0F0F0;
+          }
+          
+          /* Show auth buttons inside mobile menu */
+          .user-menu.mobile-open > .auth-buttons {
+            display: flex !important;
+            flex-direction: column;
+            gap: 12px;
+          }
+          
+          .user-menu.mobile-open > .user-info {
+            display: flex !important;
+            flex-direction: column;
+            gap: 12px;
           }
           
           .auth-buttons,
@@ -3312,6 +3337,9 @@ app.get('/', (req, res) => {
       </style>
     </head>
     <body>
+      <!-- Mobile Menu Backdrop -->
+      <div class="mobile-menu-backdrop" id="mobileMenuBackdrop"></div>
+      
       <div class="top-bar">
         <div class="top-bar-content">
           <div class="logo">
@@ -3819,11 +3847,20 @@ app.get('/', (req, res) => {
         // Mobile Menu Toggle
         const mobileMenuToggle = document.getElementById('mobileMenuToggle');
         const userMenu = document.getElementById('userMenu');
+        const mobileMenuBackdrop = document.getElementById('mobileMenuBackdrop');
         
         if (mobileMenuToggle) {
           mobileMenuToggle.addEventListener('click', function() {
             this.classList.toggle('active');
             userMenu.classList.toggle('mobile-open');
+            mobileMenuBackdrop.classList.toggle('active');
+          });
+          
+          // Close menu when clicking backdrop
+          mobileMenuBackdrop.addEventListener('click', function() {
+            mobileMenuToggle.classList.remove('active');
+            userMenu.classList.remove('mobile-open');
+            mobileMenuBackdrop.classList.remove('active');
           });
           
           // Close menu when clicking outside
@@ -3831,6 +3868,7 @@ app.get('/', (req, res) => {
             if (!userMenu.contains(event.target) && !mobileMenuToggle.contains(event.target)) {
               mobileMenuToggle.classList.remove('active');
               userMenu.classList.remove('mobile-open');
+              mobileMenuBackdrop.classList.remove('active');
             }
           });
           
@@ -3839,6 +3877,7 @@ app.get('/', (req, res) => {
             if (event.target.tagName === 'BUTTON' || event.target.tagName === 'A') {
               mobileMenuToggle.classList.remove('active');
               userMenu.classList.remove('mobile-open');
+              mobileMenuBackdrop.classList.remove('active');
             }
           });
           

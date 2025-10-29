@@ -1024,18 +1024,23 @@ app.get('/', (req, res) => {
         }
         
         .velocity-high {
-          background: #D1FAE5;
-          color: #065F46;
+          background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+          color: white;
+          font-weight: 700;
+          box-shadow: 0 2px 4px rgba(102, 126, 234, 0.3);
         }
         
         .velocity-medium {
-          background: #FEF3C7;
-          color: #92400E;
+          background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+          color: white;
+          font-weight: 700;
+          box-shadow: 0 2px 4px rgba(240, 147, 251, 0.3);
         }
         
         .velocity-low {
-          background: #FEE2E2;
-          color: #991B1B;
+          background: #F3F4F6;
+          color: #6B7280;
+          font-weight: 600;
         }
         
         .engagement-windows {
@@ -4064,9 +4069,9 @@ app.get('/', (req, res) => {
           let html = '';
           top20.forEach((product, index) => {
             const rank = index + 1;
-            const velocity = calculateVelocity(product, index) || { class: 'velocity-low', label: '📉Slow' };
+            const velocity = calculateVelocity(product, index) || { class: 'velocity-low', label: '💤 Slow' };
             const velocityClass = velocity.class || 'velocity-low';
-            const velocityLabel = velocity.label || '📉Slow';
+            const velocityLabel = velocity.label || '💤 Slow';
             const rankClass = rank <= 3 ? 'top-3' : '';
             
             const productUrl = product.url || 'https://www.producthunt.com';
@@ -4100,9 +4105,9 @@ app.get('/', (req, res) => {
           
           if (!product.createdAt || !product.votesCount) {
             // Fallback if data missing - estimate by rank
-            if (index < 5) return { class: 'velocity-high', label: '🔥HOT' };
-            if (index < 12) return { class: 'velocity-medium', label: '📈Rising' };
-            return { class: 'velocity-low', label: '📉Slow' };
+            if (index < 5) return { class: 'velocity-high', label: '🚀 HOT' };
+            if (index < 12) return { class: 'velocity-medium', label: '⚡ Rising' };
+            return { class: 'velocity-low', label: '💤 Slow' };
           }
           
           try {
@@ -4111,26 +4116,26 @@ app.get('/', (req, res) => {
             
             // Validate date
             if (isNaN(createdAt.getTime())) {
-              if (index < 5) return { class: 'velocity-high', label: '🔥HOT' };
-              if (index < 12) return { class: 'velocity-medium', label: '📈Rising' };
-              return { class: 'velocity-low', label: '📉Slow' };
+              if (index < 5) return { class: 'velocity-high', label: '🚀 HOT' };
+              if (index < 12) return { class: 'velocity-medium', label: '⚡ Rising' };
+              return { class: 'velocity-low', label: '💤 Slow' };
             }
             
             const hoursLive = Math.max((now - createdAt) / (1000 * 60 * 60), 0.5);
             const upvotesPerHour = product.votesCount / hoursLive;
             
             if (upvotesPerHour > 30) {
-              return { class: 'velocity-high', label: '🔥HOT' };
+              return { class: 'velocity-high', label: '🚀 HOT' };
             } else if (upvotesPerHour > 15) {
-              return { class: 'velocity-medium', label: '📈Rising' };
+              return { class: 'velocity-medium', label: '⚡ Rising' };
             } else {
-              return { class: 'velocity-low', label: '📉Slow' };
+              return { class: 'velocity-low', label: '💤 Slow' };
             }
           } catch (error) {
             // Fallback to rank-based velocity
-            if (index < 5) return { class: 'velocity-high', label: '🔥HOT' };
-            if (index < 12) return { class: 'velocity-medium', label: '📈Rising' };
-            return { class: 'velocity-low', label: '📉Slow' };
+            if (index < 5) return { class: 'velocity-high', label: '🚀 HOT' };
+            if (index < 12) return { class: 'velocity-medium', label: '⚡ Rising' };
+            return { class: 'velocity-low', label: '💤 Slow' };
           }
         }
         

@@ -5016,6 +5016,65 @@ Best,
           }
         }
         
+        function shareProductSummary() {
+          const product = window.currentProductData;
+          if (!product) return;
+          
+          // Determine velocity status emoji
+          const velocityNum = parseInt(product.velocity) || 0;
+          let velocityEmoji = '💤';
+          let velocityStatus = 'Slow';
+          if (velocityNum > 30) {
+            velocityEmoji = '🔥';
+            velocityStatus = 'HOT';
+          } else if (velocityNum > 15) {
+            velocityEmoji = '📈';
+            velocityStatus = 'Rising';
+          }
+          
+          // Determine rank emoji
+          let rankEmoji = '📊';
+          if (product.rank <= 3) {
+            rankEmoji = '🏆';
+          } else if (product.rank <= 10) {
+            rankEmoji = '🎯';
+          }
+          
+          // Generate formatted summary
+          const summary = rankEmoji + ' ' + product.name + ' - ProductHunt Performance\\n\\n' +
+            '📈 Current Stats:\\n' +
+            '• Rank: #' + product.rank + '\\n' +
+            '• Upvotes: ' + product.votesCount + ' ▲\\n' +
+            '• Comments: ' + product.commentsCount + ' 💬\\n' +
+            '• Velocity: ' + product.velocity + ' ' + velocityEmoji + ' ' + velocityStatus + '\\n' +
+            '• Category: ' + product.category + '\\n\\n' +
+            '🔗 ' + product.url + '\\n\\n' +
+            '#ProductHunt #SaaS #Startup';
+          
+          // Copy to clipboard using textarea method
+          const textarea = document.createElement('textarea');
+          textarea.value = summary;
+          textarea.style.position = 'fixed';
+          textarea.style.opacity = '0';
+          document.body.appendChild(textarea);
+          textarea.select();
+          document.execCommand('copy');
+          document.body.removeChild(textarea);
+          
+          // Visual feedback
+          const btn = document.getElementById('shareSummaryBtn');
+          if (btn) {
+            const originalHTML = btn.innerHTML;
+            btn.innerHTML = '<svg width="18" height="18" viewBox="0 0 24 24" fill="white"><path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/></svg> Copied to Clipboard!';
+            btn.style.background = 'linear-gradient(135deg, #10B981 0%, #059669 100%)';
+            
+            setTimeout(() => {
+              btn.innerHTML = originalHTML;
+              btn.style.background = 'linear-gradient(135deg, #3B82F6 0%, #2563EB 100%)';
+            }, 2500);
+          }
+        }
+        
         function switchTemplateSlide(index) {
           // Hide all slides
           const slides = document.querySelectorAll('.template-slide');
@@ -5178,8 +5237,18 @@ Best,
                 <div style="font-size: 12px; color: #6B7280; font-weight: 600; margin-bottom: 4px;">CATEGORY</div>
                 <div style="font-size: 14px; color: #1A1A1A; font-weight: 600;">\${product.category}</div>
               </div>
+              
+              <button id="shareSummaryBtn" onclick="shareProductSummary()" style="width: 100%; margin-top: 16px; background: linear-gradient(135deg, #3B82F6 0%, #2563EB 100%); color: white; border: none; padding: 12px 24px; border-radius: 10px; font-size: 14px; font-weight: 700; cursor: pointer; transition: all 0.2s; box-shadow: 0 2px 8px rgba(59, 130, 246, 0.3); display: flex; align-items: center; justify-content: center; gap: 8px;">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="white">
+                  <path d="M18 16.08c-.76 0-1.44.3-1.96.77L8.91 12.7c.05-.23.09-.46.09-.7s-.04-.47-.09-.7l7.05-4.11c.54.5 1.25.81 2.04.81 1.66 0 3-1.34 3-3s-1.34-3-3-3-3 1.34-3 3c0 .24.04.47.09.7L8.04 9.81C7.5 9.31 6.79 9 6 9c-1.66 0-3 1.34-3 3s1.34 3 3 3c.79 0 1.5-.31 2.04-.81l7.12 4.16c-.05.21-.08.43-.08.65 0 1.61 1.31 2.92 2.92 2.92 1.61 0 2.92-1.31 2.92-2.92s-1.31-2.92-2.92-2.92z"/>
+                </svg>
+                Share Summary
+              </button>
             </div>
           \`;
+          
+          // Store current product data for sharing
+          window.currentProductData = product;
         }
         
         async function displayAIAnalysis(product, categoryStats) {

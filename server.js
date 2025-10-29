@@ -5040,6 +5040,14 @@ Best,
             rankEmoji = '🎯';
           }
           
+          // Generate tracked URL with UTM parameters
+          const baseUrl = product.url || 'https://www.producthunt.com/posts/' + product.slug;
+          const trackedUrl = baseUrl + 
+            '?utm_source=share-summary' +
+            '&utm_medium=social' +
+            '&utm_campaign=huntproducthunt-tracking' +
+            '&utm_content=rank-' + product.rank;
+          
           // Generate formatted summary
           const summary = rankEmoji + ' ' + product.name + ' - ProductHunt Performance\\n\\n' +
             '📈 Current Stats:\\n' +
@@ -5048,7 +5056,7 @@ Best,
             '• Comments: ' + product.commentsCount + ' 💬\\n' +
             '• Velocity: ' + product.velocity + ' ' + velocityEmoji + ' ' + velocityStatus + '\\n' +
             '• Category: ' + product.category + '\\n\\n' +
-            '🔗 ' + product.url + '\\n\\n' +
+            '🔗 ' + trackedUrl + '\\n\\n' +
             '#ProductHunt #SaaS #Startup';
           
           // Copy to clipboard using textarea method
@@ -5381,7 +5389,17 @@ Best,
         }
         
         function generateTrackTemplates(product) {
-          const productUrl = product.url || \`https://www.producthunt.com/posts/\${product.slug}\`;
+          const baseUrl = product.url || \`https://www.producthunt.com/posts/\${product.slug}\`;
+          
+          // Generate tracked URLs with UTM parameters for analytics
+          const twitterUrl = baseUrl + 
+            \`?utm_source=twitter&utm_medium=social&utm_campaign=huntproducthunt-tracking&utm_content=rank-\${product.rank}\`;
+          
+          const linkedinUrl = baseUrl + 
+            \`?utm_source=linkedin&utm_medium=social&utm_campaign=huntproducthunt-tracking&utm_content=rank-\${product.rank}\`;
+          
+          const emailUrl = baseUrl + 
+            \`?utm_source=email&utm_medium=email&utm_campaign=huntproducthunt-tracking&utm_content=rank-\${product.rank}\`;
           
           // Twitter template
           const twitterText = \`🚀 Just hunted on @ProductHunt today!
@@ -5390,7 +5408,7 @@ Best,
 
 Currently at #\${product.rank} with \${product.votesCount} upvotes! 🎯
 
-Check it out and show your support: \${productUrl}
+Check it out and show your support: \${twitterUrl}
 
 #ProductHunt #Startup\`;
           
@@ -5401,7 +5419,7 @@ Check it out and show your support: \${productUrl}
 
 \${product.tagline}
 
-We'd love your support and feedback. Check out our hunt here: \${productUrl}
+We'd love your support and feedback. Check out our hunt here: \${linkedinUrl}
 
 #ProductHunt #ProductLaunch #Startup\`;
           
@@ -5416,7 +5434,7 @@ We're currently at #\${product.rank} with \${product.votesCount} upvotes and wou
 
 \${product.tagline}
 
-Check it out here: \${productUrl}
+Check it out here: \${emailUrl}
 
 Your upvote and feedback would mean the world to us!
 

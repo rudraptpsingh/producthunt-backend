@@ -3585,6 +3585,12 @@ app.get('/', (req, res) => {
               </div>
             </div>
             
+            <!-- AI Analysis Section -->
+            <div id="aiAnalysisSection" style="display: none; margin-top: 32px;">
+              <h3 style="color: #1a1a1a; margin-bottom: 16px;">🤖 AI Performance Analysis</h3>
+              <div id="aiAnalysisContent"></div>
+            </div>
+            
             <!-- Social Templates Section -->
             <div class="templates-section" id="trackTemplates" style="display: none; margin-top: 40px;">
               <h3>📝 One-Click Templates</h3>
@@ -4990,6 +4996,9 @@ Best,
             // Display product summary
             displayProductSummary(data.product);
             
+            // Fetch and display AI analysis
+            displayAIAnalysis(data.product, data.categoryStats);
+            
             // Generate and display templates
             generateTrackTemplates(data.product);
             
@@ -4998,6 +5007,7 @@ Best,
             
             // Show sections
             document.getElementById('productSummary').style.display = 'block';
+            document.getElementById('aiAnalysisSection').style.display = 'block';
             document.getElementById('trackTemplates').style.display = 'block';
             document.getElementById('trackCompetitorAnalysis').style.display = 'block';
             document.getElementById('trackActionSuggestions').style.display = 'block';
@@ -5076,6 +5086,122 @@ Best,
               </div>
             </div>
           \`;
+        }
+        
+        async function displayAIAnalysis(product, categoryStats) {
+          const analysisContainer = document.getElementById('aiAnalysisContent');
+          
+          // Show loading state
+          analysisContainer.innerHTML = \`
+            <div style="text-align: center; padding: 40px;">
+              <div style="font-size: 32px; margin-bottom: 12px;">🤖</div>
+              <div style="color: #6B7280; font-size: 14px;">AI is analyzing your hunt performance...</div>
+            </div>
+          \`;
+          
+          try {
+            const response = await fetch('/api/analyze-tracked-hunt', {
+              method: 'POST',
+              headers: { 'Content-Type': 'application/json' },
+              body: JSON.stringify({ product, categoryStats })
+            });
+            
+            if (!response.ok) {
+              throw new Error('Failed to get AI analysis');
+            }
+            
+            const analysis = await response.json();
+            
+            // Priority badge styling
+            const priorityConfig = {
+              high: { bg: 'linear-gradient(135deg, #EF4444 0%, #DC2626 100%)', icon: '🔴', text: 'High Priority' },
+              medium: { bg: 'linear-gradient(135deg, #F59E0B 0%, #D97706 100%)', icon: '🟠', text: 'Medium Priority' },
+              low: { bg: 'linear-gradient(135deg, #10B981 0%, #059669 100%)', icon: '🟢', text: 'Low Priority' }
+            };
+            
+            const priority = priorityConfig[analysis.priority] || priorityConfig.medium;
+            
+            analysisContainer.innerHTML = \`
+              <div style="background: white; border-radius: 12px; padding: 0; overflow: hidden;">
+                
+                <!-- Priority Banner -->
+                <div style="background: \${priority.bg}; color: white; padding: 12px 20px; display: flex; align-items: center; gap: 8px; font-weight: 600; font-size: 13px;">
+                  <span>\${priority.icon}</span>
+                  <span>\${priority.text}</span>
+                </div>
+                
+                <!-- Analysis Content -->
+                <div style="padding: 24px;">
+                  
+                  <!-- Performance Summary -->
+                  <div style="margin-bottom: 24px;">
+                    <h4 style="color: #1A1A1A; margin: 0 0 12px 0; font-size: 16px; font-weight: 700; display: flex; align-items: center; gap: 8px;">
+                      📊 Performance Overview
+                    </h4>
+                    <p style="color: #4B5563; margin: 0; line-height: 1.6; font-size: 14px;">\${analysis.performanceSummary}</p>
+                  </div>
+                  
+                  <!-- Key Insights Grid -->
+                  <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 16px; margin-bottom: 24px;">
+                    
+                    <!-- Category Analysis -->
+                    <div style="background: linear-gradient(135deg, #EEF2FF 0%, #E0E7FF 100%); border: 1px solid #C7D2FE; border-radius: 10px; padding: 16px;">
+                      <div style="color: #4338CA; font-weight: 700; font-size: 12px; margin-bottom: 8px; text-transform: uppercase; letter-spacing: 0.5px;">
+                        📂 Category Performance
+                      </div>
+                      <div style="color: #3730A3; font-size: 13px; line-height: 1.5;">\${analysis.categoryAnalysis}</div>
+                    </div>
+                    
+                    <!-- Position Analysis -->
+                    <div style="background: linear-gradient(135deg, #FEF3C7 0%, #FDE68A 100%); border: 1px solid #FDE047; border-radius: 10px; padding: 16px;">
+                      <div style="color: #92400E; font-weight: 700; font-size: 12px; margin-bottom: 8px; text-transform: uppercase; letter-spacing: 0.5px;">
+                        🏆 Leaderboard Position
+                      </div>
+                      <div style="color: #78350F; font-size: 13px; line-height: 1.5;">\${analysis.positionAnalysis}</div>
+                    </div>
+                    
+                  </div>
+                  
+                  <!-- Strengths & Weaknesses -->
+                  <div style="background: #F9FAFB; border: 1px solid #E5E7EB; border-radius: 10px; padding: 16px; margin-bottom: 24px;">
+                    <div style="color: #374151; font-weight: 700; font-size: 12px; margin-bottom: 8px; text-transform: uppercase; letter-spacing: 0.5px;">
+                      ⚖️ Strengths & Opportunities
+                    </div>
+                    <div style="color: #4B5563; font-size: 13px; line-height: 1.6;">\${analysis.strengthsAndWeaknesses}</div>
+                  </div>
+                  
+                  <!-- Action Items -->
+                  <div>
+                    <h4 style="color: #1A1A1A; margin: 0 0 16px 0; font-size: 16px; font-weight: 700; display: flex; align-items: center; gap: 8px;">
+                      🎯 Recommended Actions
+                    </h4>
+                    <div style="display: flex; flex-direction: column; gap: 12px;">
+                      \${analysis.actionItems.map((action, index) => \`
+                        <div style="background: linear-gradient(135deg, #FFF7ED 0%, #FFEDD5 100%); border-left: 4px solid #DA552F; border-radius: 8px; padding: 14px 16px; display: flex; align-items: start; gap: 12px;">
+                          <div style="background: #DA552F; color: white; width: 24px; height: 24px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: 700; font-size: 12px; flex-shrink: 0;">
+                            \${index + 1}
+                          </div>
+                          <div style="color: #1A1A1A; font-size: 14px; line-height: 1.5; font-weight: 500; flex: 1;">
+                            \${action}
+                          </div>
+                        </div>
+                      \`).join('')}
+                    </div>
+                  </div>
+                  
+                </div>
+              </div>
+            \`;
+            
+          } catch (error) {
+            console.error('Error fetching AI analysis:', error);
+            analysisContainer.innerHTML = \`
+              <div style="background: #FEF2F2; border: 1px solid #FCA5A5; border-radius: 10px; padding: 16px; text-align: center;">
+                <div style="color: #991B1B; font-size: 14px; font-weight: 600; margin-bottom: 4px;">⚠️ Analysis Unavailable</div>
+                <div style="color: #B91C1C; font-size: 13px;">Could not generate AI insights. Please try again.</div>
+              </div>
+            \`;
+          }
         }
         
         function generateTrackTemplates(product) {
@@ -6537,14 +6663,110 @@ app.post('/api/track-hunt', async (req, res) => {
     const endIndex = Math.min(products.length, rank + 3);
     const competitors = products.slice(startIndex, endIndex);
     
+    // Calculate category stats
+    const categoryProducts = products.filter(p => p.category === trackedProduct.category);
+    const categoryLeader = categoryProducts[0]; // First in category
+    const categoryAvgUpvotes = categoryProducts.reduce((sum, p) => sum + p.votesCount, 0) / categoryProducts.length;
+    
     res.json({
       product: trackedProduct,
-      competitors: competitors
+      competitors: competitors,
+      categoryStats: {
+        categoryName: trackedProduct.category,
+        categoryLeader: categoryLeader,
+        categoryAvgUpvotes: Math.round(categoryAvgUpvotes),
+        productsInCategory: categoryProducts.length,
+        productsInCategoryTotal: categoryProducts.length,
+        top3Products: products.slice(0, 3),
+        totalProducts: products.length
+      }
     });
     
   } catch (error) {
     console.error('Error tracking hunt:', error);
     res.status(500).json({ error: 'Failed to track product' });
+  }
+});
+
+// AI Analysis for tracked hunt
+app.post('/api/analyze-tracked-hunt', async (req, res) => {
+  try {
+    const { product, categoryStats } = req.body;
+    
+    if (!product || !categoryStats) {
+      return res.status(400).json({ error: 'Product and category stats required' });
+    }
+    
+    // Build context for AI
+    const prompt = `Analyze this ProductHunt product's performance and provide concise, actionable insights.
+
+PRODUCT DATA:
+- Name: ${product.name}
+- Rank: #${product.rank} overall (out of ${categoryStats.totalProducts} products)
+- Upvotes: ${product.votesCount}
+- Comments: ${product.commentsCount}
+- Category: ${product.category}
+- Velocity: ${product.velocity}
+- Tagline: ${product.tagline}
+
+CATEGORY CONTEXT:
+- Category: ${categoryStats.categoryName}
+- Category Average Upvotes: ${categoryStats.categoryAvgUpvotes}
+- Category Leader: ${categoryStats.categoryLeader ? `${categoryStats.categoryLeader.name} (#${categoryStats.categoryLeader.rank} overall, ${categoryStats.categoryLeader.votesCount} upvotes)` : 'N/A'}
+- Total Products in Category: ${categoryStats.productsInCategory}
+- Product's Performance vs Category Average: ${product.votesCount > categoryStats.categoryAvgUpvotes ? `${product.votesCount - categoryStats.categoryAvgUpvotes} upvotes above average` : `${categoryStats.categoryAvgUpvotes - product.votesCount} upvotes below average`}
+
+LEADERBOARD CONTEXT:
+- Top 3 Products Overall: ${categoryStats.top3Products.map(p => `#${p.rank} ${p.name} (${p.votesCount} upvotes)`).join(', ')}
+- Total Products Today: ${categoryStats.totalProducts}
+
+Provide a professional analysis in JSON format:
+
+{
+  "performanceSummary": "2-3 sentence concise summary of overall performance",
+  "categoryAnalysis": "How this product performs vs category average and leader",
+  "positionAnalysis": "Analysis of overall leaderboard position and competitiveness",
+  "strengthsAndWeaknesses": "Key strengths and areas for improvement",
+  "actionItems": [
+    "Specific action 1 with clear direction",
+    "Specific action 2 with clear direction",
+    "Specific action 3 with clear direction"
+  ],
+  "priority": "high|medium|low - urgency of taking action"
+}
+
+Make the analysis:
+- Professional and data-driven
+- Concise but complete
+- Action items should be specific, time-sensitive, and easy to follow
+- Focus on what the maker can do RIGHT NOW to improve their hunt`;
+
+    const completion = await openai.chat.completions.create({
+      model: "gpt-4o-mini",
+      messages: [
+        {
+          role: "system",
+          content: "You are an expert ProductHunt strategist who provides data-driven insights and actionable recommendations for makers. You understand what drives success on ProductHunt and can identify opportunities for improvement."
+        },
+        {
+          role: "user",
+          content: prompt
+        }
+      ],
+      response_format: { type: "json_object" },
+      temperature: 0.7,
+      max_tokens: 1000
+    });
+
+    const analysis = JSON.parse(completion.choices[0].message.content);
+    res.json(analysis);
+
+  } catch (error) {
+    console.error('Error in AI track analysis:', error);
+    res.status(500).json({
+      error: 'AI analysis failed',
+      message: error.message
+    });
   }
 });
 

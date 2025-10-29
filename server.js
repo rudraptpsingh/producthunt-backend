@@ -2264,7 +2264,7 @@ app.get('/', (req, res) => {
             min-height: 48px;
           }
           
-          /* Mobile-optimized leaderboard - Compact Card Layout */
+          /* Mobile-optimized leaderboard - Compact Flex Layout */
           .leaderboard-table {
             overflow-x: visible;
             overflow-y: auto;
@@ -2272,38 +2272,29 @@ app.get('/', (req, res) => {
           
           .leaderboard-row {
             display: flex;
-            flex-direction: column;
-            padding: 12px;
-            gap: 8px;
+            flex-wrap: wrap;
+            padding: 10px;
+            gap: 6px;
             min-width: auto;
             width: 100%;
-          }
-          
-          .leaderboard-row > div,
-          .leaderboard-row > button {
-            width: 100%;
-            max-width: 100%;
-            text-align: left;
-            white-space: normal;
+            align-items: flex-start;
           }
           
           .lb-rank {
-            font-size: 16px;
+            font-size: 18px;
             font-weight: 700;
-            text-align: left;
-            margin-bottom: -4px;
+            width: 45px;
+            flex-shrink: 0;
           }
           
           .lb-product {
             font-size: 15px;
             font-weight: 600;
-            min-width: auto;
-            max-width: 100%;
-            overflow: visible;
-            text-overflow: clip;
-            white-space: normal;
             word-wrap: break-word;
+            overflow-wrap: break-word;
             line-height: 1.3;
+            flex: 1 1 calc(100% - 55px);
+            min-width: 0;
           }
           
           .lb-product a {
@@ -2312,44 +2303,43 @@ app.get('/', (req, res) => {
           }
           
           .lb-category {
-            font-size: 12px;
-            max-width: 100%;
-            overflow: visible;
-            text-overflow: clip;
-            white-space: normal;
+            font-size: 11px;
             background: #F3F4F6;
-            padding: 4px 10px;
-            border-radius: 4px;
-            display: inline-block;
-            width: auto;
-            margin-bottom: 4px;
+            padding: 3px 8px;
+            border-radius: 3px;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            margin-left: 45px;
+            max-width: calc(100% - 55px);
           }
           
-          .lb-upvotes,
-          .lb-comments {
-            font-size: 13px;
-            white-space: normal;
+          .lb-upvotes {
+            font-size: 12px;
             font-weight: 600;
-            display: inline-block;
-            margin-right: 12px;
+            white-space: nowrap;
+            order: 3;
+          }
+          
+          .lb-comments {
+            font-size: 12px;
+            font-weight: 600;
+            white-space: nowrap;
+            margin-left: 8px;
+            order: 4;
           }
           
           .lb-velocity {
-            font-size: 12px;
-            padding: 6px 10px;
-            text-align: center;
-            width: auto;
-            display: inline-block;
-            margin-top: 4px;
+            display: none;
           }
           
           .track-product-btn {
-            font-size: 14px;
-            padding: 10px 14px;
-            min-height: 44px;
-            width: 100%;
-            white-space: normal;
-            margin-top: 4px;
+            font-size: 12px;
+            padding: 6px 12px;
+            min-height: 36px;
+            white-space: nowrap;
+            margin-left: auto;
+            order: 5;
           }
           
           /* Modal optimization for mobile */

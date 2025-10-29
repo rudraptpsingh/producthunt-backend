@@ -2236,12 +2236,12 @@ app.get('/', (req, res) => {
           
           /* Mobile Navigation */
           .mobile-menu-toggle {
-            display: flex;
+            display: flex !important;
             margin-left: auto;
           }
           
           .desktop-nav-links {
-            display: none;
+            display: none !important;
           }
           
           .top-bar-content {

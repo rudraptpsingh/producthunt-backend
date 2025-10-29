@@ -22,7 +22,10 @@ if (!OPENAI_API_KEY) {
 // Initialize OpenAI client only if API key is available
 let openai = null;
 if (OPENAI_API_KEY) {
-  openai = new OpenAI({ apiKey: OPENAI_API_KEY });
+  openai = new OpenAI({ 
+    apiKey: OPENAI_API_KEY,
+    fetch: fetch // Pass node-fetch to OpenAI client
+  });
 }
 
 // Enable CORS for all routes

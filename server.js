@@ -402,14 +402,14 @@ app.get('/', (req, res) => {
         
         .charts-grid {
           display: grid;
-          grid-template-columns: repeat(3, 1fr);
+          grid-template-columns: repeat(2, 1fr);
           gap: 12px;
           margin-bottom: 20px;
           max-width: 100%;
           overflow: hidden;
         }
         
-        @media (max-width: 1200px) {
+        @media (max-width: 768px) {
           .charts-grid {
             grid-template-columns: 1fr;
           }
@@ -1040,55 +1040,55 @@ app.get('/', (req, res) => {
         
         .engagement-windows {
           display: flex;
-          flex-direction: row;
-          flex-wrap: wrap;
+          flex-direction: column;
           gap: 8px;
           max-width: 100%;
           overflow: hidden;
         }
         
         .engagement-window {
-          background: white;
+          background: #F8FAFC;
           border: 1px solid #E5E5E5;
           border-radius: 4px;
-          padding: 8px 12px;
+          padding: 10px 12px;
           font-size: 12px;
           word-wrap: break-word;
           overflow-wrap: break-word;
           max-width: 100%;
           box-sizing: border-box;
-          flex: 1 1 auto;
-          min-width: 140px;
+          transition: all 0.2s;
         }
         
         .engagement-window.optimal {
           border-color: #10B981;
           background: #ECFDF5;
+          border-left: 3px solid #10B981;
         }
         
         .ew-time {
-          font-size: 13px;
+          font-size: 14px;
           font-weight: 700;
           color: #1A1A1A;
-          margin-bottom: 2px;
+          margin-bottom: 4px;
           word-wrap: break-word;
           overflow-wrap: break-word;
           word-break: break-word;
         }
         
         .ew-label {
-          font-size: 11px;
+          font-size: 12px;
           color: #666;
           word-break: break-word;
+          line-height: 1.4;
         }
         
         .ew-status {
           display: inline-block;
-          font-size: 10px;
+          font-size: 11px;
           font-weight: 600;
-          padding: 2px 6px;
-          border-radius: 10px;
-          margin-top: 4px;
+          padding: 3px 8px;
+          border-radius: 12px;
+          margin-top: 6px;
           background: #10B981;
           color: white;
           word-break: break-word;
@@ -1953,7 +1953,7 @@ app.get('/', (req, res) => {
           }
           
           .container {
-            padding: 0 16px 32px;
+            padding: 0 8px 32px;
           }
           
           .top-bar {
@@ -2023,6 +2023,10 @@ app.get('/', (req, res) => {
           
           .hero-motto h2 {
             font-size: 24px;
+          }
+          
+          .cc-section {
+            padding: 12px 8px;
           }
           
           .win-badge {
@@ -2286,10 +2290,10 @@ app.get('/', (req, res) => {
           
           .leaderboard-row {
             display: grid;
-            grid-template-columns: 38px 1fr 55px 40px 60px 70px;
+            grid-template-columns: 35px 1fr 58px 58px 60px;
             grid-template-rows: auto auto;
-            padding: 8px;
-            gap: 4px;
+            padding: 8px 6px;
+            gap: 3px;
             min-width: auto;
             width: 100%;
             align-items: center;
@@ -2298,19 +2302,21 @@ app.get('/', (req, res) => {
           .lb-rank {
             grid-row: 1 / 3;
             grid-column: 1;
-            font-size: 15px;
+            font-size: 14px;
             font-weight: 700;
-            align-self: start;
+            align-self: center;
+            text-align: center;
           }
           
           .lb-product {
             grid-row: 1;
-            grid-column: 2 / 7;
+            grid-column: 2 / 6;
             font-size: 13px;
             font-weight: 600;
             word-wrap: break-word;
             overflow-wrap: break-word;
-            line-height: 1.2;
+            line-height: 1.3;
+            padding-bottom: 2px;
           }
           
           .lb-product a {
@@ -2323,11 +2329,12 @@ app.get('/', (req, res) => {
             grid-column: 2;
             font-size: 9px;
             background: #F3F4F6;
-            padding: 2px 5px;
+            padding: 2px 4px;
             border-radius: 3px;
             white-space: nowrap;
             overflow: hidden;
             text-overflow: ellipsis;
+            max-width: 100%;
           }
           
           .lb-upvotes {
@@ -2336,6 +2343,7 @@ app.get('/', (req, res) => {
             font-size: 11px;
             font-weight: 600;
             white-space: nowrap;
+            text-align: center;
           }
           
           .lb-comments {
@@ -2344,21 +2352,23 @@ app.get('/', (req, res) => {
             font-size: 11px;
             font-weight: 600;
             white-space: nowrap;
+            text-align: center;
           }
           
           .lb-velocity {
             grid-row: 2;
             grid-column: 5;
-            font-size: 9px;
-            padding: 2px 4px;
+            font-size: 8px;
+            padding: 2px 3px;
             border-radius: 3px;
             white-space: nowrap;
+            text-align: center;
           }
           
           .track-product-btn {
-            grid-row: 2;
-            grid-column: 6;
-            font-size: 10px;
+            grid-row: 1;
+            grid-column: 5;
+            font-size: 9px;
             padding: 4px 6px;
             min-height: 28px;
             white-space: nowrap;
@@ -3135,14 +3145,6 @@ app.get('/', (req, res) => {
                   <div class="chart-container">
                     <canvas id="avgUpvotesChart"></canvas>
                   </div>
-                </div>
-              </div>
-              
-              <!-- Optimal Engagement Windows (non-intrusive) -->
-              <div style="margin-top: 20px; padding: 16px; background: #F8FAFC; border-radius: 8px; border-left: 3px solid #DA552F;">
-                <h4 style="font-size: 13px; font-weight: 600; color: #666; margin: 0 0 12px 0;">⏰ Best Times to Engage (PST)</h4>
-                <div class="engagement-windows" id="engagementWindows" style="display: flex; gap: 8px; flex-wrap: wrap;">
-                  <div class="loading-placeholder">Calculating...</div>
                 </div>
               </div>
             </div>
@@ -4097,22 +4099,39 @@ app.get('/', (req, res) => {
           // Simple velocity calculation based on upvotes per hour
           if (!product.createdAt || !product.votesCount) {
             // Fallback if data missing - estimate by rank
-            if (index < 5) return { class: 'velocity-high', label: '🔥 HOT' };
-            if (index < 12) return { class: 'velocity-medium', label: '📈 Rising' };
-            return { class: 'velocity-low', label: '📉 Slow' };
+            if (index < 5) return { class: 'velocity-high', label: '🔥HOT' };
+            if (index < 12) return { class: 'velocity-medium', label: '📈Rising' };
+            return { class: 'velocity-low', label: '📉Slow' };
           }
           
-          const createdAt = new Date(product.createdAt);
-          const now = new Date();
-          const hoursLive = Math.max((now - createdAt) / (1000 * 60 * 60), 1);
-          const upvotesPerHour = product.votesCount / hoursLive;
-          
-          if (upvotesPerHour > 30) {
-            return { class: 'velocity-high', label: '🔥 HOT' };
-          } else if (upvotesPerHour > 15) {
-            return { class: 'velocity-medium', label: '📈 Rising' };
-          } else {
-            return { class: 'velocity-low', label: '📉 Slow' };
+          try {
+            const createdAt = new Date(product.createdAt);
+            const now = new Date();
+            
+            // Validate date
+            if (isNaN(createdAt.getTime())) {
+              console.warn('Invalid createdAt date for product:', product.name);
+              if (index < 5) return { class: 'velocity-high', label: '🔥HOT' };
+              if (index < 12) return { class: 'velocity-medium', label: '📈Rising' };
+              return { class: 'velocity-low', label: '📉Slow' };
+            }
+            
+            const hoursLive = Math.max((now - createdAt) / (1000 * 60 * 60), 0.5);
+            const upvotesPerHour = product.votesCount / hoursLive;
+            
+            if (upvotesPerHour > 30) {
+              return { class: 'velocity-high', label: '🔥HOT' };
+            } else if (upvotesPerHour > 15) {
+              return { class: 'velocity-medium', label: '📈Rising' };
+            } else {
+              return { class: 'velocity-low', label: '📉Slow' };
+            }
+          } catch (error) {
+            console.error('Error calculating velocity:', error);
+            // Fallback to rank-based velocity
+            if (index < 5) return { class: 'velocity-high', label: '🔥HOT' };
+            if (index < 12) return { class: 'velocity-medium', label: '📈Rising' };
+            return { class: 'velocity-low', label: '📉Slow' };
           }
         }
         

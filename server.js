@@ -3683,6 +3683,15 @@ app.get('/', (req, res) => {
               </div>
             </div>
             
+            <!-- Share in Communities Section -->
+            <div id="communitiesSection" style="display: none; margin-top: 40px;">
+              <h3 style="color: #1a1a1a; margin-bottom: 8px; font-size: 20px; font-weight: 700;">🌐 Share in Communities</h3>
+              <p style="font-size: 14px; color: #666; margin-bottom: 24px;">Promote your hunt in relevant communities to maximize reach</p>
+              <div id="communitiesList">
+                <!-- Will be populated dynamically -->
+              </div>
+            </div>
+            
             <!-- Action Suggestions Section -->
             <div id="trackActionSuggestions" style="display: none; margin-top: 32px;">
               <h3>💡 Action Suggestions</h3>
@@ -5166,11 +5175,15 @@ Best,
             // Display competitor analysis
             displayTrackCompetitorAnalysis(data.product, data.competitors);
             
+            // Fetch and display relevant communities
+            displayCommunities(data.product.category);
+            
             // Show sections
             document.getElementById('productSummary').style.display = 'block';
             document.getElementById('aiAnalysisSection').style.display = 'block';
             document.getElementById('trackTemplates').style.display = 'block';
             document.getElementById('trackCompetitorAnalysis').style.display = 'block';
+            document.getElementById('communitiesSection').style.display = 'block';
             document.getElementById('trackActionSuggestions').style.display = 'block';
             
             // Scroll to summary
@@ -5257,6 +5270,143 @@ Best,
           
           // Store current product data for sharing
           window.currentProductData = product;
+        }
+        
+        async function displayCommunities(category) {
+          const communitiesList = document.getElementById('communitiesList');
+          
+          try {
+            // Show loading state
+            communitiesList.innerHTML = '<div class="loading-placeholder">Finding relevant communities...</div>';
+            
+            const response = await fetch('/api/get-communities', {
+              method: 'POST',
+              headers: { 'Content-Type': 'application/json' },
+              body: JSON.stringify({ category })
+            });
+            
+            if (!response.ok) throw new Error('Failed to fetch communities');
+            
+            const data = await response.json();
+            const communities = data.communities;
+            
+            let html = '<div style="display: grid; gap: 24px;">';
+            
+            // Reddit Section
+            html += \`
+              <div style="background: white; border: 2px solid #FF4500; border-radius: 12px; padding: 20px;">
+                <div style="display: flex; align-items: center; gap: 10px; margin-bottom: 16px;">
+                  <div style="width: 40px; height: 40px; background: linear-gradient(135deg, #FF4500 0%, #FF5700 100%); border-radius: 10px; display: flex; align-items: center; justify-content: center; box-shadow: 0 4px 12px rgba(255, 69, 0, 0.3);">
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="white">
+                      <path d="M12 0A12 12 0 0 0 0 12a12 12 0 0 0 12 12 12 12 0 0 0 12-12A12 12 0 0 0 12 0zm5.01 4.744c.688 0 1.25.561 1.25 1.249a1.25 1.25 0 0 1-2.498.056l-2.597-.547-.8 3.747c1.824.07 3.48.632 4.674 1.488.308-.309.73-.491 1.207-.491.968 0 1.754.786 1.754 1.754 0 .716-.435 1.333-1.01 1.614a3.111 3.111 0 0 1 .042.52c0 2.694-3.13 4.87-7.004 4.87-3.874 0-7.004-2.176-7.004-4.87 0-.183.015-.366.043-.534A1.748 1.748 0 0 1 4.028 12c0-.968.786-1.754 1.754-1.754.463 0 .898.196 1.207.49 1.207-.883 2.878-1.43 4.744-1.487l.885-4.182a.342.342 0 0 1 .14-.197.35.35 0 0 1 .238-.042l2.906.617a1.214 1.214 0 0 1 1.108-.701zM9.25 12C8.561 12 8 12.562 8 13.25c0 .687.561 1.248 1.25 1.248.687 0 1.248-.561 1.248-1.249 0-.688-.561-1.249-1.249-1.249zm5.5 0c-.687 0-1.248.561-1.248 1.25 0 .687.561 1.248 1.249 1.248.688 0 1.249-.561 1.249-1.249 0-.687-.562-1.249-1.25-1.249zm-5.466 3.99a.327.327 0 0 0-.231.094.33.33 0 0 0 0 .463c.842.842 2.484.913 2.961.913.477 0 2.105-.056 2.961-.913a.361.361 0 0 0 .029-.463.33.33 0 0 0-.464 0c-.547.533-1.684.73-2.512.73-.828 0-1.979-.196-2.512-.73a.326.326 0 0 0-.232-.095z"/>
+                    </svg>
+                  </div>
+                  <div>
+                    <h4 style="margin: 0; font-size: 18px; font-weight: 700; color: #1a1a1a;">Reddit Communities</h4>
+                    <p style="margin: 4px 0 0 0; font-size: 13px; color: #666;">Share with engaged Redditors</p>
+                  </div>
+                </div>
+                <div style="display: flex; flex-direction: column; gap: 10px;">
+            \`;
+            
+            communities.reddit.forEach(sub => {
+              html += \`
+                <a href="\${sub.url}" target="_blank" rel="noopener noreferrer" style="text-decoration: none; display: flex; align-items: center; justify-content: space-between; padding: 12px 16px; background: #F9FAFB; border: 1px solid #E5E7EB; border-radius: 8px; transition: all 0.2s;">
+                  <div>
+                    <div style="font-weight: 600; color: #FF4500; font-size: 14px;">\${sub.name}</div>
+                    <div style="font-size: 12px; color: #6B7280; margin-top: 2px;">\${sub.members} members</div>
+                  </div>
+                  <svg width="20" height="20" viewBox="0 0 24 24" fill="#9CA3AF">
+                    <path d="M14 3v2h3.59l-9.83 9.83 1.41 1.41L19 6.41V10h2V3m-2 16H5V5h7V3H5a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7h-2v7z"/>
+                  </svg>
+                </a>
+              \`;
+            });
+            
+            html += \`
+                </div>
+              </div>
+            \`;
+            
+            // LinkedIn Section
+            html += \`
+              <div style="background: white; border: 2px solid #0A66C2; border-radius: 12px; padding: 20px;">
+                <div style="display: flex; align-items: center; gap: 10px; margin-bottom: 16px;">
+                  <div style="width: 40px; height: 40px; background: linear-gradient(135deg, #0A66C2 0%, #004182 100%); border-radius: 10px; display: flex; align-items: center; justify-content: center; box-shadow: 0 4px 12px rgba(10, 102, 194, 0.3);">
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="white">
+                      <path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433c-1.144 0-2.063-.926-2.063-2.065 0-1.138.92-2.063 2.063-2.063 1.14 0 2.064.925 2.064 2.063 0 1.139-.925 2.065-2.064 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/>
+                    </svg>
+                  </div>
+                  <div>
+                    <h4 style="margin: 0; font-size: 18px; font-weight: 700; color: #1a1a1a;">LinkedIn Groups</h4>
+                    <p style="margin: 4px 0 0 0; font-size: 13px; color: #666;">Connect with professionals</p>
+                  </div>
+                </div>
+                <div style="display: flex; flex-direction: column; gap: 10px;">
+            \`;
+            
+            communities.linkedin.forEach(group => {
+              html += \`
+                <a href="\${group.url}" target="_blank" rel="noopener noreferrer" style="text-decoration: none; display: flex; align-items: center; justify-content: space-between; padding: 12px 16px; background: #F9FAFB; border: 1px solid #E5E7EB; border-radius: 8px; transition: all 0.2s;">
+                  <div>
+                    <div style="font-weight: 600; color: #0A66C2; font-size: 14px;">\${group.name}</div>
+                    <div style="font-size: 12px; color: #6B7280; margin-top: 2px;">\${group.members} members</div>
+                  </div>
+                  <svg width="20" height="20" viewBox="0 0 24 24" fill="#9CA3AF">
+                    <path d="M14 3v2h3.59l-9.83 9.83 1.41 1.41L19 6.41V10h2V3m-2 16H5V5h7V3H5a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7h-2v7z"/>
+                  </svg>
+                </a>
+              \`;
+            });
+            
+            html += \`
+                </div>
+              </div>
+            \`;
+            
+            // Twitter Section
+            html += \`
+              <div style="background: white; border: 2px solid #1DA1F2; border-radius: 12px; padding: 20px;">
+                <div style="display: flex; align-items: center; gap: 10px; margin-bottom: 16px;">
+                  <div style="width: 40px; height: 40px; background: linear-gradient(135deg, #1DA1F2 0%, #0C85D0 100%); border-radius: 10px; display: flex; align-items: center; justify-content: center; box-shadow: 0 4px 12px rgba(29, 161, 242, 0.3);">
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="white">
+                      <path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/>
+                    </svg>
+                  </div>
+                  <div>
+                    <h4 style="margin: 0; font-size: 18px; font-weight: 700; color: #1a1a1a;">Twitter/X Accounts</h4>
+                    <p style="margin: 4px 0 0 0; font-size: 13px; color: #666;">Tag influential accounts</p>
+                  </div>
+                </div>
+                <div style="display: flex; flex-direction: column; gap: 10px;">
+            \`;
+            
+            communities.twitter.forEach(account => {
+              html += \`
+                <a href="\${account.url}" target="_blank" rel="noopener noreferrer" style="text-decoration: none; display: flex; align-items: center; justify-content: space-between; padding: 12px 16px; background: #F9FAFB; border: 1px solid #E5E7EB; border-radius: 8px; transition: all 0.2s;">
+                  <div>
+                    <div style="font-weight: 600; color: #1DA1F2; font-size: 14px;">\${account.name}</div>
+                    <div style="font-size: 12px; color: #6B7280; margin-top: 2px;">@\${account.handle}</div>
+                  </div>
+                  <svg width="20" height="20" viewBox="0 0 24 24" fill="#9CA3AF">
+                    <path d="M14 3v2h3.59l-9.83 9.83 1.41 1.41L19 6.41V10h2V3m-2 16H5V5h7V3H5a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7h-2v7z"/>
+                  </svg>
+                </a>
+              \`;
+            });
+            
+            html += \`
+                </div>
+              </div>
+            \`;
+            
+            html += '</div>';
+            communitiesList.innerHTML = html;
+            
+          } catch (error) {
+            console.error('Error fetching communities:', error);
+            communitiesList.innerHTML = '<div class="loading-placeholder">Failed to load communities. Please try again.</div>';
+          }
         }
         
         async function displayAIAnalysis(product, categoryStats) {
@@ -6911,6 +7061,117 @@ app.post('/api/track-hunt', async (req, res) => {
   } catch (error) {
     console.error('Error tracking hunt:', error);
     res.status(500).json({ error: 'Failed to track product' });
+  }
+});
+
+// Get relevant communities for product category
+app.post('/api/get-communities', async (req, res) => {
+  try {
+    const { category } = req.body;
+    
+    // Curated community recommendations by category
+    const communityMap = {
+      'AI': {
+        reddit: [
+          { name: 'r/ArtificialIntelligence', url: 'https://reddit.com/r/ArtificialIntelligence', members: '500K+' },
+          { name: 'r/MachineLearning', url: 'https://reddit.com/r/MachineLearning', members: '2.8M+' },
+          { name: 'r/OpenAI', url: 'https://reddit.com/r/OpenAI', members: '300K+' }
+        ],
+        linkedin: [
+          { name: 'Artificial Intelligence & Deep Learning', url: 'https://www.linkedin.com/groups/8206957/', members: '1M+' },
+          { name: 'AI & Machine Learning Professionals', url: 'https://www.linkedin.com/groups/12121940/', members: '500K+' }
+        ],
+        twitter: [
+          { name: '@AIatMeta', handle: 'AIatMeta', url: 'https://twitter.com/AIatMeta' },
+          { name: '@OpenAI', handle: 'OpenAI', url: 'https://twitter.com/OpenAI' }
+        ]
+      },
+      'Developer Tools': {
+        reddit: [
+          { name: 'r/programming', url: 'https://reddit.com/r/programming', members: '6M+' },
+          { name: 'r/webdev', url: 'https://reddit.com/r/webdev', members: '1.8M+' },
+          { name: 'r/devtools', url: 'https://reddit.com/r/devtools', members: '50K+' }
+        ],
+        linkedin: [
+          { name: 'Software Developers Group', url: 'https://www.linkedin.com/groups/99517/', members: '2M+' },
+          { name: 'DevOps & Cloud', url: 'https://www.linkedin.com/groups/6585254/', members: '800K+' }
+        ],
+        twitter: [
+          { name: '@github', handle: 'github', url: 'https://twitter.com/github' },
+          { name: '@stackoverflow', handle: 'stackoverflow', url: 'https://twitter.com/stackoverflow' }
+        ]
+      },
+      'SaaS': {
+        reddit: [
+          { name: 'r/SaaS', url: 'https://reddit.com/r/SaaS', members: '200K+' },
+          { name: 'r/Entrepreneur', url: 'https://reddit.com/r/Entrepreneur', members: '3M+' },
+          { name: 'r/startups', url: 'https://reddit.com/r/startups', members: '1.5M+' }
+        ],
+        linkedin: [
+          { name: 'SaaS Growth Hacks', url: 'https://www.linkedin.com/groups/8800788/', members: '400K+' },
+          { name: 'B2B SaaS Community', url: 'https://www.linkedin.com/groups/12345678/', members: '300K+' }
+        ],
+        twitter: [
+          { name: '@SaaStr', handle: 'SaaStr', url: 'https://twitter.com/SaaStr' },
+          { name: '@saasmag', handle: 'saasmag', url: 'https://twitter.com/saasmag' }
+        ]
+      },
+      'Productivity': {
+        reddit: [
+          { name: 'r/productivity', url: 'https://reddit.com/r/productivity', members: '2M+' },
+          { name: 'r/getdisciplined', url: 'https://reddit.com/r/getdisciplined', members: '1.2M+' },
+          { name: 'r/selfimprovement', url: 'https://reddit.com/r/selfimprovement', members: '1.5M+' }
+        ],
+        linkedin: [
+          { name: 'Productivity & Time Management', url: 'https://www.linkedin.com/groups/1873577/', members: '500K+' },
+          { name: 'Remote Work & Productivity', url: 'https://www.linkedin.com/groups/8985962/', members: '300K+' }
+        ],
+        twitter: [
+          { name: '@NotionHQ', handle: 'NotionHQ', url: 'https://twitter.com/NotionHQ' },
+          { name: '@asana', handle: 'asana', url: 'https://twitter.com/asana' }
+        ]
+      },
+      'Fintech': {
+        reddit: [
+          { name: 'r/Fintech', url: 'https://reddit.com/r/Fintech', members: '100K+' },
+          { name: 'r/Finance', url: 'https://reddit.com/r/Finance', members: '400K+' },
+          { name: 'r/CryptoCurrency', url: 'https://reddit.com/r/CryptoCurrency', members: '7M+' }
+        ],
+        linkedin: [
+          { name: 'Fintech & Payments Professionals', url: 'https://www.linkedin.com/groups/8324363/', members: '600K+' },
+          { name: 'Digital Banking & Fintech', url: 'https://www.linkedin.com/groups/4554103/', members: '400K+' }
+        ],
+        twitter: [
+          { name: '@FintechNewsNet', handle: 'FintechNewsNet', url: 'https://twitter.com/FintechNewsNet' },
+          { name: '@stripe', handle: 'stripe', url: 'https://twitter.com/stripe' }
+        ]
+      },
+      'default': {
+        reddit: [
+          { name: 'r/InternetIsBeautiful', url: 'https://reddit.com/r/InternetIsBeautiful', members: '17M+' },
+          { name: 'r/ProductHunt', url: 'https://reddit.com/r/ProductHunt', members: '5K+' },
+          { name: 'r/Entrepreneur', url: 'https://reddit.com/r/Entrepreneur', members: '3M+' },
+          { name: 'r/startups', url: 'https://reddit.com/r/startups', members: '1.5M+' }
+        ],
+        linkedin: [
+          { name: 'Startup Specialists', url: 'https://www.linkedin.com/groups/49352/', members: '2M+' },
+          { name: 'Product Management', url: 'https://www.linkedin.com/groups/42629/', members: '1.5M+' }
+        ],
+        twitter: [
+          { name: '@ProductHunt', handle: 'ProductHunt', url: 'https://twitter.com/ProductHunt' },
+          { name: '@IndieHackers', handle: 'IndieHackers', url: 'https://twitter.com/IndieHackers' }
+        ]
+      }
+    };
+    
+    // Get communities for category or default
+    const communities = communityMap[category] || communityMap['default'];
+    
+    res.json({ communities });
+    
+  } catch (error) {
+    console.error('Error getting communities:', error);
+    res.status(500).json({ error: 'Failed to get communities' });
   }
 });
 

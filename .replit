@@ -1,4 +1,4 @@
-modules = ["nodejs-20"]
+modules = ["nodejs-14"]
 [agent]
 expertMode = true
 integrations = ["javascript_openai:1.0.0"]
@@ -33,6 +33,10 @@ outputType = "webview"
 [[ports]]
 localPort = 5000
 externalPort = 80
+
+[[ports]]
+localPort = 34669
+externalPort = 3003
 
 [[ports]]
 localPort = 36355

@@ -19,8 +19,11 @@ if (!OPENAI_API_KEY) {
   console.error('WARNING: OPENAI_API_KEY not set. AI features will not work.');
 }
 
-// Initialize OpenAI client
-const openai = new OpenAI({ apiKey: OPENAI_API_KEY });
+// Initialize OpenAI client only if API key is available
+let openai = null;
+if (OPENAI_API_KEY) {
+  openai = new OpenAI({ apiKey: OPENAI_API_KEY });
+}
 
 // Enable CORS for all routes
 app.use(cors());

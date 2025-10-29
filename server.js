@@ -1986,6 +1986,391 @@ app.get('/', (req, res) => {
         .feedback-icon {
           font-size: 20px;
         }
+        
+        /* Authentication UI Styles */
+        .user-menu {
+          display: flex;
+          align-items: center;
+          gap: 12px;
+        }
+        
+        .auth-buttons {
+          display: flex;
+          align-items: center;
+          gap: 8px;
+        }
+        
+        .auth-btn {
+          padding: 8px 16px;
+          border-radius: 6px;
+          font-size: 14px;
+          font-weight: 600;
+          cursor: pointer;
+          transition: all 0.2s;
+          border: none;
+          text-decoration: none;
+        }
+        
+        .btn-login {
+          background: transparent;
+          color: #1A1A1A;
+          border: 1px solid #E5E5E5;
+        }
+        
+        .btn-login:hover {
+          background: #F8F8F8;
+          border-color: #DA552F;
+          color: #DA552F;
+        }
+        
+        .btn-register {
+          background: #DA552F;
+          color: white;
+          border: 1px solid #DA552F;
+        }
+        
+        .btn-register:hover {
+          background: #C44A27;
+          transform: translateY(-1px);
+          box-shadow: 0 2px 8px rgba(218, 85, 47, 0.3);
+        }
+        
+        .user-info {
+          display: flex;
+          align-items: center;
+          gap: 12px;
+        }
+        
+        .user-email {
+          font-size: 14px;
+          color: #1A1A1A;
+          font-weight: 500;
+        }
+        
+        .btn-logout {
+          padding: 8px 16px;
+          border-radius: 6px;
+          font-size: 14px;
+          font-weight: 600;
+          cursor: pointer;
+          transition: all 0.2s;
+          background: transparent;
+          color: #666;
+          border: 1px solid #E5E5E5;
+        }
+        
+        .btn-logout:hover {
+          background: #FEF2F2;
+          border-color: #EF4444;
+          color: #EF4444;
+        }
+        
+        /* Modal Styles */
+        .modal-overlay {
+          display: none;
+          position: fixed;
+          top: 0;
+          left: 0;
+          right: 0;
+          bottom: 0;
+          background: rgba(0, 0, 0, 0.5);
+          z-index: 1000;
+          align-items: center;
+          justify-content: center;
+        }
+        
+        .modal-overlay.show {
+          display: flex;
+        }
+        
+        .modal {
+          background: white;
+          border-radius: 12px;
+          padding: 32px;
+          max-width: 450px;
+          width: 90%;
+          max-height: 90vh;
+          overflow-y: auto;
+          box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+        }
+        
+        .modal-header {
+          text-align: center;
+          margin-bottom: 24px;
+        }
+        
+        .modal-header h2 {
+          font-size: 24px;
+          font-weight: 700;
+          color: #1A1A1A;
+          margin-bottom: 8px;
+        }
+        
+        .modal-header p {
+          font-size: 14px;
+          color: #666;
+        }
+        
+        .modal-tabs {
+          display: flex;
+          gap: 8px;
+          margin-bottom: 24px;
+          border-bottom: 2px solid #E5E5E5;
+        }
+        
+        .modal-tab {
+          flex: 1;
+          padding: 12px;
+          background: transparent;
+          border: none;
+          font-size: 15px;
+          font-weight: 600;
+          color: #666;
+          cursor: pointer;
+          transition: all 0.2s;
+          border-bottom: 3px solid transparent;
+          margin-bottom: -2px;
+        }
+        
+        .modal-tab.active {
+          color: #DA552F;
+          border-bottom-color: #DA552F;
+        }
+        
+        .modal-tab:hover {
+          color: #DA552F;
+        }
+        
+        .modal-content {
+          display: none;
+        }
+        
+        .modal-content.active {
+          display: block;
+        }
+        
+        .form-group {
+          margin-bottom: 20px;
+        }
+        
+        .form-group label {
+          display: block;
+          font-size: 14px;
+          font-weight: 600;
+          color: #1A1A1A;
+          margin-bottom: 8px;
+        }
+        
+        .form-group input {
+          width: 100%;
+          padding: 12px;
+          border: 1px solid #E5E5E5;
+          border-radius: 6px;
+          font-size: 14px;
+          font-family: inherit;
+          transition: all 0.2s;
+        }
+        
+        .form-group input:focus {
+          outline: none;
+          border-color: #DA552F;
+          box-shadow: 0 0 0 3px rgba(218, 85, 47, 0.1);
+        }
+        
+        .modal-btn {
+          width: 100%;
+          padding: 14px;
+          background: #DA552F;
+          color: white;
+          border: none;
+          border-radius: 6px;
+          font-size: 16px;
+          font-weight: 600;
+          cursor: pointer;
+          transition: all 0.2s;
+        }
+        
+        .modal-btn:hover {
+          background: #C44A27;
+          transform: translateY(-1px);
+          box-shadow: 0 4px 12px rgba(218, 85, 47, 0.3);
+        }
+        
+        .modal-btn:disabled {
+          background: #ccc;
+          cursor: not-allowed;
+          transform: none;
+        }
+        
+        .modal-close {
+          position: absolute;
+          top: 16px;
+          right: 16px;
+          background: transparent;
+          border: none;
+          font-size: 28px;
+          color: #666;
+          cursor: pointer;
+          width: 32px;
+          height: 32px;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          border-radius: 4px;
+          transition: all 0.2s;
+        }
+        
+        .modal-close:hover {
+          background: #F8F8F8;
+          color: #1A1A1A;
+        }
+        
+        .error-message {
+          background: #FEF2F2;
+          border: 1px solid #FCA5A5;
+          color: #DC2626;
+          padding: 12px;
+          border-radius: 6px;
+          font-size: 14px;
+          margin-bottom: 16px;
+          display: none;
+        }
+        
+        .error-message.show {
+          display: block;
+        }
+        
+        .success-message {
+          background: #ECFDF5;
+          border: 1px solid #6EE7B7;
+          color: #059669;
+          padding: 12px;
+          border-radius: 6px;
+          font-size: 14px;
+          margin-bottom: 16px;
+          display: none;
+        }
+        
+        .success-message.show {
+          display: block;
+        }
+        
+        /* Tracked Hunts Dashboard Styles */
+        .tracked-hunts-card {
+          background: #FFFFFF;
+          border: 1px solid #E5E5E5;
+          border-radius: 8px;
+          padding: 32px;
+          margin-bottom: 32px;
+          box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+          display: none;
+        }
+        
+        .tracked-hunts-card.show {
+          display: block;
+        }
+        
+        .tracked-hunts-header h2 {
+          color: #1A1A1A;
+          font-size: 24px;
+          font-weight: 700;
+          margin-bottom: 8px;
+          text-align: center;
+        }
+        
+        .tracked-hunts-header p {
+          color: #666;
+          font-size: 14px;
+          margin-bottom: 24px;
+          text-align: center;
+        }
+        
+        .tracked-hunts-list {
+          display: grid;
+          gap: 12px;
+        }
+        
+        .tracked-hunt-item {
+          background: #F8F8F8;
+          border: 1px solid #E5E5E5;
+          border-radius: 8px;
+          padding: 16px;
+          display: grid;
+          grid-template-columns: 1fr auto;
+          gap: 16px;
+          align-items: center;
+          transition: all 0.2s;
+        }
+        
+        .tracked-hunt-item:hover {
+          border-color: #DA552F;
+          box-shadow: 0 2px 8px rgba(218, 85, 47, 0.1);
+        }
+        
+        .tracked-hunt-info {
+          display: grid;
+          gap: 8px;
+        }
+        
+        .tracked-hunt-name {
+          font-size: 16px;
+          font-weight: 700;
+          color: #1A1A1A;
+        }
+        
+        .tracked-hunt-stats {
+          display: flex;
+          align-items: center;
+          gap: 16px;
+          font-size: 13px;
+          color: #666;
+        }
+        
+        .tracked-hunt-stat {
+          display: flex;
+          align-items: center;
+          gap: 4px;
+        }
+        
+        .tracked-hunt-stat strong {
+          color: #DA552F;
+          font-weight: 700;
+        }
+        
+        .btn-remove {
+          padding: 8px 16px;
+          background: transparent;
+          color: #EF4444;
+          border: 1px solid #EF4444;
+          border-radius: 6px;
+          font-size: 14px;
+          font-weight: 600;
+          cursor: pointer;
+          transition: all 0.2s;
+        }
+        
+        .btn-remove:hover {
+          background: #EF4444;
+          color: white;
+          transform: translateY(-1px);
+          box-shadow: 0 2px 8px rgba(239, 68, 68, 0.3);
+        }
+        
+        .empty-state {
+          text-align: center;
+          padding: 60px 20px;
+          color: #999;
+        }
+        
+        .empty-state-icon {
+          font-size: 48px;
+          margin-bottom: 16px;
+        }
+        
+        .empty-state-text {
+          font-size: 16px;
+          color: #666;
+        }
       </style>
     </head>
     <body>
@@ -1994,6 +2379,16 @@ app.get('/', (req, res) => {
           <div class="logo">
             <div class="logo-icon"></div>
             <h1><span class="hunt">Hunt</span>Product<span class="ph">Hunt</span></h1>
+          </div>
+          <div class="user-menu" id="userMenu">
+            <div class="auth-buttons" id="authButtons">
+              <button class="auth-btn btn-login" onclick="openAuthModal('login')">Login</button>
+              <button class="auth-btn btn-register" onclick="openAuthModal('register')">Sign Up</button>
+            </div>
+            <div class="user-info" id="userInfo" style="display: none;">
+              <span class="user-email" id="userEmail"></span>
+              <button class="btn-logout" onclick="handleLogout()">Logout</button>
+            </div>
           </div>
         </div>
       </div>
@@ -2241,6 +2636,21 @@ app.get('/', (req, res) => {
             </div>
           </div>
           
+          <!-- My Tracked Hunts Dashboard -->
+          <div class="tracked-hunts-card" id="trackedHuntsCard">
+            <div class="tracked-hunts-header">
+              <h2>📊 My Tracked Hunts</h2>
+              <p>Monitor your tracked products in real-time</p>
+            </div>
+            
+            <div class="tracked-hunts-list" id="trackedHuntsList">
+              <div class="empty-state">
+                <div class="empty-state-icon">🎯</div>
+                <div class="empty-state-text">No hunts tracked yet. Use "Track My Hunt" above to start tracking!</div>
+              </div>
+            </div>
+          </div>
+          
           <div class="analyzer-card">
             <div class="analyzer-header">
               <h2>▲ Get Your Product Ready to Hunt</h2>
@@ -2368,6 +2778,67 @@ app.get('/', (req, res) => {
               <span class="feedback-icon">▲</span>
               <span>Hunt Us on ProductHunt</span>
             </a>
+          </div>
+        </div>
+      </div>
+      
+      <!-- Auth Modal -->
+      <div class="modal-overlay" id="authModal" onclick="if(event.target === this) closeAuthModal()">
+        <div class="modal" style="position: relative;">
+          <button class="modal-close" onclick="closeAuthModal()">×</button>
+          <div class="modal-header">
+            <h2>Welcome to HuntProductHunt</h2>
+            <p>Track your hunts and get personalized insights</p>
+          </div>
+          
+          <div class="modal-tabs">
+            <button class="modal-tab active" id="loginTab" onclick="switchAuthTab('login')">Login</button>
+            <button class="modal-tab" id="registerTab" onclick="switchAuthTab('register')">Sign Up</button>
+          </div>
+          
+          <!-- Login Form -->
+          <div class="modal-content active" id="loginContent">
+            <div class="error-message" id="loginError"></div>
+            <div class="success-message" id="loginSuccess"></div>
+            
+            <form onsubmit="handleLogin(event)">
+              <div class="form-group">
+                <label for="loginEmail">Email</label>
+                <input type="email" id="loginEmail" placeholder="your@email.com" required>
+              </div>
+              
+              <div class="form-group">
+                <label for="loginPassword">Password</label>
+                <input type="password" id="loginPassword" placeholder="Enter your password" required minlength="6">
+              </div>
+              
+              <button type="submit" class="modal-btn" id="loginBtn">Login</button>
+            </form>
+          </div>
+          
+          <!-- Register Form -->
+          <div class="modal-content" id="registerContent">
+            <div class="error-message" id="registerError"></div>
+            <div class="success-message" id="registerSuccess"></div>
+            
+            <form onsubmit="handleRegister(event)">
+              <div class="form-group">
+                <label for="registerName">Name</label>
+                <input type="text" id="registerName" placeholder="Your name" required>
+              </div>
+              
+              <div class="form-group">
+                <label for="registerEmail">Email</label>
+                <input type="email" id="registerEmail" placeholder="your@email.com" required>
+              </div>
+              
+              <div class="form-group">
+                <label for="registerPassword">Password</label>
+                <input type="password" id="registerPassword" placeholder="At least 6 characters" required minlength="6">
+              </div>
+              
+              <button type="submit" class="modal-btn" id="registerBtn">Create Account</button>
+            </form>
           </div>
         </div>
       </div>
@@ -3761,6 +4232,298 @@ Best regards\`;
           document.getElementById('feedbackModal').classList.remove('show');
         }
         
+        // Authentication Functions
+        let currentUser = null;
+        
+        function openAuthModal(tab = 'login') {
+          document.getElementById('authModal').classList.add('show');
+          switchAuthTab(tab);
+        }
+        
+        function closeAuthModal() {
+          document.getElementById('authModal').classList.remove('show');
+          clearAuthErrors();
+        }
+        
+        function switchAuthTab(tab) {
+          const loginTab = document.getElementById('loginTab');
+          const registerTab = document.getElementById('registerTab');
+          const loginContent = document.getElementById('loginContent');
+          const registerContent = document.getElementById('registerContent');
+          
+          if (tab === 'login') {
+            loginTab.classList.add('active');
+            registerTab.classList.remove('active');
+            loginContent.classList.add('active');
+            registerContent.classList.remove('active');
+          } else {
+            registerTab.classList.add('active');
+            loginTab.classList.remove('active');
+            registerContent.classList.add('active');
+            loginContent.classList.remove('active');
+          }
+          
+          clearAuthErrors();
+        }
+        
+        function clearAuthErrors() {
+          document.getElementById('loginError').classList.remove('show');
+          document.getElementById('loginSuccess').classList.remove('show');
+          document.getElementById('registerError').classList.remove('show');
+          document.getElementById('registerSuccess').classList.remove('show');
+        }
+        
+        function showAuthError(type, message) {
+          const errorEl = document.getElementById(type + 'Error');
+          errorEl.textContent = message;
+          errorEl.classList.add('show');
+        }
+        
+        function showAuthSuccess(type, message) {
+          const successEl = document.getElementById(type + 'Success');
+          successEl.textContent = message;
+          successEl.classList.add('show');
+        }
+        
+        async function checkAuth() {
+          try {
+            const response = await fetch('/api/auth/user', {
+              credentials: 'include'
+            });
+            
+            if (response.ok) {
+              const data = await response.json();
+              currentUser = data.user;
+              updateUIForAuthState(true);
+            } else {
+              currentUser = null;
+              updateUIForAuthState(false);
+            }
+          } catch (error) {
+            console.error('Auth check error:', error);
+            currentUser = null;
+            updateUIForAuthState(false);
+          }
+        }
+        
+        function updateUIForAuthState(isLoggedIn) {
+          const authButtons = document.getElementById('authButtons');
+          const userInfo = document.getElementById('userInfo');
+          const trackedHuntsCard = document.getElementById('trackedHuntsCard');
+          
+          if (isLoggedIn && currentUser) {
+            authButtons.style.display = 'none';
+            userInfo.style.display = 'flex';
+            document.getElementById('userEmail').textContent = currentUser.email;
+            trackedHuntsCard.classList.add('show');
+            loadTrackedHunts();
+          } else {
+            authButtons.style.display = 'flex';
+            userInfo.style.display = 'none';
+            trackedHuntsCard.classList.remove('show');
+          }
+        }
+        
+        async function handleLogin(event) {
+          event.preventDefault();
+          clearAuthErrors();
+          
+          const email = document.getElementById('loginEmail').value;
+          const password = document.getElementById('loginPassword').value;
+          const loginBtn = document.getElementById('loginBtn');
+          
+          loginBtn.disabled = true;
+          loginBtn.textContent = 'Logging in...';
+          
+          try {
+            const response = await fetch('/api/auth/login', {
+              method: 'POST',
+              headers: {
+                'Content-Type': 'application/json'
+              },
+              credentials: 'include',
+              body: JSON.stringify({ email, password })
+            });
+            
+            const data = await response.json();
+            
+            if (response.ok) {
+              showAuthSuccess('login', 'Login successful!');
+              currentUser = data.user;
+              setTimeout(() => {
+                closeAuthModal();
+                updateUIForAuthState(true);
+                event.target.reset();
+              }, 1000);
+            } else {
+              showAuthError('login', data.error || 'Login failed. Please try again.');
+            }
+          } catch (error) {
+            console.error('Login error:', error);
+            showAuthError('login', 'An error occurred. Please try again.');
+          } finally {
+            loginBtn.disabled = false;
+            loginBtn.textContent = 'Login';
+          }
+        }
+        
+        async function handleRegister(event) {
+          event.preventDefault();
+          clearAuthErrors();
+          
+          const name = document.getElementById('registerName').value;
+          const email = document.getElementById('registerEmail').value;
+          const password = document.getElementById('registerPassword').value;
+          const registerBtn = document.getElementById('registerBtn');
+          
+          registerBtn.disabled = true;
+          registerBtn.textContent = 'Creating Account...';
+          
+          try {
+            const response = await fetch('/api/auth/register', {
+              method: 'POST',
+              headers: {
+                'Content-Type': 'application/json'
+              },
+              credentials: 'include',
+              body: JSON.stringify({ name, email, password })
+            });
+            
+            const data = await response.json();
+            
+            if (response.ok) {
+              showAuthSuccess('register', 'Account created successfully!');
+              currentUser = data.user;
+              setTimeout(() => {
+                closeAuthModal();
+                updateUIForAuthState(true);
+                event.target.reset();
+              }, 1000);
+            } else {
+              showAuthError('register', data.error || 'Registration failed. Please try again.');
+            }
+          } catch (error) {
+            console.error('Register error:', error);
+            showAuthError('register', 'An error occurred. Please try again.');
+          } finally {
+            registerBtn.disabled = false;
+            registerBtn.textContent = 'Create Account';
+          }
+        }
+        
+        async function handleLogout() {
+          try {
+            const response = await fetch('/api/auth/logout', {
+              method: 'POST',
+              credentials: 'include'
+            });
+            
+            if (response.ok) {
+              currentUser = null;
+              updateUIForAuthState(false);
+            }
+          } catch (error) {
+            console.error('Logout error:', error);
+          }
+        }
+        
+        // Tracked Hunts Functions
+        async function loadTrackedHunts() {
+          try {
+            const response = await fetch('/api/hunts/tracked', {
+              credentials: 'include'
+            });
+            
+            if (response.ok) {
+              const data = await response.json();
+              displayTrackedHunts(data.hunts || []);
+            } else {
+              console.error('Failed to load tracked hunts');
+              displayTrackedHunts([]);
+            }
+          } catch (error) {
+            console.error('Error loading tracked hunts:', error);
+            displayTrackedHunts([]);
+          }
+        }
+        
+        function displayTrackedHunts(hunts) {
+          const listEl = document.getElementById('trackedHuntsList');
+          
+          if (!hunts || hunts.length === 0) {
+            listEl.innerHTML = \`
+              <div class="empty-state">
+                <div class="empty-state-icon">🎯</div>
+                <div class="empty-state-text">No hunts tracked yet. Use "Track My Hunt" above to start tracking!</div>
+              </div>
+            \`;
+            return;
+          }
+          
+          listEl.innerHTML = hunts.map(hunt => {
+            const velocity = calculateVelocity(hunt);
+            return \`
+              <div class="tracked-hunt-item">
+                <div class="tracked-hunt-info">
+                  <div class="tracked-hunt-name">\${hunt.product_name}</div>
+                  <div class="tracked-hunt-stats">
+                    <div class="tracked-hunt-stat">
+                      <span>Rank:</span>
+                      <strong>#\${hunt.current_rank || 'N/A'}</strong>
+                    </div>
+                    <div class="tracked-hunt-stat">
+                      <span>Upvotes:</span>
+                      <strong>\${hunt.current_upvotes || 0}</strong>
+                    </div>
+                    <div class="tracked-hunt-stat">
+                      <span>Velocity:</span>
+                      <strong>\${velocity}</strong>
+                    </div>
+                  </div>
+                </div>
+                <button class="btn-remove" onclick="removeTrackedHunt(\${hunt.id})">Remove</button>
+              </div>
+            \`;
+          }).join('');
+        }
+        
+        function calculateVelocity(hunt) {
+          if (!hunt.current_upvotes || !hunt.tracked_at) return 'N/A';
+          
+          const trackedDate = new Date(hunt.tracked_at);
+          const now = new Date();
+          const hoursPassed = (now - trackedDate) / (1000 * 60 * 60);
+          
+          if (hoursPassed < 1) return 'New';
+          
+          const upvotesPerHour = Math.round(hunt.current_upvotes / hoursPassed);
+          return \`\${upvotesPerHour}/hr\`;
+        }
+        
+        async function removeTrackedHunt(huntId) {
+          if (!confirm('Are you sure you want to remove this tracked hunt?')) {
+            return;
+          }
+          
+          try {
+            const response = await fetch(\`/api/hunts/\${huntId}\`, {
+              method: 'DELETE',
+              credentials: 'include'
+            });
+            
+            if (response.ok) {
+              loadTrackedHunts();
+            } else {
+              alert('Failed to remove tracked hunt');
+            }
+          } catch (error) {
+            console.error('Error removing tracked hunt:', error);
+            alert('An error occurred. Please try again.');
+          }
+        }
+        
+        // Initialize on page load
+        checkAuth();
         loadDashboardData();
       </script>
     </body>

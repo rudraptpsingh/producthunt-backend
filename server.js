@@ -724,6 +724,9 @@ app.get('/', (req, res) => {
           background: #F8F8F8;
           border-radius: 8px;
           border: 1px solid #E5E5E5;
+          max-width: 100%;
+          box-sizing: border-box;
+          overflow-x: hidden;
         }
         
         .timer-item {
@@ -835,12 +838,18 @@ app.get('/', (req, res) => {
           margin-bottom: 32px;
           box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
           border: 1px solid #E5E5E5;
+          overflow-x: hidden;
+          max-width: 100%;
+          box-sizing: border-box;
         }
         
         .command-center-header {
           text-align: center;
           margin-bottom: 32px;
           position: relative;
+          max-width: 100%;
+          overflow-wrap: break-word;
+          word-wrap: break-word;
         }
         
         .command-center-header h2 {
@@ -848,11 +857,15 @@ app.get('/', (req, res) => {
           margin: 0 0 8px 0;
           font-weight: 700;
           color: #1A1A1A;
+          word-wrap: break-word;
+          overflow-wrap: break-word;
         }
         
         .command-center-header p {
           color: #666;
           margin: 0;
+          word-wrap: break-word;
+          overflow-wrap: break-word;
         }
         
         .auto-refresh-badge {
@@ -1006,6 +1019,10 @@ app.get('/', (req, res) => {
           border: 2px solid #E5E5E5;
           border-radius: 6px;
           padding: 12px;
+          word-wrap: break-word;
+          overflow-wrap: break-word;
+          max-width: 100%;
+          box-sizing: border-box;
         }
         
         .engagement-window.optimal {
@@ -1018,11 +1035,19 @@ app.get('/', (req, res) => {
           font-weight: 700;
           color: #1A1A1A;
           margin-bottom: 4px;
+          word-wrap: break-word;
+          overflow-wrap: break-word;
+          word-break: break-word;
         }
         
         .ew-label {
           font-size: 13px;
           color: #666;
+          word-break: break-word;
+        }
+        
+        .ew-status {
+          word-break: break-word;
         }
         
         .ew-status {
@@ -2049,10 +2074,15 @@ app.get('/', (req, res) => {
             grid-template-columns: 1fr;
             padding: 16px;
             gap: 12px;
+            margin-left: 0;
+            margin-right: 0;
+            width: 100%;
           }
           
           .timer-item {
             min-width: auto;
+            max-width: 100%;
+            overflow-wrap: break-word;
           }
           
           .timer-value {
@@ -2095,14 +2125,23 @@ app.get('/', (req, res) => {
           
           .engagement-window {
             padding: 14px;
+            max-width: 100%;
+            box-sizing: border-box;
           }
           
           .ew-time {
-            font-size: 15px;
+            font-size: 14px;
+            word-break: break-word;
           }
           
           .ew-status {
             font-size: 12px;
+            word-break: break-word;
+          }
+          
+          .ew-label {
+            font-size: 11px;
+            word-break: break-word;
           }
           
           .action-buttons {
@@ -2125,6 +2164,19 @@ app.get('/', (req, res) => {
           
           .product-name {
             font-size: 16px;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            max-width: 100%;
+          }
+          
+          .product-tagline {
+            font-size: 13px;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            display: -webkit-box;
+            -webkit-line-clamp: 2;
+            -webkit-box-orient: vertical;
           }
           
           .footer {
@@ -2195,6 +2247,8 @@ app.get('/', (req, res) => {
             font-size: 13px;
             padding: 12px 8px;
             gap: 8px;
+            min-width: 500px;
+            grid-template-columns: 40px 1.5fr 80px 70px 70px 100px 70px;
           }
           
           .lb-rank {
@@ -2204,12 +2258,23 @@ app.get('/', (req, res) => {
           
           .lb-product {
             min-width: 120px;
+            max-width: 150px;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
           }
           
           .lb-category,
           .lb-upvotes,
           .lb-comments {
             font-size: 12px;
+            white-space: nowrap;
+          }
+          
+          .lb-category {
+            max-width: 80px;
+            overflow: hidden;
+            text-overflow: ellipsis;
           }
           
           .track-product-btn {

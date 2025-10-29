@@ -1845,6 +1845,39 @@ app.get('/', (req, res) => {
           box-shadow: 0 2px 8px rgba(239, 68, 68, 0.2);
         }
         
+        /* Mobile Navigation Toggle */
+        .mobile-menu-toggle {
+          display: none;
+          flex-direction: column;
+          gap: 4px;
+          background: none;
+          border: none;
+          cursor: pointer;
+          padding: 8px;
+          z-index: 1001;
+        }
+        
+        .mobile-menu-toggle span {
+          display: block;
+          width: 24px;
+          height: 3px;
+          background: #1a1a1a;
+          border-radius: 2px;
+          transition: all 0.3s ease;
+        }
+        
+        .mobile-menu-toggle.active span:nth-child(1) {
+          transform: rotate(45deg) translate(6px, 6px);
+        }
+        
+        .mobile-menu-toggle.active span:nth-child(2) {
+          opacity: 0;
+        }
+        
+        .mobile-menu-toggle.active span:nth-child(3) {
+          transform: rotate(-45deg) translate(6px, -6px);
+        }
+        
         @media (max-width: 768px) {
           body {
             font-size: 14px;
@@ -1859,7 +1892,7 @@ app.get('/', (req, res) => {
           }
           
           .logo h1 {
-            font-size: 20px;
+            font-size: 18px;
           }
           
           .logo-icon {
@@ -1877,6 +1910,44 @@ app.get('/', (req, res) => {
             height: 7px;
           }
           
+          /* Mobile Navigation */
+          .mobile-menu-toggle {
+            display: flex;
+          }
+          
+          .user-menu {
+            position: fixed;
+            top: 0;
+            right: -100%;
+            width: 280px;
+            height: 100vh;
+            background: #FFFFFF;
+            box-shadow: -2px 0 10px rgba(0, 0, 0, 0.1);
+            padding: 80px 20px 20px;
+            transition: right 0.3s ease;
+            z-index: 1000;
+            overflow-y: auto;
+          }
+          
+          .user-menu.mobile-open {
+            right: 0;
+          }
+          
+          .auth-buttons,
+          .user-info {
+            flex-direction: column;
+            align-items: stretch !important;
+            width: 100%;
+          }
+          
+          .auth-btn,
+          .user-action-btn {
+            width: 100%;
+            justify-content: center;
+            min-height: 48px;
+            font-size: 16px;
+          }
+          
           .hero {
             padding: 24px 16px 24px;
           }
@@ -1890,7 +1961,8 @@ app.get('/', (req, res) => {
           }
           
           .hero-tagline {
-            font-size: 13px;
+            font-size: 14px;
+            line-height: 1.6;
           }
           
           .hero-title-row {
@@ -1901,11 +1973,13 @@ app.get('/', (req, res) => {
           .ph-badges {
             gap: 6px;
             justify-content: center;
+            flex-wrap: wrap;
           }
           
           .ph-badge {
-            font-size: 10px;
-            padding: 6px 10px;
+            font-size: 11px;
+            padding: 8px 12px;
+            min-height: 36px;
           }
           
           .ph-badge-icon {
@@ -1913,19 +1987,22 @@ app.get('/', (req, res) => {
           }
           
           .feature-slide {
-            padding: 16px;
+            padding: 20px 16px;
           }
           
           .feature-icon {
-            font-size: 36px;
+            font-size: 40px;
+            margin-bottom: 12px;
           }
           
           .feature-title {
-            font-size: 16px;
+            font-size: 18px;
+            margin-bottom: 8px;
           }
           
           .feature-description {
-            font-size: 13px;
+            font-size: 14px;
+            line-height: 1.6;
           }
           
           .filters-grid {
@@ -1943,7 +2020,7 @@ app.get('/', (req, res) => {
           }
           
           .chart-card h3 {
-            font-size: 15px;
+            font-size: 16px;
           }
           
           .recommendations-grid {
@@ -1955,13 +2032,13 @@ app.get('/', (req, res) => {
           }
           
           .predictor-header h2 {
-            font-size: 20px;
+            font-size: 22px;
           }
           
           .score-circle {
-            width: 140px;
-            height: 140px;
-            font-size: 48px;
+            width: 160px;
+            height: 160px;
+            font-size: 52px;
           }
           
           .launch-timers {
@@ -1971,7 +2048,7 @@ app.get('/', (req, res) => {
           }
           
           .timer-value {
-            font-size: 16px;
+            font-size: 18px;
           }
           
           .action-buttons {
@@ -1979,38 +2056,42 @@ app.get('/', (req, res) => {
             gap: 12px;
           }
           
-          .analyze-btn {
+          .analyze-btn,
+          button,
+          .btn {
             max-width: 100%;
-            font-size: 14px;
-            padding: 12px 24px;
+            font-size: 16px;
+            padding: 14px 24px;
+            min-height: 48px;
           }
           
           .product-card {
-            padding: 14px;
-          }
-          
-          .product-name {
-            font-size: 15px;
-          }
-          
-          .footer {
             padding: 16px;
           }
           
-          .product-tagline {
-            font-size: 13px;
+          .product-name {
+            font-size: 16px;
           }
           
-          .analyzer-card {
+          .footer {
             padding: 20px 16px;
           }
           
+          .product-tagline {
+            font-size: 14px;
+          }
+          
+          .analyzer-card {
+            padding: 24px 16px;
+          }
+          
           .analyzer-header h2 {
-            font-size: 20px;
+            font-size: 22px;
           }
           
           .analyzer-header p {
-            font-size: 13px;
+            font-size: 14px;
+            line-height: 1.6;
           }
           
           .form-grid {
@@ -2019,22 +2100,25 @@ app.get('/', (req, res) => {
           }
           
           .form-group label {
-            font-size: 13px;
+            font-size: 14px;
           }
           
           .form-group input,
           .form-group select,
           .form-group textarea {
-            font-size: 14px;
-            padding: 10px 12px;
+            font-size: 16px;
+            padding: 14px 16px;
+            min-height: 48px;
           }
           
           .feedback-modal {
-            padding: 20px;
+            padding: 24px;
+            margin: 20px;
+            max-width: calc(100% - 40px);
           }
           
           .feedback-content h3 {
-            font-size: 18px;
+            font-size: 20px;
           }
           
           .feedback-options {
@@ -2042,8 +2126,114 @@ app.get('/', (req, res) => {
           }
           
           .feedback-btn {
+            font-size: 14px;
+            padding: 12px 20px;
+            min-height: 48px;
+          }
+          
+          /* Mobile-optimized leaderboard */
+          .leaderboard-table {
+            overflow-x: auto;
+            -webkit-overflow-scrolling: touch;
+          }
+          
+          .leaderboard-row {
             font-size: 13px;
-            padding: 10px 16px;
+            padding: 12px 8px;
+            gap: 8px;
+          }
+          
+          .lb-rank {
+            min-width: 40px;
+            font-size: 14px;
+          }
+          
+          .lb-product {
+            min-width: 120px;
+          }
+          
+          .lb-category,
+          .lb-upvotes,
+          .lb-comments {
+            font-size: 12px;
+          }
+          
+          .track-product-btn {
+            font-size: 12px;
+            padding: 8px 12px;
+            min-height: 40px;
+            white-space: nowrap;
+          }
+          
+          /* Modal optimization for mobile */
+          .modal-content {
+            width: 95%;
+            max-width: 400px;
+            margin: 20px auto;
+            padding: 24px;
+          }
+          
+          .modal-header h2 {
+            font-size: 20px;
+          }
+          
+          .modal-close {
+            width: 36px;
+            height: 36px;
+            font-size: 24px;
+          }
+          
+          /* Stats grid mobile */
+          .stats-grid {
+            grid-template-columns: 1fr;
+            gap: 12px;
+          }
+          
+          .stat-card {
+            padding: 20px;
+          }
+          
+          .stat-card .value {
+            font-size: 28px;
+          }
+          
+          /* Touch-friendly product links */
+          .product-link {
+            padding: 4px 0;
+            display: inline-block;
+          }
+          
+          /* AI Analysis Results Mobile */
+          .analysis-section {
+            padding: 16px;
+          }
+          
+          .analysis-header h3 {
+            font-size: 18px;
+          }
+          
+          .competitive-analysis-table {
+            overflow-x: auto;
+            -webkit-overflow-scrolling: touch;
+          }
+          
+          /* Tracked Hunts Mobile */
+          .tracked-hunt-card {
+            padding: 16px;
+          }
+          
+          .hunt-header {
+            flex-direction: column;
+            align-items: flex-start;
+            gap: 12px;
+          }
+          
+          .hunt-actions {
+            width: 100%;
+          }
+          
+          .hunt-actions button {
+            min-height: 44px;
           }
         }
         
@@ -2578,6 +2768,11 @@ app.get('/', (req, res) => {
             <div class="logo-icon"></div>
             <h1><span class="hunt">Hunt</span>Product<span class="ph">Hunt</span></h1>
           </div>
+          <button class="mobile-menu-toggle" id="mobileMenuToggle" aria-label="Toggle menu">
+            <span></span>
+            <span></span>
+            <span></span>
+          </button>
           <div class="user-menu" id="userMenu">
             <div class="auth-buttons" id="authButtons">
               <button class="auth-btn btn-login" onclick="openAuthModal('login')">Login</button>
@@ -3053,6 +3248,33 @@ app.get('/', (req, res) => {
       </div>
       
       <script>
+        // Mobile Menu Toggle
+        const mobileMenuToggle = document.getElementById('mobileMenuToggle');
+        const userMenu = document.getElementById('userMenu');
+        
+        if (mobileMenuToggle) {
+          mobileMenuToggle.addEventListener('click', function() {
+            this.classList.toggle('active');
+            userMenu.classList.toggle('mobile-open');
+          });
+          
+          // Close menu when clicking outside
+          document.addEventListener('click', function(event) {
+            if (!userMenu.contains(event.target) && !mobileMenuToggle.contains(event.target)) {
+              mobileMenuToggle.classList.remove('active');
+              userMenu.classList.remove('mobile-open');
+            }
+          });
+          
+          // Close menu when clicking a menu item
+          userMenu.addEventListener('click', function(event) {
+            if (event.target.tagName === 'BUTTON' || event.target.tagName === 'A') {
+              mobileMenuToggle.classList.remove('active');
+              userMenu.classList.remove('mobile-open');
+            }
+          });
+        }
+        
         // Features slider functionality
         let currentSlide = 0;
         let sliderInterval;

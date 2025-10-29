@@ -212,72 +212,47 @@ app.get('/', (req, res) => {
           z-index: 1;
         }
         
-        .features-slider {
-          max-width: 800px;
-          margin: 32px auto 0;
-          position: relative;
-          overflow: hidden;
+        .features-grid {
+          max-width: 1000px;
+          margin: 40px auto 0;
+          display: grid;
+          grid-template-columns: repeat(3, 1fr);
+          gap: 24px;
           z-index: 1;
         }
         
-        .features-track {
-          display: flex;
-          transition: transform 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+        .feature-card {
+          background: white;
+          border: 1px solid #E5E5E5;
+          border-radius: 12px;
+          padding: 24px;
+          text-align: center;
+          transition: all 0.3s ease;
         }
         
-        .feature-slide {
-          min-width: 100%;
-          padding: 20px;
-          text-align: center;
+        .feature-card:hover {
+          border-color: #DA552F;
+          box-shadow: 0 4px 12px rgba(218, 85, 47, 0.1);
+          transform: translateY(-2px);
         }
         
         .feature-icon {
-          font-size: 40px;
+          font-size: 36px;
           margin-bottom: 12px;
           display: block;
         }
         
         .feature-title {
-          font-size: 18px;
+          font-size: 16px;
           font-weight: 700;
           margin-bottom: 8px;
           color: #1A1A1A;
         }
         
         .feature-description {
-          font-size: 14px;
+          font-size: 13px;
           color: #666666;
           line-height: 1.5;
-          max-width: 600px;
-          margin: 0 auto;
-        }
-        
-        .slider-dots {
-          display: flex;
-          justify-content: center;
-          gap: 10px;
-          margin-top: 24px;
-        }
-        
-        .slider-dot {
-          width: 8px;
-          height: 8px;
-          border-radius: 50%;
-          background: #D1D5DB;
-          cursor: pointer;
-          transition: all 0.2s ease;
-          border: none;
-          padding: 0;
-        }
-        
-        .slider-dot.active {
-          background: #DA552F;
-          width: 24px;
-          border-radius: 4px;
-        }
-        
-        .slider-dot:hover {
-          background: #9CA3AF;
         }
         
         .hero-subtitle {
@@ -2322,23 +2297,26 @@ app.get('/', (req, res) => {
             padding: 12px 8px;
           }
           
-          .feature-slide {
-            padding: 20px 16px;
+          .features-grid {
+            grid-template-columns: 1fr;
+            gap: 16px;
+            margin-top: 24px;
+          }
+          
+          .feature-card {
+            padding: 20px;
           }
           
           .feature-icon {
-            font-size: 40px;
-            margin-bottom: 12px;
+            font-size: 32px;
           }
           
           .feature-title {
-            font-size: 18px;
-            margin-bottom: 8px;
+            font-size: 15px;
           }
           
           .feature-description {
-            font-size: 14px;
-            line-height: 1.6;
+            font-size: 12px;
           }
           
           .filters-grid {

@@ -104,6 +104,7 @@ app.get('/', (req, res) => {
           font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
           background: #F8F8F8;
           min-height: 100vh;
+          overflow-x: hidden;
         }
         
         .top-bar {
@@ -895,6 +896,8 @@ app.get('/', (req, res) => {
         .leaderboard-table {
           max-height: 600px;
           overflow-y: auto;
+          overflow-x: auto;
+          -webkit-overflow-scrolling: touch;
         }
         
         .leaderboard-row {
@@ -908,6 +911,7 @@ app.get('/', (req, res) => {
           margin-bottom: 8px;
           align-items: center;
           transition: all 0.2s;
+          min-width: 600px;
         }
         
         .leaderboard-row:hover {
@@ -2042,13 +2046,63 @@ app.get('/', (req, res) => {
           }
           
           .launch-timers {
-            grid-template-columns: repeat(2, 1fr);
+            grid-template-columns: 1fr;
             padding: 16px;
-            gap: 10px;
+            gap: 12px;
+          }
+          
+          .timer-item {
+            min-width: auto;
           }
           
           .timer-value {
-            font-size: 18px;
+            font-size: 20px;
+          }
+          
+          .timer-label {
+            font-size: 13px;
+          }
+          
+          .timer-subtitle {
+            font-size: 12px;
+          }
+          
+          .command-center-card {
+            padding: 20px 16px;
+          }
+          
+          .command-center-header h2 {
+            font-size: 20px;
+          }
+          
+          .command-center-header p {
+            font-size: 14px;
+          }
+          
+          .command-center-grid {
+            grid-template-columns: 1fr;
+            gap: 16px;
+          }
+          
+          .engagement-windows {
+            grid-template-columns: 1fr;
+            gap: 8px;
+          }
+          
+          .window-item {
+            padding: 12px;
+          }
+          
+          .engagement-window {
+            padding: 14px;
+          }
+          
+          .ew-time {
+            font-size: 15px;
+          }
+          
+          .ew-status {
+            font-size: 12px;
           }
           
           .action-buttons {

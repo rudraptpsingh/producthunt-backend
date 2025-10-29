@@ -3064,7 +3064,7 @@ app.get('/', (req, res) => {
             <a href="#huntWeather" class="nav-link">Hunt Weather</a>
             <a href="#commandCenter" class="nav-link">Leaderboard</a>
             <a href="#trackHuntCard" class="nav-link">Track Hunt</a>
-            <a href="#myTrackedHunts" class="nav-link">My Hunts</a>
+            <a href="#myTrackedHunts" class="nav-link nav-link-auth" style="display: none;">My Hunts</a>
             <a href="#getReady" class="nav-link">Get Ready</a>
           </div>
           
@@ -3078,7 +3078,7 @@ app.get('/', (req, res) => {
               <a href="#huntWeather" class="mobile-nav-link">🌤️ Hunt Weather</a>
               <a href="#commandCenter" class="mobile-nav-link">📊 Leaderboard</a>
               <a href="#trackHuntCard" class="mobile-nav-link">📍 Track Hunt</a>
-              <a href="#myTrackedHunts" class="mobile-nav-link">💾 My Hunts</a>
+              <a href="#myTrackedHunts" class="mobile-nav-link mobile-nav-link-auth" style="display: none;">💾 My Hunts</a>
               <a href="#getReady" class="mobile-nav-link">🚀 Get Ready</a>
             </div>
             <div class="auth-buttons" id="authButtons">
@@ -5118,17 +5118,20 @@ Best regards\`;
           const authButtons = document.getElementById('authButtons');
           const userInfo = document.getElementById('userInfo');
           const trackedHuntsCard = document.getElementById('trackedHuntsCard');
+          const authNavLinks = document.querySelectorAll('.nav-link-auth, .mobile-nav-link-auth');
           
           if (isLoggedIn && currentUser) {
             authButtons.style.display = 'none';
             userInfo.style.display = 'flex';
             document.getElementById('userEmail').textContent = currentUser.email;
             trackedHuntsCard.classList.add('show');
+            authNavLinks.forEach(link => link.style.display = 'block');
             loadTrackedHunts();
           } else {
             authButtons.style.display = 'flex';
             userInfo.style.display = 'none';
             trackedHuntsCard.classList.remove('show');
+            authNavLinks.forEach(link => link.style.display = 'none');
           }
         }
         

@@ -5566,7 +5566,27 @@ Best,
         }
         
         function generateTrackTemplates(product) {
-          const baseUrl = product.url || \`https://www.producthunt.com/posts/\${product.slug}\`;
+          // Clean URL by removing any existing UTM parameters
+          let cleanUrl = product.url || \`https://www.producthunt.com/posts/\${product.slug}\`;
+          if (cleanUrl.includes('?')) {
+            cleanUrl = cleanUrl.split('?')[0];
+          }
+          
+          // Generate category-specific hashtags
+          const categoryHashtags = {
+            'AI': '#AI #ArtificialIntelligence #MachineLearning #Tech',
+            'Developer Tools': '#DevTools #Developers #Programming #Coding',
+            'SaaS': '#SaaS #B2B #CloudSoftware #Tech',
+            'Productivity': '#Productivity #ProductivityTools #WorkSmarter #Efficiency',
+            'Fintech': '#Fintech #Finance #FinancialTech #Banking',
+            'Design Tools': '#Design #DesignTools #UXDesign #GraphicDesign',
+            'Marketing': '#Marketing #GrowthHacking #DigitalMarketing #MarTech',
+            'Analytics': '#Analytics #DataAnalytics #BusinessIntelligence #Data',
+            'E-commerce': '#Ecommerce #OnlineBusiness #Retail #Commerce',
+            'default': '#Startup #Makers #Indie #Tech'
+          };
+          
+          const hashtags = categoryHashtags[product.category] || categoryHashtags['default'];
           
           // Twitter template
           const twitterText = \`🚀 Just hunted on @ProductHunt today!
@@ -5575,9 +5595,9 @@ Best,
 
 Currently at #\${product.rank} with \${product.votesCount} upvotes! 🎯
 
-Check it out and show your support: \${baseUrl}
+Check it out and show your support: \${cleanUrl}
 
-#ProductHunt #Startup\`;
+#ProductHunt \${hashtags}\`;
           
           // LinkedIn template
           const linkedinText = \`Exciting news! We're live on ProductHunt today! 🚀
@@ -5586,9 +5606,9 @@ Check it out and show your support: \${baseUrl}
 
 \${product.tagline}
 
-We'd love your support and feedback. Check out our hunt here: \${baseUrl}
+We'd love your support and feedback. Check out our hunt here: \${cleanUrl}
 
-#ProductHunt #ProductLaunch #Startup\`;
+#ProductHunt #ProductLaunch \${hashtags}\`;
           
           // Email template
           const emailText = \`Subject: We're Live on ProductHunt! 🚀
@@ -5601,7 +5621,7 @@ We're currently at #\${product.rank} with \${product.votesCount} upvotes and wou
 
 \${product.tagline}
 
-Check it out here: \${baseUrl}
+Check it out here: \${cleanUrl}
 
 Your upvote and feedback would mean the world to us!
 

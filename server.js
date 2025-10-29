@@ -280,78 +280,117 @@ app.get('/', (req, res) => {
           background: #9CA3AF;
         }
         
-        .ph-badges {
-          display: flex;
-          align-items: center;
-          gap: 12px;
-          flex-wrap: wrap;
-        }
-        
-        .ph-badge {
-          background: #FFF4F0;
-          border: 1px solid #FFE0D6;
-          padding: 8px 14px;
-          border-radius: 6px;
-          display: flex;
-          align-items: center;
-          gap: 6px;
-          font-size: 13px;
+        .hero-subtitle {
+          font-size: 14px;
           font-weight: 600;
           color: #DA552F;
-          transition: all 0.2s ease;
-          white-space: nowrap;
+          text-transform: uppercase;
+          letter-spacing: 1.5px;
+          margin-bottom: 20px;
         }
         
-        .ph-badge:hover {
-          background: #FFE8DE;
-          transform: translateY(-1px);
-          box-shadow: 0 2px 8px rgba(218, 85, 47, 0.15);
+        .hero-title {
+          font-size: 48px;
+          font-weight: 800;
+          color: #1A1A1A;
+          line-height: 1.2;
+          margin-bottom: 20px;
         }
         
-        .ph-badge-icon {
+        .hero-title-highlight {
+          background: linear-gradient(135deg, #DA552F 0%, #F97316 100%);
+          -webkit-background-clip: text;
+          -webkit-text-fill-color: transparent;
+          background-clip: text;
+        }
+        
+        .hero-description {
           font-size: 18px;
+          color: #666;
+          line-height: 1.6;
+          max-width: 700px;
+          margin: 0 auto 32px;
         }
         
-        .hero-motto {
+        .hero-cta {
+          display: flex;
+          flex-direction: column;
+          align-items: center;
+          gap: 24px;
+        }
+        
+        .cta-primary {
+          background: linear-gradient(135deg, #DA552F 0%, #F97316 100%);
+          color: white;
+          font-size: 18px;
+          font-weight: 700;
+          padding: 18px 40px;
+          border: none;
+          border-radius: 12px;
+          cursor: pointer;
+          transition: all 0.3s ease;
+          box-shadow: 0 4px 16px rgba(218, 85, 47, 0.3);
+        }
+        
+        .cta-primary:hover {
+          transform: translateY(-2px);
+          box-shadow: 0 6px 24px rgba(218, 85, 47, 0.4);
+        }
+        
+        .cta-primary:active {
+          transform: translateY(0);
+        }
+        
+        .hero-stats {
           display: flex;
           align-items: center;
+          gap: 32px;
+          flex-wrap: wrap;
           justify-content: center;
-          gap: 12px;
-          margin: 20px 0 12px;
         }
         
-        .hero-motto h2 {
-          font-size: 32px;
-          font-weight: 700;
-          margin: 0;
-          line-height: 1.2;
-          letter-spacing: -0.5px;
-          color: #1A1A1A;
+        .stat-item {
+          display: flex;
+          align-items: center;
+          gap: 8px;
+          font-size: 14px;
+          color: #666;
+          font-weight: 600;
         }
         
-        .win-badge {
-          font-size: 32px;
-        }
-        
-        .hero-tagline {
-          font-size: 15px;
-          color: #666666;
-          margin-bottom: 24px;
-          font-weight: 500;
+        .stat-icon {
+          font-size: 20px;
         }
         
         @media (max-width: 768px) {
-          .ph-badges {
-            gap: 8px;
+          .hero-subtitle {
+            font-size: 12px;
+            letter-spacing: 1px;
           }
           
-          .ph-badge {
-            font-size: 10px;
-            padding: 6px 12px;
+          .hero-title {
+            font-size: 32px;
           }
           
-          .ph-badge-icon {
-            font-size: 14px;
+          .hero-description {
+            font-size: 16px;
+          }
+          
+          .cta-primary {
+            font-size: 16px;
+            padding: 16px 32px;
+          }
+          
+          .hero-stats {
+            gap: 16px;
+          }
+          
+          .stat-item {
+            font-size: 12px;
+          }
+          
+          .stat-icon {
+            font-size: 18px;
           }
         }
         
@@ -2035,45 +2074,11 @@ app.get('/', (req, res) => {
           }
           
           .hero {
-            padding: 24px 16px 24px;
-          }
-          
-          .hero-motto h2 {
-            font-size: 24px;
+            padding: 32px 16px 40px;
           }
           
           .cc-section {
             padding: 12px 8px;
-          }
-          
-          .win-badge {
-            font-size: 28px;
-          }
-          
-          .hero-tagline {
-            font-size: 14px;
-            line-height: 1.6;
-          }
-          
-          .hero-title-row {
-            gap: 8px;
-            margin-bottom: 16px;
-          }
-          
-          .ph-badges {
-            gap: 6px;
-            justify-content: center;
-            flex-wrap: wrap;
-          }
-          
-          .ph-badge {
-            font-size: 11px;
-            padding: 8px 12px;
-            min-height: 36px;
-          }
-          
-          .ph-badge-icon {
-            font-size: 14px;
           }
           
           .feature-slide {
@@ -3095,33 +3100,37 @@ app.get('/', (req, res) => {
       
       <div class="hero">
         <div class="hero-content">
-          <div class="hero-title-row">
-            <div class="ph-badges">
-              <div class="ph-badge">
-                <span class="ph-badge-icon">🏆</span>
-                <span>Product of the Day</span>
+          <div class="hero-subtitle">Track. Analyze. Dominate ProductHunt</div>
+          
+          <h1 class="hero-title">
+            Master Your ProductHunt Launch with<br/>
+            <span class="hero-title-highlight">AI-Powered Hunt Intelligence</span>
+          </h1>
+          
+          <p class="hero-description">
+            Real-time leaderboard tracking, AI-driven launch timing optimization, and professional asset generation. 
+            Everything you need to maximize upvotes and win Product of the Day.
+          </p>
+          
+          <div class="hero-cta">
+            <button class="cta-primary" onclick="document.getElementById('huntWeather').scrollIntoView({ behavior: 'smooth' })">
+              🚀 Start Tracking Now - Free
+            </button>
+            <div class="hero-stats">
+              <div class="stat-item">
+                <span class="stat-icon">🏆</span>
+                <span class="stat-text">Win Product Awards</span>
               </div>
-              <div class="ph-badge">
-                <span class="ph-badge-icon">⭐</span>
-                <span>Product of the Week</span>
+              <div class="stat-item">
+                <span class="stat-icon">📊</span>
+                <span class="stat-text">Live Hunt Analytics</span>
               </div>
-              <div class="ph-badge">
-                <span class="ph-badge-icon">💎</span>
-                <span>Product of the Month</span>
-              </div>
-              <div class="ph-badge">
-                <span class="ph-badge-icon">🏅</span>
-                <span>Golden Kitty</span>
+              <div class="stat-item">
+                <span class="stat-icon">🤖</span>
+                <span class="stat-text">AI Launch Assistant</span>
               </div>
             </div>
           </div>
-          
-          <div class="hero-motto">
-            <h2>Analyze. Hunt. Win.</h2>
-            <div class="win-badge">▲</div>
-          </div>
-          
-          <p class="hero-tagline">Launching on ProductHunt gets you instant visibility to 5M+ tech enthusiasts, valuable early feedback, and credibility through community validation. Maximize your success with AI-powered insights from today's top hunts.</p>
           
           <div class="features-slider">
             <div class="features-track" id="featuresTrack">

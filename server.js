@@ -899,7 +899,7 @@ app.get('/', (req, res) => {
         
         .leaderboard-row {
           display: grid;
-          grid-template-columns: 40px 2fr 100px 80px 80px 120px;
+          grid-template-columns: 40px 2fr 100px 80px 80px 120px 80px;
           gap: 12px;
           padding: 12px;
           background: white;
@@ -1307,6 +1307,121 @@ app.get('/', (req, res) => {
           transform: translateY(0);
         }
         
+        .track-btn:disabled {
+          background: #10B981;
+          cursor: not-allowed;
+          transform: none;
+        }
+        
+        .save-hunt-btn {
+          background: linear-gradient(135deg, #DA552F 0%, #ff6b47 100%);
+          color: white;
+          border: none;
+          padding: 14px 28px;
+          border-radius: 8px;
+          font-size: 16px;
+          font-weight: 700;
+          cursor: pointer;
+          transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+          box-shadow: 0 4px 12px rgba(218, 85, 47, 0.25);
+          display: inline-flex;
+          align-items: center;
+          gap: 8px;
+          justify-content: center;
+          width: auto;
+          min-width: 200px;
+        }
+        
+        .save-hunt-btn:hover:not(:disabled) {
+          transform: translateY(-2px);
+          box-shadow: 0 6px 20px rgba(218, 85, 47, 0.4);
+        }
+        
+        .save-hunt-btn:disabled {
+          background: #10B981;
+          cursor: not-allowed;
+          transform: none;
+        }
+        
+        .save-hunt-btn.saving {
+          background: #F59E0B;
+          cursor: wait;
+        }
+        
+        .save-analysis-btn {
+          background: linear-gradient(135deg, #DA552F 0%, #ff6b47 100%);
+          color: white;
+          border: none;
+          padding: 12px 24px;
+          border-radius: 8px;
+          font-size: 15px;
+          font-weight: 700;
+          cursor: pointer;
+          transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+          box-shadow: 0 4px 12px rgba(218, 85, 47, 0.25);
+          display: inline-flex;
+          align-items: center;
+          gap: 8px;
+          margin-top: 16px;
+        }
+        
+        .save-analysis-btn:hover:not(:disabled) {
+          transform: translateY(-2px);
+          box-shadow: 0 6px 20px rgba(218, 85, 47, 0.4);
+        }
+        
+        .save-analysis-btn:disabled {
+          background: #10B981;
+          cursor: not-allowed;
+          transform: none;
+        }
+        
+        .save-analysis-btn.saving {
+          background: #F59E0B;
+          cursor: wait;
+        }
+        
+        .track-product-btn {
+          background: transparent;
+          border: 1px solid #DA552F;
+          color: #DA552F;
+          padding: 4px 10px;
+          border-radius: 6px;
+          font-size: 11px;
+          font-weight: 600;
+          cursor: pointer;
+          transition: all 0.2s;
+          display: inline-flex;
+          align-items: center;
+          gap: 4px;
+        }
+        
+        .track-product-btn:hover:not(:disabled) {
+          background: #DA552F;
+          color: white;
+          transform: scale(1.05);
+        }
+        
+        .track-product-btn:disabled {
+          background: #ECFDF5;
+          border-color: #10B981;
+          color: #10B981;
+          cursor: not-allowed;
+        }
+        
+        .track-product-btn.saving {
+          border-color: #F59E0B;
+          color: #F59E0B;
+          cursor: wait;
+        }
+        
+        .save-btn-container {
+          text-align: center;
+          margin-top: 24px;
+          padding-top: 24px;
+          border-top: 1px solid #E5E5E5;
+        }
+        
         .product-summary {
           padding: 24px;
           background: #F9FAFB;
@@ -1543,6 +1658,89 @@ app.get('/', (req, res) => {
         
         .analyze-btn.secondary:hover {
           background: #FFF4F0;
+        }
+        
+        /* Save/Track Button Styles */
+        .save-btn-container {
+          display: flex;
+          justify-content: center;
+          margin-top: 20px;
+        }
+        
+        .save-hunt-btn,
+        .save-analysis-btn {
+          background: #DA552F;
+          color: white;
+          border: none;
+          padding: 14px 32px;
+          font-size: 16px;
+          font-weight: 600;
+          border-radius: 8px;
+          cursor: pointer;
+          transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+          box-shadow: 0 2px 4px rgba(218, 85, 47, 0.2);
+        }
+        
+        .save-hunt-btn:hover,
+        .save-analysis-btn:hover {
+          background: #C44A27;
+          transform: translateY(-2px);
+          box-shadow: 0 4px 12px rgba(218, 85, 47, 0.3);
+        }
+        
+        .save-hunt-btn:active,
+        .save-analysis-btn:active {
+          transform: translateY(0);
+        }
+        
+        .save-hunt-btn.saving,
+        .save-analysis-btn.saving {
+          background: #F59E0B;
+          cursor: wait;
+          pointer-events: none;
+        }
+        
+        .save-hunt-btn:disabled,
+        .save-analysis-btn:disabled {
+          background: #10B981;
+          cursor: not-allowed;
+          transform: none;
+        }
+        
+        .track-product-btn {
+          background: #DA552F;
+          color: white;
+          border: none;
+          padding: 6px 12px;
+          font-size: 12px;
+          font-weight: 600;
+          border-radius: 6px;
+          cursor: pointer;
+          transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+          white-space: nowrap;
+          box-shadow: 0 1px 3px rgba(218, 85, 47, 0.2);
+        }
+        
+        .track-product-btn:hover {
+          background: #C44A27;
+          transform: translateY(-1px);
+          box-shadow: 0 2px 6px rgba(218, 85, 47, 0.3);
+        }
+        
+        .track-product-btn:active {
+          transform: translateY(0);
+        }
+        
+        .track-product-btn.saving {
+          background: #F59E0B;
+          cursor: wait;
+          pointer-events: none;
+        }
+        
+        .track-product-btn:disabled {
+          background: #10B981;
+          cursor: not-allowed;
+          transform: none;
         }
         
         .analysis-results {
@@ -2601,6 +2799,11 @@ app.get('/', (req, res) => {
               <div class="summary-grid" id="summaryGrid">
                 <!-- Will be populated dynamically -->
               </div>
+              <div class="save-btn-container">
+                <button class="save-hunt-btn" id="saveHuntTrackerBtn" onclick="saveHuntFromTracker()">
+                  🔖 Save to My Hunts
+                </button>
+              </div>
             </div>
             
             <!-- Social Templates Section -->
@@ -2740,6 +2943,12 @@ app.get('/', (req, res) => {
               </div>
               
               <div class="insights-grid" id="userInsights">
+              </div>
+              
+              <div class="save-btn-container" style="margin-top: 24px;">
+                <button class="save-analysis-btn" id="saveAnalysisBtn" onclick="saveAnalysis()">
+                  💾 Save This Analysis
+                </button>
               </div>
             </div>
             
@@ -3409,6 +3618,9 @@ app.get('/', (req, res) => {
           updateCompetitorAnalysis(top20);
         }
         
+        // Store leaderboard products for saving
+        let leaderboardProducts = [];
+        
         function updateLeaderboard(top20) {
           const leaderboardTable = document.getElementById('leaderboardTable');
           if (!leaderboardTable) return;
@@ -3417,6 +3629,9 @@ app.get('/', (req, res) => {
             leaderboardTable.innerHTML = '<div class="loading-placeholder">No products available</div>';
             return;
           }
+          
+          // Store products globally for access by save function
+          leaderboardProducts = top20;
           
           let html = '';
           top20.forEach((product, index) => {
@@ -3435,10 +3650,21 @@ app.get('/', (req, res) => {
               '<div class="lb-upvotes">▲ ' + product.votesCount + '</div>' +
               '<div class="lb-comments">💬 ' + product.commentsCount + '</div>' +
               '<div class="lb-velocity ' + velocityClass + '">' + velocityLabel + '</div>' +
+              '<button class="track-product-btn" data-product-index="' + index + '" data-rank="' + rank + '">' +
+              '🔖 Track' +
+              '</button>' +
               '</div>';
           });
           
           leaderboardTable.innerHTML = html;
+          
+          // Add event listeners to all track buttons
+          document.querySelectorAll('.track-product-btn').forEach(btn => {
+            btn.addEventListener('click', function() {
+              const productIndex = parseInt(this.getAttribute('data-product-index'));
+              saveHuntFromLeaderboard(productIndex);
+            });
+          });
         }
         
         function calculateVelocity(product, index) {
@@ -3785,6 +4011,9 @@ Best,
             
             const data = await response.json();
             
+            // Store product data for saving
+            currentTrackedProduct = data.product;
+            
             // Display product summary
             displayProductSummary(data.product);
             
@@ -4080,6 +4309,16 @@ Best regards\`;
             }
             
             const analysis = await response.json();
+            
+            // Store analysis data for saving
+            currentAnalysisData = {
+              appName,
+              category,
+              tagline,
+              score: analysis.score || 0,
+              scoreLabel: analysis.scoreLabel || 'Analysis Complete',
+              insights: analysis.insights || []
+            };
             
             // Display AI analysis results
             scoreDiv.textContent = analysis.score || 0;
@@ -4427,6 +4666,187 @@ Best regards\`;
           }
         }
         
+        // Store current tracked product data
+        let currentTrackedProduct = null;
+        let currentAnalysisData = null;
+        
+        // Save Hunt from Tracker Section
+        async function saveHuntFromTracker() {
+          if (!currentUser) {
+            openAuthModal('login');
+            alert('Please login to save hunts to your tracked list');
+            return;
+          }
+          
+          if (!currentTrackedProduct) {
+            alert('No product data available to save');
+            return;
+          }
+          
+          const btn = document.getElementById('saveHuntTrackerBtn');
+          const originalText = btn.innerHTML;
+          
+          btn.classList.add('saving');
+          btn.innerHTML = '⏳ Saving...';
+          btn.disabled = true;
+          
+          try {
+            const response = await fetch('/api/hunts/track', {
+              method: 'POST',
+              headers: { 'Content-Type': 'application/json' },
+              credentials: 'include',
+              body: JSON.stringify({
+                slug: currentTrackedProduct.slug,
+                name: currentTrackedProduct.name,
+                url: currentTrackedProduct.url,
+                tagline: currentTrackedProduct.tagline || '',
+                category: currentTrackedProduct.category || 'Uncategorized',
+                rank: currentTrackedProduct.rank || 0,
+                upvotes: currentTrackedProduct.votesCount || 0
+              })
+            });
+            
+            const data = await response.json();
+            
+            if (response.ok) {
+              btn.classList.remove('saving');
+              btn.innerHTML = '✅ Saved!';
+              loadTrackedHunts();
+              
+              if (typeof gtag === 'function') {
+                gtag('event', 'save_hunt_from_tracker', {
+                  'product_name': currentTrackedProduct.name
+                });
+              }
+            } else {
+              throw new Error(data.error || 'Failed to save hunt');
+            }
+          } catch (error) {
+            console.error('Error saving hunt:', error);
+            alert('Failed to save hunt: ' + error.message);
+            btn.classList.remove('saving');
+            btn.innerHTML = originalText;
+            btn.disabled = false;
+          }
+        }
+        
+        // Save Hunt from Leaderboard
+        async function saveHuntFromLeaderboard(productIndex) {
+          if (!currentUser) {
+            openAuthModal('login');
+            alert('Please login to save hunts to your tracked list');
+            return;
+          }
+          
+          const product = leaderboardProducts[productIndex];
+          if (!product) {
+            alert('Product data not found');
+            return;
+          }
+          
+          const rank = productIndex + 1;
+          const btn = document.getElementById('track-lb-' + rank);
+          if (!btn) return;
+          
+          const originalText = btn.innerHTML;
+          
+          btn.classList.add('saving');
+          btn.innerHTML = '⏳';
+          btn.disabled = true;
+          
+          try {
+            const response = await fetch('/api/hunts/track', {
+              method: 'POST',
+              headers: { 'Content-Type': 'application/json' },
+              credentials: 'include',
+              body: JSON.stringify({
+                slug: product.slug || '',
+                name: product.name,
+                url: product.url || '',
+                tagline: product.tagline || '',
+                category: product.category || 'Uncategorized',
+                rank: rank,
+                upvotes: product.votesCount || 0
+              })
+            });
+            
+            const data = await response.json();
+            
+            if (response.ok) {
+              btn.classList.remove('saving');
+              btn.innerHTML = '✅';
+              loadTrackedHunts();
+              
+              if (typeof gtag === 'function') {
+                gtag('event', 'save_hunt_from_leaderboard', {
+                  'product_name': product.name,
+                  'rank': rank
+                });
+              }
+            } else {
+              throw new Error(data.error || 'Failed to save hunt');
+            }
+          } catch (error) {
+            console.error('Error saving hunt:', error);
+            alert('Failed to save hunt: ' + error.message);
+            btn.classList.remove('saving');
+            btn.innerHTML = originalText;
+            btn.disabled = false;
+          }
+        }
+        
+        // Save Analysis
+        async function saveAnalysis() {
+          if (!currentUser) {
+            openAuthModal('login');
+            alert('Please login to save your analysis');
+            return;
+          }
+          
+          if (!currentAnalysisData) {
+            alert('No analysis data available to save');
+            return;
+          }
+          
+          const btn = document.getElementById('saveAnalysisBtn');
+          const originalText = btn.innerHTML;
+          
+          btn.classList.add('saving');
+          btn.innerHTML = '⏳ Saving...';
+          btn.disabled = true;
+          
+          try {
+            const response = await fetch('/api/analyses/save', {
+              method: 'POST',
+              headers: { 'Content-Type': 'application/json' },
+              credentials: 'include',
+              body: JSON.stringify(currentAnalysisData)
+            });
+            
+            const data = await response.json();
+            
+            if (response.ok) {
+              btn.classList.remove('saving');
+              btn.innerHTML = '✅ Saved!';
+              
+              if (typeof gtag === 'function') {
+                gtag('event', 'save_analysis', {
+                  'app_name': currentAnalysisData.appName,
+                  'score': currentAnalysisData.score
+                });
+              }
+            } else {
+              throw new Error(data.error || 'Failed to save analysis');
+            }
+          } catch (error) {
+            console.error('Error saving analysis:', error);
+            alert('Failed to save analysis: ' + error.message);
+            btn.classList.remove('saving');
+            btn.innerHTML = originalText;
+            btn.disabled = false;
+          }
+        }
+        
         // Tracked Hunts Functions
         async function loadTrackedHunts() {
           try {
@@ -4435,8 +4855,8 @@ Best regards\`;
             });
             
             if (response.ok) {
-              const data = await response.json();
-              displayTrackedHunts(data.hunts || []);
+              const hunts = await response.json();
+              displayTrackedHunts(Array.isArray(hunts) ? hunts : []);
             } else {
               console.error('Failed to load tracked hunts');
               displayTrackedHunts([]);

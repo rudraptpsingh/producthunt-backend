@@ -3460,9 +3460,8 @@ app.get('/', (req, res) => {
         <div id="dashboard" style="display: none;">
           <div class="command-center-card" id="commandCenterCard">
             <div class="command-center-header" id="huntWeather">
-              <h2>🌤️ Hunt Weather & Command Center</h2>
+              <h2>🌤️ Hunt Weather</h2>
               <p>AI-powered hunt scoring, optimal timing insights, and live leaderboard tracking</p>
-              <div class="auto-refresh-badge">Auto-refreshing every 30s</div>
             </div>
             
             <!-- Hunt Weather Section -->
@@ -5018,30 +5017,63 @@ Best,
         function displayProductSummary(product) {
           const summaryGrid = document.getElementById('summaryGrid');
           
+          // Calculate velocity status
+          const velocityNum = parseInt(product.velocity) || 0;
+          let velocityBadge = '';
+          if (velocityNum > 30) {
+            velocityBadge = '<span style="background: linear-gradient(135deg, #9333EA 0%, #C026D3 100%); color: white; padding: 4px 10px; border-radius: 12px; font-size: 11px; font-weight: 600;">🔥 HOT</span>';
+          } else if (velocityNum > 15) {
+            velocityBadge = '<span style="background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%); color: white; padding: 4px 10px; border-radius: 12px; font-size: 11px; font-weight: 600;">📈 Rising</span>';
+          } else {
+            velocityBadge = '<span style="background: #F3F4F6; color: #6B7280; padding: 4px 10px; border-radius: 12px; font-size: 11px; font-weight: 600; border: 1px solid #E5E5E5;">💤 Slow</span>';
+          }
+          
+          // Rank badge
+          let rankBadge = '';
+          if (product.rank <= 3) {
+            rankBadge = '<span style="background: linear-gradient(135deg, #FFD700 0%, #FFA500 100%); color: #1A1A1A; padding: 4px 10px; border-radius: 12px; font-size: 11px; font-weight: 600;">🏆 Top 3</span>';
+          } else if (product.rank <= 10) {
+            rankBadge = '<span style="background: linear-gradient(135deg, #DA552F 0%, #F97316 100%); color: white; padding: 4px 10px; border-radius: 12px; font-size: 11px; font-weight: 600;">🎯 Top 10</span>';
+          }
+          
           summaryGrid.innerHTML = \`
-            <div class="summary-item">
-              <div class="summary-label">Product Name</div>
-              <div class="summary-value">\${product.name}</div>
-            </div>
-            <div class="summary-item">
-              <div class="summary-label">Rank</div>
-              <div class="summary-value">#\${product.rank}</div>
-            </div>
-            <div class="summary-item">
-              <div class="summary-label">Upvotes</div>
-              <div class="summary-value">▲ \${product.votesCount}</div>
-            </div>
-            <div class="summary-item">
-              <div class="summary-label">Comments</div>
-              <div class="summary-value">💬 \${product.commentsCount}</div>
-            </div>
-            <div class="summary-item">
-              <div class="summary-label">Category</div>
-              <div class="summary-value">\${product.category}</div>
-            </div>
-            <div class="summary-item">
-              <div class="summary-label">Velocity</div>
-              <div class="summary-value">\${product.velocity || 'Calculating...'}</div>
+            <div style="background: white; border: 2px solid #DA552F; border-radius: 12px; padding: 24px; margin-bottom: 24px;">
+              <div style="display: flex; align-items: center; gap: 12px; margin-bottom: 16px; flex-wrap: wrap;">
+                <h3 style="color: #1A1A1A; margin: 0; font-size: 22px; font-weight: 700;">\${product.name}</h3>
+                \${rankBadge}
+                \${velocityBadge}
+              </div>
+              
+              <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(140px, 1fr)); gap: 16px; margin-top: 20px;">
+                <div style="text-align: center; padding: 16px; background: linear-gradient(135deg, #FEF3C7 0%, #FDE68A 100%); border-radius: 10px;">
+                  <div style="font-size: 32px; margin-bottom: 4px;">🏆</div>
+                  <div style="font-size: 24px; font-weight: 700; color: #92400E;">#\${product.rank}</div>
+                  <div style="font-size: 12px; color: #78350F; font-weight: 600;">Rank</div>
+                </div>
+                
+                <div style="text-align: center; padding: 16px; background: linear-gradient(135deg, #DBEAFE 0%, #BFDBFE 100%); border-radius: 10px;">
+                  <div style="font-size: 32px; margin-bottom: 4px;">▲</div>
+                  <div style="font-size: 24px; font-weight: 700; color: #1E40AF;">\${product.votesCount}</div>
+                  <div style="font-size: 12px; color: #1E3A8A; font-weight: 600;">Upvotes</div>
+                </div>
+                
+                <div style="text-align: center; padding: 16px; background: linear-gradient(135deg, #D1FAE5 0%, #A7F3D0 100%); border-radius: 10px;">
+                  <div style="font-size: 32px; margin-bottom: 4px;">💬</div>
+                  <div style="font-size: 24px; font-weight: 700; color: #065F46;">\${product.commentsCount}</div>
+                  <div style="font-size: 12px; color: #064E3B; font-weight: 600;">Comments</div>
+                </div>
+                
+                <div style="text-align: center; padding: 16px; background: linear-gradient(135deg, #FCE7F3 0%, #FBCFE8 100%); border-radius: 10px;">
+                  <div style="font-size: 32px; margin-bottom: 4px;">⚡</div>
+                  <div style="font-size: 24px; font-weight: 700; color: #831843;">\${product.velocity || '—'}</div>
+                  <div style="font-size: 12px; color: #831843; font-weight: 600;">upvotes/hr</div>
+                </div>
+              </div>
+              
+              <div style="margin-top: 16px; padding: 12px; background: #F9FAFB; border-radius: 8px; border: 1px solid #E5E5E5;">
+                <div style="font-size: 12px; color: #6B7280; font-weight: 600; margin-bottom: 4px;">CATEGORY</div>
+                <div style="font-size: 14px; color: #1A1A1A; font-weight: 600;">\${product.category}</div>
+              </div>
             </div>
           \`;
         }
@@ -5101,7 +5133,7 @@ Best regards\`;
             return;
           }
           
-          let html = '';
+          let html = '<div style="display: flex; flex-direction: column; gap: 12px;">';
           const productRank = product.rank;
           
           // Show products around the tracked product
@@ -5111,28 +5143,73 @@ Best regards\`;
             const isAbove = comp.rank < productRank;
             const isSameProduct = comp.name === product.name;
             
-            let cardClass = '';
-            let actionText = '';
-            
-            if (isSameProduct) {
-              cardClass = 'current-product';
-              actionText = '👉 Your Product';
-            } else if (isAbove) {
-              cardClass = gap <= 50 ? 'catchable' : 'out-of-reach';
-              actionText = gap <= 50 ? (\`💪 Gap: \${gap} upvotes - Catchable!\`) : (\`🎯 Gap: \${gap} upvotes - Keep pushing!\`);
-            } else {
-              cardClass = 'behind';
-              actionText = \`✅ Leading by \${gap} upvotes\`;
+            // Calculate velocity for competitor
+            const compVelocity = comp.velocity || '—';
+            let velocityIcon = '💤';
+            let velocityColor = '#6B7280';
+            if (comp.velocity > 30) {
+              velocityIcon = '🔥';
+              velocityColor = '#9333EA';
+            } else if (comp.velocity > 15) {
+              velocityIcon = '📈';
+              velocityColor = '#F97316';
             }
             
-            html += '<div class="competitor-card ' + cardClass + '">' +
-              '<div class="comp-rank">#' + rank + '</div>' +
-              '<div class="comp-name">' + comp.name + '</div>' +
-              '<div class="comp-gap">▲ ' + comp.votesCount + ' upvotes</div>' +
-              '<div class="comp-action">' + actionText + '</div>' +
-              '</div>';
+            let borderColor = '#E5E5E5';
+            let bgColor = '#FFFFFF';
+            let actionBadge = '';
+            
+            if (isSameProduct) {
+              borderColor = '#DA552F';
+              bgColor = '#FFF7ED';
+              actionBadge = '<div style="background: linear-gradient(135deg, #DA552F 0%, #F97316 100%); color: white; padding: 6px 12px; border-radius: 8px; font-size: 12px; font-weight: 700; display: inline-block;">👉 YOUR PRODUCT</div>';
+            } else if (isAbove) {
+              if (gap <= 50) {
+                borderColor = '#10B981';
+                actionBadge = '<div style="background: linear-gradient(135deg, #10B981 0%, #059669 100%); color: white; padding: 6px 12px; border-radius: 8px; font-size: 12px; font-weight: 700; display: inline-block;">🎯 Catchable - Gap: ' + gap + '</div>';
+              } else {
+                actionBadge = '<div style="background: #F3F4F6; color: #6B7280; padding: 6px 12px; border-radius: 8px; font-size: 12px; font-weight: 600; display: inline-block; border: 1px solid #E5E5E5;">Keep Pushing - Gap: ' + gap + '</div>';
+              }
+            } else {
+              borderColor = '#93C5FD';
+              bgColor = '#EFF6FF';
+              actionBadge = '<div style="background: linear-gradient(135deg, #3B82F6 0%, #2563EB 100%); color: white; padding: 6px 12px; border-radius: 8px; font-size: 12px; font-weight: 700; display: inline-block;">✅ Leading by ' + gap + '</div>';
+            }
+            
+            html += \`
+              <div style="border: 2px solid \${borderColor}; background: \${bgColor}; border-radius: 10px; padding: 16px;">
+                <div style="display: flex; align-items: center; justify-content: space-between; gap: 12px; flex-wrap: wrap; margin-bottom: 12px;">
+                  <div style="display: flex; align-items: center; gap: 12px;">
+                    <div style="background: linear-gradient(135deg, #FEF3C7 0%, #FDE68A 100%); width: 50px; height: 50px; border-radius: 10px; display: flex; align-items: center; justify-content: center; font-size: 20px; font-weight: 700; color: #92400E;">
+                      #\${rank}
+                    </div>
+                    <div>
+                      <div style="font-weight: 700; color: #1A1A1A; font-size: 15px; margin-bottom: 2px;">\${comp.name}</div>
+                      <div style="font-size: 12px; color: #666;">\${comp.category || 'General'}</div>
+                    </div>
+                  </div>
+                  \${actionBadge}
+                </div>
+                
+                <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(100px, 1fr)); gap: 10px;">
+                  <div style="text-align: center; padding: 10px; background: linear-gradient(135deg, #DBEAFE 0%, #BFDBFE 100%); border-radius: 8px;">
+                    <div style="font-size: 18px; font-weight: 700; color: #1E40AF;">▲ \${comp.votesCount}</div>
+                    <div style="font-size: 10px; color: #1E3A8A; font-weight: 600;">Upvotes</div>
+                  </div>
+                  <div style="text-align: center; padding: 10px; background: linear-gradient(135deg, #D1FAE5 0%, #A7F3D0 100%); border-radius: 8px;">
+                    <div style="font-size: 18px; font-weight: 700; color: #065F46;">💬 \${comp.commentsCount || 0}</div>
+                    <div style="font-size: 10px; color: #064E3B; font-weight: 600;">Comments</div>
+                  </div>
+                  <div style="text-align: center; padding: 10px; background: linear-gradient(135deg, #FCE7F3 0%, #FBCFE8 100%); border-radius: 8px;">
+                    <div style="font-size: 18px; font-weight: 700; color: \${velocityColor};">\${velocityIcon} \${compVelocity}</div>
+                    <div style="font-size: 10px; color: #831843; font-weight: 600;">per hour</div>
+                  </div>
+                </div>
+              </div>
+            \`;
           });
           
+          html += '</div>';
           insights.innerHTML = html;
         }
         

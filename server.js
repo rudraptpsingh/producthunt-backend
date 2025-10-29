@@ -5568,16 +5568,6 @@ Best,
         function generateTrackTemplates(product) {
           const baseUrl = product.url || \`https://www.producthunt.com/posts/\${product.slug}\`;
           
-          // Generate tracked URLs with UTM parameters for analytics
-          const twitterUrl = baseUrl + 
-            \`?utm_source=twitter&utm_medium=social&utm_campaign=huntproducthunt-tracking&utm_content=rank-\${product.rank}\`;
-          
-          const linkedinUrl = baseUrl + 
-            \`?utm_source=linkedin&utm_medium=social&utm_campaign=huntproducthunt-tracking&utm_content=rank-\${product.rank}\`;
-          
-          const emailUrl = baseUrl + 
-            \`?utm_source=email&utm_medium=email&utm_campaign=huntproducthunt-tracking&utm_content=rank-\${product.rank}\`;
-          
           // Twitter template
           const twitterText = \`🚀 Just hunted on @ProductHunt today!
 
@@ -5585,7 +5575,7 @@ Best,
 
 Currently at #\${product.rank} with \${product.votesCount} upvotes! 🎯
 
-Check it out and show your support: \${twitterUrl}
+Check it out and show your support: \${baseUrl}
 
 #ProductHunt #Startup\`;
           
@@ -5596,7 +5586,7 @@ Check it out and show your support: \${twitterUrl}
 
 \${product.tagline}
 
-We'd love your support and feedback. Check out our hunt here: \${linkedinUrl}
+We'd love your support and feedback. Check out our hunt here: \${baseUrl}
 
 #ProductHunt #ProductLaunch #Startup\`;
           
@@ -5611,7 +5601,7 @@ We're currently at #\${product.rank} with \${product.votesCount} upvotes and wou
 
 \${product.tagline}
 
-Check it out here: \${emailUrl}
+Check it out here: \${baseUrl}
 
 Your upvote and feedback would mean the world to us!
 

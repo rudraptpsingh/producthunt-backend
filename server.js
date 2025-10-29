@@ -2159,6 +2159,7 @@ app.get('/', (req, res) => {
           cursor: pointer;
           padding: 8px;
           z-index: 1001;
+          position: relative;
         }
         
         .mobile-menu-toggle span {
@@ -2180,6 +2181,25 @@ app.get('/', (req, res) => {
         
         .mobile-menu-toggle.active span:nth-child(3) {
           transform: rotate(-45deg) translate(6px, -6px);
+        }
+        
+        /* Mobile Menu Backdrop */
+        .mobile-menu-backdrop {
+          display: none;
+          position: fixed;
+          top: 0;
+          left: 0;
+          width: 100%;
+          height: 100%;
+          background: rgba(0, 0, 0, 0.5);
+          z-index: 999;
+          opacity: 0;
+          transition: opacity 0.3s ease;
+        }
+        
+        .mobile-menu-backdrop.active {
+          display: block;
+          opacity: 1;
         }
         
         @media (max-width: 768px) {
@@ -2217,10 +2237,15 @@ app.get('/', (req, res) => {
           /* Mobile Navigation */
           .mobile-menu-toggle {
             display: flex;
+            margin-left: auto;
           }
           
           .desktop-nav-links {
             display: none;
+          }
+          
+          .top-bar-content {
+            position: relative;
           }
           
           .user-menu {

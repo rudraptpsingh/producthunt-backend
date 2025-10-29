@@ -255,25 +255,26 @@ app.get('/', (req, res) => {
         .slider-dots {
           display: flex;
           justify-content: center;
-          gap: 8px;
+          gap: 6px;
           margin-top: 24px;
         }
         
         .slider-dot {
-          width: 10px;
-          height: 10px;
+          width: 8px;
+          height: 8px;
           border-radius: 50%;
           background: #D1D5DB;
           cursor: pointer;
           transition: all 0.3s ease;
           border: none;
           padding: 0;
+          -webkit-tap-highlight-color: transparent;
         }
         
         .slider-dot.active {
           background: #DA552F;
-          transform: scale(1.2);
-          box-shadow: 0 0 0 3px rgba(218, 85, 47, 0.2);
+          width: 20px;
+          border-radius: 4px;
         }
         
         .slider-dot:hover {
@@ -3380,7 +3381,7 @@ app.get('/', (req, res) => {
       
       <div class="hero">
         <div class="hero-content">
-          <div class="hero-subtitle">Track. Analyze. Dominate ProductHunt</div>
+          <div class="hero-subtitle">Analyze. Hunt. Dominate.</div>
           
           <h1 class="hero-title">
             Master Your ProductHunt Launch with<br/>

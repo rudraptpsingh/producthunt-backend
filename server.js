@@ -1021,11 +1021,12 @@ app.get('/', (req, res) => {
           padding: 0 16px;
           max-height: 0;
           overflow: hidden;
-          transition: max-height 0.3s ease, padding 0.3s ease;
+          transition: max-height 0.4s ease, padding 0.3s ease;
         }
         
         .leaderboard-item.expanded .leaderboard-details {
-          padding: 16px;
+          padding: 20px 16px;
+          overflow: visible;
         }
         
         .detail-section {
@@ -1099,13 +1100,84 @@ app.get('/', (req, res) => {
         }
         
         .detail-analysis {
-          background: white;
-          padding: 12px;
-          border-radius: 6px;
+          display: flex;
+          gap: 8px;
+          flex-wrap: wrap;
+          align-items: center;
+        }
+        
+        .analysis-badge {
+          display: inline-flex;
+          align-items: center;
+          gap: 6px;
+          padding: 8px 12px;
+          border-radius: 20px;
+          font-size: 12px;
+          font-weight: 600;
+          white-space: nowrap;
+        }
+        
+        .badge-icon {
+          font-size: 16px;
+          line-height: 1;
+        }
+        
+        .badge-text {
+          line-height: 1;
+        }
+        
+        .badge-top {
+          background: linear-gradient(135deg, #FFD700 0%, #FFA500 100%);
+          color: #1A1A1A;
+          box-shadow: 0 2px 8px rgba(255, 215, 0, 0.3);
+        }
+        
+        .badge-good {
+          background: linear-gradient(135deg, #DA552F 0%, #F97316 100%);
+          color: white;
+          box-shadow: 0 2px 8px rgba(218, 85, 47, 0.3);
+        }
+        
+        .badge-neutral {
+          background: #F3F4F6;
+          color: #6B7280;
           border: 1px solid #E5E5E5;
-          font-size: 13px;
-          line-height: 1.6;
-          color: #333;
+        }
+        
+        .badge-hot {
+          background: linear-gradient(135deg, #9333EA 0%, #C026D3 100%);
+          color: white;
+          box-shadow: 0 2px 8px rgba(147, 51, 234, 0.3);
+        }
+        
+        .badge-rising {
+          background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+          color: white;
+          box-shadow: 0 2px 8px rgba(240, 147, 251, 0.3);
+        }
+        
+        .badge-slow {
+          background: #F3F4F6;
+          color: #6B7280;
+          border: 1px solid #E5E5E5;
+        }
+        
+        .badge-engaged {
+          background: linear-gradient(135deg, #10B981 0%, #059669 100%);
+          color: white;
+          box-shadow: 0 2px 8px rgba(16, 185, 129, 0.3);
+        }
+        
+        .badge-moderate {
+          background: linear-gradient(135deg, #3B82F6 0%, #2563EB 100%);
+          color: white;
+          box-shadow: 0 2px 8px rgba(59, 130, 246, 0.3);
+        }
+        
+        .badge-quiet {
+          background: #F3F4F6;
+          color: #6B7280;
+          border: 1px solid #E5E5E5;
         }
         
         .lb-rank {
@@ -2542,7 +2614,16 @@ app.get('/', (req, res) => {
           }
           
           .detail-analysis {
-            font-size: 12px;
+            gap: 6px;
+          }
+          
+          .analysis-badge {
+            font-size: 11px;
+            padding: 6px 10px;
+          }
+          
+          .badge-icon {
+            font-size: 14px;
           }
           
           /* Modal optimization for mobile */
@@ -4396,13 +4477,6 @@ app.get('/', (req, res) => {
               '</div>' +
               '</div>' +
               '<div class="detail-section">' +
-              '<h4>🔗 Links</h4>' +
-              '<div class="detail-links">' +
-              '<a href="' + productUrl + '" target="_blank" class="detail-link">🌐 View on ProductHunt</a>' +
-              (product.website ? '<a href="' + product.website + '" target="_blank" class="detail-link">🏠 Product Website</a>' : '') +
-              '</div>' +
-              '</div>' +
-              '<div class="detail-section">' +
               '<h4>💡 Quick Analysis</h4>' +
               '<div class="detail-analysis">' +
               getQuickAnalysis(rank, velocity, upvotesPerHour, commentsPerUpvote) +
@@ -4441,7 +4515,8 @@ app.get('/', (req, res) => {
                 expandIcon.textContent = '▶';
               } else {
                 item.classList.add('expanded');
-                details.style.maxHeight = details.scrollHeight + 'px';
+                // Use a large max-height to ensure all content is visible
+                details.style.maxHeight = '800px';
                 expandIcon.textContent = '▼';
               }
             });
@@ -4449,31 +4524,36 @@ app.get('/', (req, res) => {
         }
         
         function getQuickAnalysis(rank, velocity, upvotesPerHour, commentsPerUpvote) {
-          let analysis = '';
+          let badges = '';
           
+          // Rank Badge
           if (rank <= 3) {
-            analysis += '🏆 <strong>Top 3 Position!</strong> This product is dominating today. ';
+            badges += '<div class="analysis-badge badge-top"><span class="badge-icon">🏆</span><span class="badge-text">Top 3 - Dominating</span></div>';
           } else if (rank <= 10) {
-            analysis += '🎯 <strong>Top 10 Product.</strong> Strong performance with high visibility. ';
+            badges += '<div class="analysis-badge badge-good"><span class="badge-icon">🎯</span><span class="badge-text">Top 10 - High Visibility</span></div>';
+          } else {
+            badges += '<div class="analysis-badge badge-neutral"><span class="badge-icon">📊</span><span class="badge-text">Rank #' + rank + '</span></div>';
           }
           
+          // Velocity Badge
           if (velocity.class === 'velocity-high') {
-            analysis += '🚀 <strong>Hot momentum</strong> - gaining upvotes rapidly. ';
+            badges += '<div class="analysis-badge badge-hot"><span class="badge-icon">🚀</span><span class="badge-text">Hot Momentum</span></div>';
           } else if (velocity.class === 'velocity-medium') {
-            analysis += '⚡ <strong>Rising steadily</strong> - good traction. ';
+            badges += '<div class="analysis-badge badge-rising"><span class="badge-icon">⚡</span><span class="badge-text">Rising Steadily</span></div>';
           } else {
-            analysis += '💤 <strong>Slower pace</strong> - room for acceleration. ';
+            badges += '<div class="analysis-badge badge-slow"><span class="badge-icon">💤</span><span class="badge-text">Slow Pace</span></div>';
           }
           
+          // Engagement Badge
           if (commentsPerUpvote > 0.5) {
-            analysis += '💬 <strong>High engagement</strong> - users are actively discussing this product.';
+            badges += '<div class="analysis-badge badge-engaged"><span class="badge-icon">💬</span><span class="badge-text">High Engagement</span></div>';
           } else if (commentsPerUpvote > 0.2) {
-            analysis += '💬 <strong>Moderate engagement</strong> - decent conversation happening.';
+            badges += '<div class="analysis-badge badge-moderate"><span class="badge-icon">💬</span><span class="badge-text">Moderate Talk</span></div>';
           } else {
-            analysis += '💬 <strong>Low engagement</strong> - mostly upvotes without much discussion.';
+            badges += '<div class="analysis-badge badge-quiet"><span class="badge-icon">🤫</span><span class="badge-text">Quiet Discussion</span></div>';
           }
           
-          return analysis || 'Building momentum...';
+          return badges || '<div class="analysis-badge badge-neutral"><span class="badge-icon">⏳</span><span class="badge-text">Building Momentum</span></div>';
         }
         
         function calculateVelocity(product, index) {

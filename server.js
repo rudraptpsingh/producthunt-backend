@@ -3593,24 +3593,72 @@ app.get('/', (req, res) => {
             
             <!-- Social Templates Section -->
             <div class="templates-section" id="trackTemplates" style="display: none; margin-top: 40px;">
-              <h3>📝 One-Click Templates</h3>
-              <p style="font-size: 14px; color: #666; margin-bottom: 20px;">Customized templates for your product's hunt</p>
-              <div class="templates-grid">
-                <div class="template-card">
-                  <h4>🐦 Twitter Post</h4>
-                  <textarea id="trackTwitterTemplate" readonly></textarea>
-                  <button class="copy-btn" onclick="copyTrackTemplate('twitter')">📋 Copy to Clipboard</button>
+              <h3 style="color: #1a1a1a; margin-bottom: 8px; font-size: 20px; font-weight: 700;">📝 One-Click Templates</h3>
+              <p style="font-size: 14px; color: #666; margin-bottom: 24px;">Customized templates for your product's hunt</p>
+              
+              <!-- Templates Slider -->
+              <div style="position: relative; background: white; border: 1px solid #E5E5E5; border-radius: 12px; padding: 24px; overflow: hidden;">
+                
+                <!-- Slider Container -->
+                <div class="templates-slider" id="templatesSlider">
+                  
+                  <!-- Twitter Template Slide -->
+                  <div class="template-slide" data-platform="twitter" style="display: block;">
+                    <div style="display: flex; align-items: center; justify-content: center; gap: 12px; margin-bottom: 20px;">
+                      <div style="background: linear-gradient(135deg, #1DA1F2 0%, #0C85D0 100%); width: 48px; height: 48px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 24px;">
+                        🐦
+                      </div>
+                      <h4 style="color: #1A1A1A; margin: 0; font-size: 20px; font-weight: 700;">Twitter Post</h4>
+                    </div>
+                    <textarea id="trackTwitterTemplate" readonly style="width: 100%; min-height: 180px; padding: 16px; border: 1px solid #E5E5E5; border-radius: 8px; font-size: 14px; line-height: 1.6; font-family: inherit; resize: vertical; background: #F9FAFB;"></textarea>
+                    <button class="copy-btn" onclick="copyTrackTemplate('twitter')" style="width: 100%; margin-top: 16px; background: linear-gradient(135deg, #DA552F 0%, #F97316 100%); color: white; border: none; padding: 14px 24px; border-radius: 8px; font-size: 15px; font-weight: 600; cursor: pointer; transition: all 0.2s;">
+                      📋 Copy to Clipboard
+                    </button>
+                  </div>
+                  
+                  <!-- LinkedIn Template Slide -->
+                  <div class="template-slide" data-platform="linkedin" style="display: none;">
+                    <div style="display: flex; align-items: center; justify-content: center; gap: 12px; margin-bottom: 20px;">
+                      <div style="background: linear-gradient(135deg, #0077B5 0%, #005885 100%); width: 48px; height: 48px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 24px;">
+                        💼
+                      </div>
+                      <h4 style="color: #1A1A1A; margin: 0; font-size: 20px; font-weight: 700;">LinkedIn Post</h4>
+                    </div>
+                    <textarea id="trackLinkedinTemplate" readonly style="width: 100%; min-height: 180px; padding: 16px; border: 1px solid #E5E5E5; border-radius: 8px; font-size: 14px; line-height: 1.6; font-family: inherit; resize: vertical; background: #F9FAFB;"></textarea>
+                    <button class="copy-btn" onclick="copyTrackTemplate('linkedin')" style="width: 100%; margin-top: 16px; background: linear-gradient(135deg, #DA552F 0%, #F97316 100%); color: white; border: none; padding: 14px 24px; border-radius: 8px; font-size: 15px; font-weight: 600; cursor: pointer; transition: all 0.2s;">
+                      📋 Copy to Clipboard
+                    </button>
+                  </div>
+                  
+                  <!-- Email Template Slide -->
+                  <div class="template-slide" data-platform="email" style="display: none;">
+                    <div style="display: flex; align-items: center; justify-content: center; gap: 12px; margin-bottom: 20px;">
+                      <div style="background: linear-gradient(135deg, #EA4335 0%, #C5221F 100%); width: 48px; height: 48px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 24px;">
+                        📧
+                      </div>
+                      <h4 style="color: #1A1A1A; margin: 0; font-size: 20px; font-weight: 700;">Email Outreach</h4>
+                    </div>
+                    <textarea id="trackEmailTemplate" readonly style="width: 100%; min-height: 180px; padding: 16px; border: 1px solid #E5E5E5; border-radius: 8px; font-size: 14px; line-height: 1.6; font-family: inherit; resize: vertical; background: #F9FAFB;"></textarea>
+                    <button class="copy-btn" onclick="copyTrackTemplate('email')" style="width: 100%; margin-top: 16px; background: linear-gradient(135deg, #DA552F 0%, #F97316 100%); color: white; border: none; padding: 14px 24px; border-radius: 8px; font-size: 15px; font-weight: 600; cursor: pointer; transition: all 0.2s;">
+                      📋 Copy to Clipboard
+                    </button>
+                  </div>
+                  
                 </div>
-                <div class="template-card">
-                  <h4>💼 LinkedIn Post</h4>
-                  <textarea id="trackLinkedinTemplate" readonly></textarea>
-                  <button class="copy-btn" onclick="copyTrackTemplate('linkedin')">📋 Copy to Clipboard</button>
+                
+                <!-- Slider Navigation Dots -->
+                <div style="display: flex; justify-content: center; gap: 10px; margin-top: 24px; padding-top: 20px; border-top: 1px solid #E5E5E5;">
+                  <button onclick="switchTemplateSlide(0)" class="template-dot" data-index="0" style="width: 40px; height: 40px; border-radius: 50%; border: 2px solid #DA552F; background: #DA552F; cursor: pointer; transition: all 0.2s; display: flex; align-items: center; justify-content: center; font-size: 18px;">
+                    🐦
+                  </button>
+                  <button onclick="switchTemplateSlide(1)" class="template-dot" data-index="1" style="width: 40px; height: 40px; border-radius: 50%; border: 2px solid #E5E5E5; background: white; cursor: pointer; transition: all 0.2s; display: flex; align-items: center; justify-content: center; font-size: 18px;">
+                    💼
+                  </button>
+                  <button onclick="switchTemplateSlide(2)" class="template-dot" data-index="2" style="width: 40px; height: 40px; border-radius: 50%; border: 2px solid #E5E5E5; background: white; cursor: pointer; transition: all 0.2s; display: flex; align-items: center; justify-content: center; font-size: 18px;">
+                    📧
+                  </button>
                 </div>
-                <div class="template-card">
-                  <h4>📧 Email Outreach</h4>
-                  <textarea id="trackEmailTemplate" readonly></textarea>
-                  <button class="copy-btn" onclick="copyTrackTemplate('email')">📋 Copy to Clipboard</button>
-                </div>
+                
               </div>
             </div>
             
@@ -4925,17 +4973,13 @@ Best,
         
         function copyTrackTemplate(type) {
           let textarea;
-          let btnSelector;
           
           if (type === 'twitter') {
             textarea = document.getElementById('trackTwitterTemplate');
-            btnSelector = '#trackTemplates .template-card:nth-child(1) .copy-btn';
           } else if (type === 'linkedin') {
             textarea = document.getElementById('trackLinkedinTemplate');
-            btnSelector = '#trackTemplates .template-card:nth-child(2) .copy-btn';
           } else if (type === 'email') {
             textarea = document.getElementById('trackEmailTemplate');
-            btnSelector = '#trackTemplates .template-card:nth-child(3) .copy-btn';
           }
           
           if (!textarea) return;
@@ -4943,17 +4987,46 @@ Best,
           textarea.select();
           document.execCommand('copy');
           
-          const btn = document.querySelector(btnSelector);
-          if (btn) {
-            const originalText = btn.innerHTML;
-            btn.classList.add('copied');
-            btn.innerHTML = '✓ Copied!';
-            
-            setTimeout(() => {
-              btn.classList.remove('copied');
-              btn.innerHTML = originalText;
-            }, 2000);
+          // Visual feedback on the button that was clicked
+          const activeSlide = document.querySelector('.template-slide[style*="display: block"]');
+          if (activeSlide) {
+            const btn = activeSlide.querySelector('.copy-btn');
+            if (btn) {
+              const originalText = btn.innerHTML;
+              btn.innerHTML = '✓ Copied!';
+              btn.style.background = 'linear-gradient(135deg, #10B981 0%, #059669 100%)';
+              
+              setTimeout(() => {
+                btn.innerHTML = originalText;
+                btn.style.background = 'linear-gradient(135deg, #DA552F 0%, #F97316 100%)';
+              }, 2000);
+            }
           }
+        }
+        
+        function switchTemplateSlide(index) {
+          // Hide all slides
+          const slides = document.querySelectorAll('.template-slide');
+          slides.forEach(slide => {
+            slide.style.display = 'none';
+          });
+          
+          // Show selected slide
+          if (slides[index]) {
+            slides[index].style.display = 'block';
+          }
+          
+          // Update dot indicators
+          const dots = document.querySelectorAll('.template-dot');
+          dots.forEach((dot, i) => {
+            if (i === index) {
+              dot.style.background = '#DA552F';
+              dot.style.borderColor = '#DA552F';
+            } else {
+              dot.style.background = 'white';
+              dot.style.borderColor = '#E5E5E5';
+            }
+          });
         }
         
         async function trackProductHunt() {

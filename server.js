@@ -4064,9 +4064,9 @@ app.get('/', (req, res) => {
           let html = '';
           top20.forEach((product, index) => {
             const rank = index + 1;
-            const velocity = calculateVelocity(product, index);
-            const velocityClass = velocity.class;
-            const velocityLabel = velocity.label;
+            const velocity = calculateVelocity(product, index) || { class: 'velocity-low', label: '📉Slow' };
+            const velocityClass = velocity.class || 'velocity-low';
+            const velocityLabel = velocity.label || '📉Slow';
             const rankClass = rank <= 3 ? 'top-3' : '';
             
             const productUrl = product.url || 'https://www.producthunt.com';
@@ -4074,9 +4074,9 @@ app.get('/', (req, res) => {
             html += '<div class="leaderboard-row">' +
               '<div class="lb-rank ' + rankClass + '">#' + rank + '</div>' +
               '<div class="lb-product"><a href="' + productUrl + '" target="_blank" class="product-link">' + product.name + '</a></div>' +
-              '<div class="lb-category">' + product.category + '</div>' +
-              '<div class="lb-upvotes">▲ ' + product.votesCount + '</div>' +
-              '<div class="lb-comments">💬 ' + product.commentsCount + '</div>' +
+              '<div class="lb-category">' + (product.category || 'General') + '</div>' +
+              '<div class="lb-upvotes">▲ ' + (product.votesCount || 0) + '</div>' +
+              '<div class="lb-comments">💬 ' + (product.commentsCount || 0) + '</div>' +
               '<div class="lb-velocity ' + velocityClass + '">' + velocityLabel + '</div>' +
               '<button class="track-product-btn" data-product-index="' + index + '" data-rank="' + rank + '">' +
               '🔖 Track' +
@@ -4097,6 +4097,7 @@ app.get('/', (req, res) => {
         
         function calculateVelocity(product, index) {
           // Simple velocity calculation based on upvotes per hour
+          
           if (!product.createdAt || !product.votesCount) {
             // Fallback if data missing - estimate by rank
             if (index < 5) return { class: 'velocity-high', label: '🔥HOT' };
@@ -4110,7 +4111,6 @@ app.get('/', (req, res) => {
             
             // Validate date
             if (isNaN(createdAt.getTime())) {
-              console.warn('Invalid createdAt date for product:', product.name);
               if (index < 5) return { class: 'velocity-high', label: '🔥HOT' };
               if (index < 12) return { class: 'velocity-medium', label: '📈Rising' };
               return { class: 'velocity-low', label: '📉Slow' };
@@ -4127,7 +4127,6 @@ app.get('/', (req, res) => {
               return { class: 'velocity-low', label: '📉Slow' };
             }
           } catch (error) {
-            console.error('Error calculating velocity:', error);
             // Fallback to rank-based velocity
             if (index < 5) return { class: 'velocity-high', label: '🔥HOT' };
             if (index < 12) return { class: 'velocity-medium', label: '📈Rising' };

@@ -3605,10 +3605,12 @@ app.get('/', (req, res) => {
                   <!-- Twitter Template Slide -->
                   <div class="template-slide" data-platform="twitter" style="display: block;">
                     <div style="display: flex; align-items: center; justify-content: center; gap: 12px; margin-bottom: 20px;">
-                      <div style="background: linear-gradient(135deg, #1DA1F2 0%, #0C85D0 100%); width: 48px; height: 48px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 24px;">
-                        🐦
+                      <div style="background: linear-gradient(135deg, #1DA1F2 0%, #0C85D0 100%); width: 48px; height: 48px; border-radius: 50%; display: flex; align-items: center; justify-content: center;">
+                        <svg width="24" height="24" viewBox="0 0 24 24" fill="white">
+                          <path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/>
+                        </svg>
                       </div>
-                      <h4 style="color: #1A1A1A; margin: 0; font-size: 20px; font-weight: 700;">Twitter Post</h4>
+                      <h4 style="color: #1A1A1A; margin: 0; font-size: 20px; font-weight: 700;">Twitter / X</h4>
                     </div>
                     <textarea id="trackTwitterTemplate" readonly style="width: 100%; min-height: 180px; padding: 16px; border: 1px solid #E5E5E5; border-radius: 8px; font-size: 14px; line-height: 1.6; font-family: inherit; resize: vertical; background: #F9FAFB;"></textarea>
                     <button class="copy-btn" onclick="copyTrackTemplate('twitter')" style="width: 100%; margin-top: 16px; background: linear-gradient(135deg, #DA552F 0%, #F97316 100%); color: white; border: none; padding: 14px 24px; border-radius: 8px; font-size: 15px; font-weight: 600; cursor: pointer; transition: all 0.2s;">
@@ -3619,10 +3621,12 @@ app.get('/', (req, res) => {
                   <!-- LinkedIn Template Slide -->
                   <div class="template-slide" data-platform="linkedin" style="display: none;">
                     <div style="display: flex; align-items: center; justify-content: center; gap: 12px; margin-bottom: 20px;">
-                      <div style="background: linear-gradient(135deg, #0077B5 0%, #005885 100%); width: 48px; height: 48px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 24px;">
-                        💼
+                      <div style="background: linear-gradient(135deg, #0077B5 0%, #005885 100%); width: 48px; height: 48px; border-radius: 50%; display: flex; align-items: center; justify-content: center;">
+                        <svg width="24" height="24" viewBox="0 0 24 24" fill="white">
+                          <path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433c-1.144 0-2.063-.926-2.063-2.065 0-1.138.92-2.063 2.063-2.063 1.14 0 2.064.925 2.064 2.063 0 1.139-.925 2.065-2.064 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/>
+                        </svg>
                       </div>
-                      <h4 style="color: #1A1A1A; margin: 0; font-size: 20px; font-weight: 700;">LinkedIn Post</h4>
+                      <h4 style="color: #1A1A1A; margin: 0; font-size: 20px; font-weight: 700;">LinkedIn</h4>
                     </div>
                     <textarea id="trackLinkedinTemplate" readonly style="width: 100%; min-height: 180px; padding: 16px; border: 1px solid #E5E5E5; border-radius: 8px; font-size: 14px; line-height: 1.6; font-family: inherit; resize: vertical; background: #F9FAFB;"></textarea>
                     <button class="copy-btn" onclick="copyTrackTemplate('linkedin')" style="width: 100%; margin-top: 16px; background: linear-gradient(135deg, #DA552F 0%, #F97316 100%); color: white; border: none; padding: 14px 24px; border-radius: 8px; font-size: 15px; font-weight: 600; cursor: pointer; transition: all 0.2s;">
@@ -3633,10 +3637,12 @@ app.get('/', (req, res) => {
                   <!-- Email Template Slide -->
                   <div class="template-slide" data-platform="email" style="display: none;">
                     <div style="display: flex; align-items: center; justify-content: center; gap: 12px; margin-bottom: 20px;">
-                      <div style="background: linear-gradient(135deg, #EA4335 0%, #C5221F 100%); width: 48px; height: 48px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 24px;">
-                        📧
+                      <div style="background: linear-gradient(135deg, #EA4335 0%, #C5221F 100%); width: 48px; height: 48px; border-radius: 50%; display: flex; align-items: center; justify-content: center;">
+                        <svg width="24" height="24" viewBox="0 0 24 24" fill="white">
+                          <path d="M20 4H4c-1.1 0-1.99.9-1.99 2L2 18c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 4l-8 5-8-5V6l8 5 8-5v2z"/>
+                        </svg>
                       </div>
-                      <h4 style="color: #1A1A1A; margin: 0; font-size: 20px; font-weight: 700;">Email Outreach</h4>
+                      <h4 style="color: #1A1A1A; margin: 0; font-size: 20px; font-weight: 700;">Email</h4>
                     </div>
                     <textarea id="trackEmailTemplate" readonly style="width: 100%; min-height: 180px; padding: 16px; border: 1px solid #E5E5E5; border-radius: 8px; font-size: 14px; line-height: 1.6; font-family: inherit; resize: vertical; background: #F9FAFB;"></textarea>
                     <button class="copy-btn" onclick="copyTrackTemplate('email')" style="width: 100%; margin-top: 16px; background: linear-gradient(135deg, #DA552F 0%, #F97316 100%); color: white; border: none; padding: 14px 24px; border-radius: 8px; font-size: 15px; font-weight: 600; cursor: pointer; transition: all 0.2s;">
@@ -3648,14 +3654,20 @@ app.get('/', (req, res) => {
                 
                 <!-- Slider Navigation Dots -->
                 <div style="display: flex; justify-content: center; gap: 10px; margin-top: 24px; padding-top: 20px; border-top: 1px solid #E5E5E5;">
-                  <button onclick="switchTemplateSlide(0)" class="template-dot" data-index="0" style="width: 40px; height: 40px; border-radius: 50%; border: 2px solid #DA552F; background: #DA552F; cursor: pointer; transition: all 0.2s; display: flex; align-items: center; justify-content: center; font-size: 18px;">
-                    🐦
+                  <button onclick="switchTemplateSlide(0)" class="template-dot" data-index="0" style="width: 44px; height: 44px; border-radius: 50%; border: 2px solid #DA552F; background: #DA552F; cursor: pointer; transition: all 0.2s; display: flex; align-items: center; justify-content: center;">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="white">
+                      <path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/>
+                    </svg>
                   </button>
-                  <button onclick="switchTemplateSlide(1)" class="template-dot" data-index="1" style="width: 40px; height: 40px; border-radius: 50%; border: 2px solid #E5E5E5; background: white; cursor: pointer; transition: all 0.2s; display: flex; align-items: center; justify-content: center; font-size: 18px;">
-                    💼
+                  <button onclick="switchTemplateSlide(1)" class="template-dot" data-index="1" style="width: 44px; height: 44px; border-radius: 50%; border: 2px solid #E5E5E5; background: white; cursor: pointer; transition: all 0.2s; display: flex; align-items: center; justify-content: center;">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="#6B7280">
+                      <path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433c-1.144 0-2.063-.926-2.063-2.065 0-1.138.92-2.063 2.063-2.063 1.14 0 2.064.925 2.064 2.063 0 1.139-.925 2.065-2.064 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/>
+                    </svg>
                   </button>
-                  <button onclick="switchTemplateSlide(2)" class="template-dot" data-index="2" style="width: 40px; height: 40px; border-radius: 50%; border: 2px solid #E5E5E5; background: white; cursor: pointer; transition: all 0.2s; display: flex; align-items: center; justify-content: center; font-size: 18px;">
-                    📧
+                  <button onclick="switchTemplateSlide(2)" class="template-dot" data-index="2" style="width: 44px; height: 44px; border-radius: 50%; border: 2px solid #E5E5E5; background: white; cursor: pointer; transition: all 0.2s; display: flex; align-items: center; justify-content: center;">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="#6B7280">
+                      <path d="M20 4H4c-1.1 0-1.99.9-1.99 2L2 18c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 4l-8 5-8-5V6l8 5 8-5v2z"/>
+                    </svg>
                   </button>
                 </div>
                 
@@ -5019,12 +5031,15 @@ Best,
           // Update dot indicators
           const dots = document.querySelectorAll('.template-dot');
           dots.forEach((dot, i) => {
+            const svg = dot.querySelector('svg');
             if (i === index) {
               dot.style.background = '#DA552F';
               dot.style.borderColor = '#DA552F';
+              if (svg) svg.setAttribute('fill', 'white');
             } else {
               dot.style.background = 'white';
               dot.style.borderColor = '#E5E5E5';
+              if (svg) svg.setAttribute('fill', '#6B7280');
             }
           });
         }

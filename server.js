@@ -405,6 +405,8 @@ app.get('/', (req, res) => {
           grid-template-columns: repeat(3, 1fr);
           gap: 12px;
           margin-bottom: 20px;
+          max-width: 100%;
+          overflow: hidden;
         }
         
         @media (max-width: 1200px) {
@@ -420,6 +422,9 @@ app.get('/', (req, res) => {
           padding: 20px;
           box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
           transition: all 0.2s ease;
+          max-width: 100%;
+          overflow: hidden;
+          box-sizing: border-box;
         }
         
         .chart-card:hover {
@@ -431,11 +436,15 @@ app.get('/', (req, res) => {
           font-weight: 700;
           margin-bottom: 16px;
           color: #1A1A1A;
+          word-wrap: break-word;
+          overflow-wrap: break-word;
         }
         
         .chart-container {
           position: relative;
           height: 220px;
+          max-width: 100%;
+          overflow: hidden;
         }
         
         .section-header {
@@ -890,6 +899,8 @@ app.get('/', (req, res) => {
           grid-template-columns: 1.5fr 1fr;
           gap: 24px;
           margin-bottom: 32px;
+          max-width: 100%;
+          overflow: hidden;
         }
         
         .cc-section {
@@ -897,6 +908,9 @@ app.get('/', (req, res) => {
           border: 1px solid #E5E5E5;
           border-radius: 8px;
           padding: 20px;
+          max-width: 100%;
+          overflow-x: hidden;
+          box-sizing: border-box;
         }
         
         .cc-section h3 {
@@ -904,6 +918,8 @@ app.get('/', (req, res) => {
           font-weight: 700;
           color: #1A1A1A;
           margin: 0 0 16px 0;
+          word-wrap: break-word;
+          overflow-wrap: break-word;
         }
         
         .leaderboard-table {
@@ -911,6 +927,8 @@ app.get('/', (req, res) => {
           overflow-y: auto;
           overflow-x: auto;
           -webkit-overflow-scrolling: touch;
+          max-width: 100%;
+          box-sizing: border-box;
         }
         
         .leaderboard-row {
@@ -1012,6 +1030,8 @@ app.get('/', (req, res) => {
           display: flex;
           flex-direction: column;
           gap: 12px;
+          max-width: 100%;
+          overflow: hidden;
         }
         
         .engagement-window {
@@ -1065,6 +1085,8 @@ app.get('/', (req, res) => {
           display: flex;
           flex-direction: column;
           gap: 10px;
+          max-width: 100%;
+          overflow-x: hidden;
         }
         
         .action-item {
@@ -1074,6 +1096,11 @@ app.get('/', (req, res) => {
           border-radius: 4px;
           font-size: 14px;
           line-height: 1.5;
+          word-wrap: break-word;
+          overflow-wrap: break-word;
+          word-break: break-word;
+          max-width: 100%;
+          box-sizing: border-box;
         }
         
         .action-item.urgent {

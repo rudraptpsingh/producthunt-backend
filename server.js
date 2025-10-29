@@ -2,6 +2,10 @@ const express = require('express');
 const cors = require('cors');
 const fetch = require('node-fetch');
 const OpenAI = require('openai');
+const session = require('express-session');
+const pgSession = require('connect-pg-simple')(session);
+const { pool, initializeDatabase, trackedHunts, savedAnalyses, huntSnapshots } = require('./db');
+const { register, login, requireAuth, attachUser } = require('./auth');
 
 const app = express();
 const PORT = process.env.PORT || 5000;
@@ -28,9 +32,49 @@ if (OPENAI_API_KEY) {
   });
 }
 
-// Enable CORS for all routes
-app.use(cors());
+// Validate required environment variables
+if (!process.env.SESSION_SECRET) {
+  console.error('FATAL ERROR: SESSION_SECRET environment variable is not set!');
+  console.error('Please set SESSION_SECRET in Secrets to a random string (at least 32 characters)');
+  process.exit(1);
+}
+
+// Enable CORS - restrict to same origin only for security
+const corsOptions = {
+  origin: function (origin, callback) {
+    // Allow requests with no origin (like mobile apps or curl requests) in development
+    // In production, only allow same origin
+    if (!origin || process.env.NODE_ENV !== 'production') {
+      callback(null, true);
+    } else {
+      // In production, only allow same origin
+      callback(null, false);
+    }
+  },
+  credentials: true
+};
+app.use(cors(corsOptions));
 app.use(express.json());
+
+// Session middleware with secure configuration
+app.use(session({
+  store: new pgSession({
+    pool: pool,
+    tableName: 'sessions'
+  }),
+  secret: process.env.SESSION_SECRET,
+  resave: false,
+  saveUninitialized: false,
+  cookie: {
+    maxAge: 30 * 24 * 60 * 60 * 1000, // 30 days
+    httpOnly: true,
+    secure: process.env.NODE_ENV === 'production',
+    sameSite: 'strict' // CSRF protection
+  }
+}));
+
+// Attach user to request if logged in
+app.use(attachUser);
 
 // Analytics Dashboard - Home Page
 app.get('/', (req, res) => {
@@ -3724,6 +3768,153 @@ Best regards\`;
   `);
 });
 
+// ========== Authentication API Routes ==========
+
+// Register new user
+app.post('/api/auth/register', async (req, res) => {
+  try {
+    const { email, password, name } = req.body;
+    
+    if (!email || !password) {
+      return res.status(400).json({ error: 'Email and password are required' });
+    }
+    
+    const user = await register(email, password, name);
+    req.session.userId = user.id;
+    
+    res.json({ 
+      success: true, 
+      user 
+    });
+  } catch (error) {
+    console.error('Registration error:', error);
+    res.status(400).json({ 
+      error: error.message || 'Registration failed' 
+    });
+  }
+});
+
+// Login
+app.post('/api/auth/login', async (req, res) => {
+  try {
+    const { email, password } = req.body;
+    
+    if (!email || !password) {
+      return res.status(400).json({ error: 'Email and password are required' });
+    }
+    
+    const user = await login(email, password);
+    req.session.userId = user.id;
+    
+    res.json({ 
+      success: true, 
+      user 
+    });
+  } catch (error) {
+    console.error('Login error:', error);
+    res.status(401).json({ 
+      error: error.message || 'Login failed' 
+    });
+  }
+});
+
+// Logout
+app.post('/api/auth/logout', (req, res) => {
+  req.session.destroy((err) => {
+    if (err) {
+      return res.status(500).json({ error: 'Logout failed' });
+    }
+    res.json({ success: true });
+  });
+});
+
+// Get current user
+app.get('/api/auth/user', (req, res) => {
+  if (req.user) {
+    res.json(req.user);
+  } else {
+    res.status(401).json({ error: 'Not authenticated' });
+  }
+});
+
+// ========== Protected Hunt Tracking Routes ==========
+
+// Save/track a hunt
+app.post('/api/hunts/track', requireAuth, async (req, res) => {
+  try {
+    const { slug, name, url, tagline, category, rank, upvotes } = req.body;
+    
+    if (!slug || !name || !url) {
+      return res.status(400).json({ error: 'Missing required fields' });
+    }
+    
+    const hunt = await trackedHunts.create(req.session.userId, {
+      slug, name, url, tagline, category, rank, upvotes
+    });
+    
+    res.json({ success: true, hunt });
+  } catch (error) {
+    console.error('Error tracking hunt:', error);
+    res.status(500).json({ error: 'Failed to track hunt' });
+  }
+});
+
+// Get user's tracked hunts
+app.get('/api/hunts/tracked', requireAuth, async (req, res) => {
+  try {
+    const hunts = await trackedHunts.getByUserId(req.session.userId);
+    res.json(hunts);
+  } catch (error) {
+    console.error('Error fetching tracked hunts:', error);
+    res.status(500).json({ error: 'Failed to fetch tracked hunts' });
+  }
+});
+
+// Remove tracked hunt
+app.delete('/api/hunts/:id', requireAuth, async (req, res) => {
+  try {
+    const hunt = await trackedHunts.delete(req.params.id, req.session.userId);
+    if (!hunt) {
+      return res.status(404).json({ error: 'Hunt not found' });
+    }
+    res.json({ success: true });
+  } catch (error) {
+    console.error('Error removing hunt:', error);
+    res.status(500).json({ error: 'Failed to remove hunt' });
+  }
+});
+
+// Save an AI analysis
+app.post('/api/analyses/save', requireAuth, async (req, res) => {
+  try {
+    const { appName, category, tagline, score, scoreLabel, insights } = req.body;
+    
+    if (!appName || !score) {
+      return res.status(400).json({ error: 'Missing required fields' });
+    }
+    
+    const analysis = await savedAnalyses.create(req.session.userId, {
+      appName, category, tagline, score, scoreLabel, insights
+    });
+    
+    res.json({ success: true, analysis });
+  } catch (error) {
+    console.error('Error saving analysis:', error);
+    res.status(500).json({ error: 'Failed to save analysis' });
+  }
+});
+
+// Get user's saved analyses
+app.get('/api/analyses/saved', requireAuth, async (req, res) => {
+  try {
+    const analyses = await savedAnalyses.getByUserId(req.session.userId);
+    res.json(analyses);
+  } catch (error) {
+    console.error('Error fetching analyses:', error);
+    res.status(500).json({ error: 'Failed to fetch analyses' });
+  }
+});
+
 // Proxy endpoint for ProductHunt GraphQL
 app.post('/api/producthunt', async (req, res) => {
   try {
@@ -4119,11 +4310,28 @@ app.post('/api/track-hunt', async (req, res) => {
   }
 });
 
-app.listen(PORT, '0.0.0.0', () => {
-  console.log(`ProductHunt proxy server running on port ${PORT}`);
-  console.log(`API endpoint: /api/producthunt`);
-  console.log(`Dashboard endpoint: /api/dashboard-data`);
-  console.log(`AI Hunt Analysis: /api/analyze-hunt`);
-  console.log(`AI Asset Generation: /api/generate-assets`);
-  console.log(`Track Hunt: /api/track-hunt`);
-});
+// Initialize database and start server
+async function startServer() {
+  try {
+    // Initialize database schema
+    await initializeDatabase();
+    console.log('✓ Database initialized successfully');
+    
+    // Start Express server
+    app.listen(PORT, '0.0.0.0', () => {
+      console.log(`\n🚀 ProductHunt proxy server running on port ${PORT}`);
+      console.log(`API endpoint: /api/producthunt`);
+      console.log(`Dashboard endpoint: /api/dashboard-data`);
+      console.log(`AI Hunt Analysis: /api/analyze-hunt`);
+      console.log(`AI Asset Generation: /api/generate-assets`);
+      console.log(`Track Hunt: /api/track-hunt`);
+      console.log(`\n✓ Authentication enabled`);
+      console.log(`✓ Session management active`);
+    });
+  } catch (error) {
+    console.error('Failed to start server:', error);
+    process.exit(1);
+  }
+}
+
+startServer();

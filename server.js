@@ -1989,6 +1989,10 @@ app.get('/', (req, res) => {
             display: flex;
           }
           
+          .desktop-nav-links {
+            display: none;
+          }
+          
           .user-menu {
             position: fixed;
             top: 0;
@@ -2610,6 +2614,45 @@ app.get('/', (req, res) => {
           gap: 8px;
         }
         
+        /* Desktop Navigation Links */
+        .desktop-nav-links {
+          display: flex;
+          align-items: center;
+          gap: 24px;
+          margin-left: auto;
+          margin-right: 24px;
+        }
+        
+        .nav-link {
+          color: #1A1A1A;
+          text-decoration: none;
+          font-size: 14px;
+          font-weight: 600;
+          transition: all 0.2s;
+          position: relative;
+          padding: 4px 0;
+        }
+        
+        .nav-link::after {
+          content: '';
+          position: absolute;
+          bottom: 0;
+          left: 0;
+          width: 0;
+          height: 2px;
+          background: #DA552F;
+          transition: width 0.2s;
+        }
+        
+        .nav-link:hover {
+          color: #DA552F;
+        }
+        
+        .nav-link:hover::after {
+          width: 100%;
+        }
+        
+        /* Mobile Navigation Links */
         .mobile-nav-links {
           display: none;
         }
@@ -3015,6 +3058,16 @@ app.get('/', (req, res) => {
             <div class="logo-icon"></div>
             <h1><span class="hunt">Hunt</span>Product<span class="ph">Hunt</span></h1>
           </div>
+          
+          <!-- Desktop Navigation Links -->
+          <div class="desktop-nav-links">
+            <a href="#huntWeather" class="nav-link">Hunt Weather</a>
+            <a href="#commandCenter" class="nav-link">Leaderboard</a>
+            <a href="#trackHuntCard" class="nav-link">Track Hunt</a>
+            <a href="#myTrackedHunts" class="nav-link">My Hunts</a>
+            <a href="#getReady" class="nav-link">Get Ready</a>
+          </div>
+          
           <button class="mobile-menu-toggle" id="mobileMenuToggle" aria-label="Toggle menu">
             <span></span>
             <span></span>
@@ -3023,10 +3076,10 @@ app.get('/', (req, res) => {
           <div class="user-menu" id="userMenu">
             <div class="mobile-nav-links" id="mobileNavLinks">
               <a href="#huntWeather" class="mobile-nav-link">🌤️ Hunt Weather</a>
-              <a href="#commandCenter" class="mobile-nav-link">📊 Command Center</a>
-              <a href="#trackHuntCard" class="mobile-nav-link">📍 Track My Hunt</a>
-              <a href="#myTrackedHunts" class="mobile-nav-link">💾 My Tracked Hunts</a>
-              <a href="#getReady" class="mobile-nav-link">🚀 Get Ready to Hunt</a>
+              <a href="#commandCenter" class="mobile-nav-link">📊 Leaderboard</a>
+              <a href="#trackHuntCard" class="mobile-nav-link">📍 Track Hunt</a>
+              <a href="#myTrackedHunts" class="mobile-nav-link">💾 My Hunts</a>
+              <a href="#getReady" class="mobile-nav-link">🚀 Get Ready</a>
             </div>
             <div class="auth-buttons" id="authButtons">
               <button class="auth-btn btn-login" onclick="openAuthModal('login')">Login</button>
@@ -3525,8 +3578,8 @@ app.get('/', (req, res) => {
             }
           });
           
-          // Smooth scroll for navigation links
-          document.querySelectorAll('.mobile-nav-link').forEach(link => {
+          // Smooth scroll for all navigation links (mobile and desktop)
+          document.querySelectorAll('.mobile-nav-link, .nav-link').forEach(link => {
             link.addEventListener('click', function(e) {
               e.preventDefault();
               const targetId = this.getAttribute('href').substring(1);

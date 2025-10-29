@@ -970,23 +970,142 @@ app.get('/', (req, res) => {
           box-sizing: border-box;
         }
         
+        .leaderboard-item {
+          margin-bottom: 8px;
+        }
+        
         .leaderboard-row {
           display: grid;
-          grid-template-columns: 45px 2fr 110px 70px 70px 100px 85px;
+          grid-template-columns: 30px 45px 2fr 110px 70px 70px 100px 85px;
           gap: 10px;
           padding: 10px 12px;
           background: white;
           border: 1px solid #E5E5E5;
           border-radius: 6px;
-          margin-bottom: 8px;
           align-items: center;
           transition: all 0.2s;
-          min-width: 600px;
+          min-width: 650px;
+          cursor: pointer;
         }
         
         .leaderboard-row:hover {
           transform: translateX(4px);
           box-shadow: 0 2px 8px rgba(218, 85, 47, 0.1);
+          border-color: #DA552F;
+        }
+        
+        .leaderboard-item.expanded .leaderboard-row {
+          border-bottom-left-radius: 0;
+          border-bottom-right-radius: 0;
+          border-bottom: none;
+        }
+        
+        .lb-expand {
+          font-size: 12px;
+          color: #DA552F;
+          font-weight: 700;
+          transition: transform 0.2s;
+          user-select: none;
+        }
+        
+        .leaderboard-item.expanded .lb-expand {
+          transform: rotate(0deg);
+        }
+        
+        .leaderboard-details {
+          background: #FAFAFA;
+          border: 1px solid #E5E5E5;
+          border-top: none;
+          border-bottom-left-radius: 6px;
+          border-bottom-right-radius: 6px;
+          padding: 0 16px;
+          max-height: 0;
+          overflow: hidden;
+          transition: max-height 0.3s ease, padding 0.3s ease;
+        }
+        
+        .leaderboard-item.expanded .leaderboard-details {
+          padding: 16px;
+        }
+        
+        .detail-section {
+          margin-bottom: 16px;
+        }
+        
+        .detail-section:last-child {
+          margin-bottom: 0;
+        }
+        
+        .detail-section h4 {
+          font-size: 14px;
+          font-weight: 700;
+          color: #1A1A1A;
+          margin-bottom: 12px;
+        }
+        
+        .detail-grid {
+          display: grid;
+          grid-template-columns: repeat(3, 1fr);
+          gap: 12px;
+        }
+        
+        .detail-item {
+          background: white;
+          padding: 10px 12px;
+          border-radius: 6px;
+          border: 1px solid #E5E5E5;
+        }
+        
+        .detail-label {
+          display: block;
+          font-size: 11px;
+          color: #666;
+          margin-bottom: 4px;
+          font-weight: 600;
+        }
+        
+        .detail-value {
+          display: block;
+          font-size: 14px;
+          color: #1A1A1A;
+          font-weight: 700;
+        }
+        
+        .detail-links {
+          display: flex;
+          gap: 12px;
+          flex-wrap: wrap;
+        }
+        
+        .detail-link {
+          display: inline-flex;
+          align-items: center;
+          gap: 6px;
+          padding: 8px 16px;
+          background: white;
+          border: 1px solid #E5E5E5;
+          border-radius: 6px;
+          color: #DA552F;
+          text-decoration: none;
+          font-size: 13px;
+          font-weight: 600;
+          transition: all 0.2s;
+        }
+        
+        .detail-link:hover {
+          background: #DA552F;
+          color: white;
+          border-color: #DA552F;
+        }
+        
+        .detail-analysis {
+          background: white;
+          padding: 12px;
+          border-radius: 6px;
+          border: 1px solid #E5E5E5;
+          font-size: 13px;
+          line-height: 1.6;
+          color: #333;
         }
         
         .lb-rank {
@@ -2312,7 +2431,7 @@ app.get('/', (req, res) => {
           
           .leaderboard-row {
             display: grid;
-            grid-template-columns: 35px 1fr 58px 58px 60px;
+            grid-template-columns: 20px 35px 1fr 58px 58px 60px;
             grid-template-rows: auto auto;
             padding: 8px 6px;
             gap: 3px;
@@ -2321,9 +2440,17 @@ app.get('/', (req, res) => {
             align-items: center;
           }
           
-          .lb-rank {
+          .lb-expand {
             grid-row: 1 / 3;
             grid-column: 1;
+            font-size: 10px;
+            align-self: center;
+            text-align: center;
+          }
+          
+          .lb-rank {
+            grid-row: 1 / 3;
+            grid-column: 2;
             font-size: 14px;
             font-weight: 700;
             align-self: center;
@@ -2332,7 +2459,7 @@ app.get('/', (req, res) => {
           
           .lb-product {
             grid-row: 1;
-            grid-column: 2 / 6;
+            grid-column: 3 / 7;
             font-size: 13px;
             font-weight: 600;
             word-wrap: break-word;
@@ -2348,7 +2475,7 @@ app.get('/', (req, res) => {
           
           .lb-category {
             grid-row: 2;
-            grid-column: 2;
+            grid-column: 3;
             font-size: 9px;
             background: #F3F4F6;
             padding: 2px 4px;
@@ -2361,7 +2488,7 @@ app.get('/', (req, res) => {
           
           .lb-upvotes {
             grid-row: 2;
-            grid-column: 3;
+            grid-column: 4;
             font-size: 11px;
             font-weight: 600;
             white-space: nowrap;
@@ -2370,7 +2497,7 @@ app.get('/', (req, res) => {
           
           .lb-comments {
             grid-row: 2;
-            grid-column: 4;
+            grid-column: 5;
             font-size: 11px;
             font-weight: 600;
             white-space: nowrap;
@@ -2379,7 +2506,7 @@ app.get('/', (req, res) => {
           
           .lb-velocity {
             grid-row: 2;
-            grid-column: 5;
+            grid-column: 6;
             font-size: 8px;
             padding: 2px 3px;
             border-radius: 3px;
@@ -2389,11 +2516,33 @@ app.get('/', (req, res) => {
           
           .track-product-btn {
             grid-row: 1;
-            grid-column: 5;
+            grid-column: 6;
             font-size: 9px;
             padding: 4px 6px;
             min-height: 28px;
             white-space: nowrap;
+          }
+          
+          .detail-grid {
+            grid-template-columns: 1fr;
+            gap: 8px;
+          }
+          
+          .detail-section h4 {
+            font-size: 13px;
+          }
+          
+          .detail-links {
+            flex-direction: column;
+          }
+          
+          .detail-link {
+            width: 100%;
+            justify-content: center;
+          }
+          
+          .detail-analysis {
+            font-size: 12px;
           }
           
           /* Modal optimization for mobile */
@@ -4197,16 +4346,69 @@ app.get('/', (req, res) => {
             
             const productUrl = product.url || 'https://www.producthunt.com';
             
-            html += '<div class="leaderboard-row">' +
+            // Calculate additional metrics
+            const createdAt = product.createdAt ? new Date(product.createdAt) : null;
+            const hoursLive = createdAt ? Math.max((new Date() - createdAt) / (1000 * 60 * 60), 0.1) : null;
+            const upvotesPerHour = hoursLive ? Math.round(product.votesCount / hoursLive) : null;
+            const commentsPerUpvote = product.votesCount > 0 ? (product.commentsCount / product.votesCount).toFixed(2) : '0.00';
+            
+            html += '<div class="leaderboard-item" data-product-index="' + index + '">' +
+              '<div class="leaderboard-row">' +
+              '<div class="lb-expand">▶</div>' +
               '<div class="lb-rank ' + rankClass + '">#' + rank + '</div>' +
-              '<div class="lb-product"><a href="' + productUrl + '" target="_blank" class="product-link">' + product.name + '</a></div>' +
+              '<div class="lb-product"><a href="' + productUrl + '" target="_blank" class="product-link" onclick="event.stopPropagation()">' + product.name + '</a></div>' +
               '<div class="lb-category">' + (product.category || 'General') + '</div>' +
               '<div class="lb-upvotes">▲ ' + (product.votesCount || 0) + '</div>' +
               '<div class="lb-comments">💬 ' + (product.commentsCount || 0) + '</div>' +
               '<div class="lb-velocity ' + velocityClass + '">' + velocityLabel + '</div>' +
-              '<button class="track-product-btn" data-product-index="' + index + '" data-rank="' + rank + '">' +
+              '<button class="track-product-btn" data-product-index="' + index + '" data-rank="' + rank + '" onclick="event.stopPropagation()">' +
               '🔖 Track' +
               '</button>' +
+              '</div>' +
+              '<div class="leaderboard-details">' +
+              '<div class="detail-section">' +
+              '<h4>📊 Performance Metrics</h4>' +
+              '<div class="detail-grid">' +
+              '<div class="detail-item">' +
+              '<span class="detail-label">Total Upvotes</span>' +
+              '<span class="detail-value">▲ ' + (product.votesCount || 0) + '</span>' +
+              '</div>' +
+              '<div class="detail-item">' +
+              '<span class="detail-label">Total Comments</span>' +
+              '<span class="detail-value">💬 ' + (product.commentsCount || 0) + '</span>' +
+              '</div>' +
+              '<div class="detail-item">' +
+              '<span class="detail-label">Velocity</span>' +
+              '<span class="detail-value">' + (upvotesPerHour !== null ? upvotesPerHour + ' upvotes/hr' : 'N/A') + '</span>' +
+              '</div>' +
+              '<div class="detail-item">' +
+              '<span class="detail-label">Engagement Rate</span>' +
+              '<span class="detail-value">' + commentsPerUpvote + ' comments/upvote</span>' +
+              '</div>' +
+              '<div class="detail-item">' +
+              '<span class="detail-label">Hours Live</span>' +
+              '<span class="detail-value">' + (hoursLive !== null ? Math.round(hoursLive * 10) / 10 + ' hrs' : 'N/A') + '</span>' +
+              '</div>' +
+              '<div class="detail-item">' +
+              '<span class="detail-label">Rank</span>' +
+              '<span class="detail-value">#' + rank + ' of ' + top20.length + '</span>' +
+              '</div>' +
+              '</div>' +
+              '</div>' +
+              '<div class="detail-section">' +
+              '<h4>🔗 Links</h4>' +
+              '<div class="detail-links">' +
+              '<a href="' + productUrl + '" target="_blank" class="detail-link">🌐 View on ProductHunt</a>' +
+              (product.website ? '<a href="' + product.website + '" target="_blank" class="detail-link">🏠 Product Website</a>' : '') +
+              '</div>' +
+              '</div>' +
+              '<div class="detail-section">' +
+              '<h4>💡 Quick Analysis</h4>' +
+              '<div class="detail-analysis">' +
+              getQuickAnalysis(rank, velocity, upvotesPerHour, commentsPerUpvote) +
+              '</div>' +
+              '</div>' +
+              '</div>' +
               '</div>';
           });
           
@@ -4214,11 +4416,64 @@ app.get('/', (req, res) => {
           
           // Add event listeners to all track buttons
           document.querySelectorAll('.track-product-btn').forEach(btn => {
-            btn.addEventListener('click', function() {
+            btn.addEventListener('click', function(e) {
+              e.stopPropagation();
               const productIndex = parseInt(this.getAttribute('data-product-index'));
               saveHuntFromLeaderboard(productIndex);
             });
           });
+          
+          // Add click handlers to expand/collapse rows
+          document.querySelectorAll('.leaderboard-item').forEach(item => {
+            const row = item.querySelector('.leaderboard-row');
+            const details = item.querySelector('.leaderboard-details');
+            const expandIcon = item.querySelector('.lb-expand');
+            
+            row.addEventListener('click', function(e) {
+              // Don't expand if clicking on a link or button
+              if (e.target.closest('a') || e.target.closest('button')) return;
+              
+              const isExpanded = item.classList.contains('expanded');
+              
+              if (isExpanded) {
+                item.classList.remove('expanded');
+                details.style.maxHeight = '0px';
+                expandIcon.textContent = '▶';
+              } else {
+                item.classList.add('expanded');
+                details.style.maxHeight = details.scrollHeight + 'px';
+                expandIcon.textContent = '▼';
+              }
+            });
+          });
+        }
+        
+        function getQuickAnalysis(rank, velocity, upvotesPerHour, commentsPerUpvote) {
+          let analysis = '';
+          
+          if (rank <= 3) {
+            analysis += '🏆 <strong>Top 3 Position!</strong> This product is dominating today. ';
+          } else if (rank <= 10) {
+            analysis += '🎯 <strong>Top 10 Product.</strong> Strong performance with high visibility. ';
+          }
+          
+          if (velocity.class === 'velocity-high') {
+            analysis += '🚀 <strong>Hot momentum</strong> - gaining upvotes rapidly. ';
+          } else if (velocity.class === 'velocity-medium') {
+            analysis += '⚡ <strong>Rising steadily</strong> - good traction. ';
+          } else {
+            analysis += '💤 <strong>Slower pace</strong> - room for acceleration. ';
+          }
+          
+          if (commentsPerUpvote > 0.5) {
+            analysis += '💬 <strong>High engagement</strong> - users are actively discussing this product.';
+          } else if (commentsPerUpvote > 0.2) {
+            analysis += '💬 <strong>Moderate engagement</strong> - decent conversation happening.';
+          } else {
+            analysis += '💬 <strong>Low engagement</strong> - mostly upvotes without much discussion.';
+          }
+          
+          return analysis || 'Building momentum...';
         }
         
         function calculateVelocity(product, index) {

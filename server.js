@@ -2264,51 +2264,85 @@ app.get('/', (req, res) => {
             min-height: 48px;
           }
           
-          /* Mobile-optimized leaderboard */
+          /* Mobile-optimized leaderboard - Card Layout */
           .leaderboard-table {
-            overflow-x: auto;
-            -webkit-overflow-scrolling: touch;
+            overflow-x: visible;
+            overflow-y: auto;
           }
           
           .leaderboard-row {
-            font-size: 13px;
-            padding: 12px 8px;
-            gap: 8px;
-            min-width: 500px;
-            grid-template-columns: 40px 1.5fr 80px 70px 70px 100px 70px;
+            display: flex;
+            flex-direction: column;
+            padding: 16px;
+            gap: 12px;
+            min-width: auto;
+            width: 100%;
+          }
+          
+          .leaderboard-row > div,
+          .leaderboard-row > button {
+            width: 100%;
+            max-width: 100%;
+            text-align: left;
+            white-space: normal;
           }
           
           .lb-rank {
-            min-width: 40px;
-            font-size: 14px;
+            font-size: 20px;
+            font-weight: 700;
+            text-align: left;
           }
           
           .lb-product {
-            min-width: 120px;
-            max-width: 150px;
-            overflow: hidden;
-            text-overflow: ellipsis;
-            white-space: nowrap;
+            font-size: 16px;
+            font-weight: 600;
+            min-width: auto;
+            max-width: 100%;
+            overflow: visible;
+            text-overflow: clip;
+            white-space: normal;
+            word-wrap: break-word;
           }
           
-          .lb-category,
-          .lb-upvotes,
-          .lb-comments {
-            font-size: 12px;
-            white-space: nowrap;
+          .lb-product a {
+            word-wrap: break-word;
+            overflow-wrap: break-word;
           }
           
           .lb-category {
-            max-width: 80px;
-            overflow: hidden;
-            text-overflow: ellipsis;
+            font-size: 13px;
+            max-width: 100%;
+            overflow: visible;
+            text-overflow: clip;
+            white-space: normal;
+            background: #F3F4F6;
+            padding: 6px 12px;
+            border-radius: 4px;
+            display: inline-block;
+            width: auto;
+          }
+          
+          .lb-upvotes,
+          .lb-comments {
+            font-size: 14px;
+            white-space: normal;
+            font-weight: 600;
+          }
+          
+          .lb-velocity {
+            font-size: 13px;
+            padding: 8px 12px;
+            text-align: center;
+            width: auto;
+            display: inline-block;
           }
           
           .track-product-btn {
-            font-size: 12px;
-            padding: 8px 12px;
-            min-height: 40px;
-            white-space: nowrap;
+            font-size: 14px;
+            padding: 12px 16px;
+            min-height: 48px;
+            width: 100%;
+            white-space: normal;
           }
           
           /* Modal optimization for mobile */

@@ -2007,6 +2007,14 @@ app.get('/', (req, res) => {
             right: 0;
           }
           
+          .mobile-nav-links {
+            display: flex;
+            flex-direction: column;
+            margin-bottom: 24px;
+            padding-bottom: 24px;
+            border-bottom: 2px solid #F0F0F0;
+          }
+          
           .auth-buttons,
           .user-info {
             flex-direction: column;
@@ -2602,6 +2610,31 @@ app.get('/', (req, res) => {
           gap: 8px;
         }
         
+        .mobile-nav-links {
+          display: none;
+        }
+        
+        .mobile-nav-link {
+          display: block;
+          padding: 12px 16px;
+          color: #1A1A1A;
+          text-decoration: none;
+          font-size: 15px;
+          font-weight: 600;
+          border-radius: 6px;
+          transition: all 0.2s;
+          margin-bottom: 8px;
+        }
+        
+        .mobile-nav-link:hover {
+          background: #F8F8F8;
+          color: #DA552F;
+        }
+        
+        .mobile-nav-link:active {
+          background: #F0F0F0;
+        }
+        
         .auth-btn {
           padding: 8px 16px;
           border-radius: 6px;
@@ -2988,6 +3021,13 @@ app.get('/', (req, res) => {
             <span></span>
           </button>
           <div class="user-menu" id="userMenu">
+            <div class="mobile-nav-links" id="mobileNavLinks">
+              <a href="#huntWeather" class="mobile-nav-link">🌤️ Hunt Weather</a>
+              <a href="#commandCenter" class="mobile-nav-link">📊 Command Center</a>
+              <a href="#trackHuntCard" class="mobile-nav-link">📍 Track My Hunt</a>
+              <a href="#myTrackedHunts" class="mobile-nav-link">💾 My Tracked Hunts</a>
+              <a href="#getReady" class="mobile-nav-link">🚀 Get Ready to Hunt</a>
+            </div>
             <div class="auth-buttons" id="authButtons">
               <button class="auth-btn btn-login" onclick="openAuthModal('login')">Login</button>
               <button class="auth-btn btn-register" onclick="openAuthModal('register')">Sign Up</button>
@@ -3076,7 +3116,7 @@ app.get('/', (req, res) => {
         
         <div id="dashboard" style="display: none;">
           <div class="command-center-card" id="commandCenterCard">
-            <div class="command-center-header">
+            <div class="command-center-header" id="huntWeather">
               <h2>🌤️ Hunt Weather & Command Center</h2>
               <p>AI-powered hunt scoring, optimal timing insights, and live leaderboard tracking</p>
               <div class="auto-refresh-badge">Auto-refreshing every 30s</div>
@@ -3155,7 +3195,7 @@ app.get('/', (req, res) => {
             </div>
             
             <!-- Live Leaderboard Section (Full Width) -->
-            <div class="cc-section leaderboard-section" style="margin-top: 24px;">
+            <div class="cc-section leaderboard-section" id="commandCenter" style="margin-top: 24px;">
               <h3>📊 Live Leaderboard - <a href="https://www.producthunt.com" target="_blank" style="color: #DA552F; text-decoration: none; border-bottom: 1px solid #DA552F;">Top 20 Hunts Today</a></h3>
               <p style="font-size: 13px; color: #666; margin: 8px 0 16px 0;">Real-time ranking of today's featured products with velocity tracking</p>
               <div class="leaderboard-table" id="leaderboardTable">
@@ -3260,7 +3300,7 @@ app.get('/', (req, res) => {
             </div>
           </div>
           
-          <div class="analyzer-card">
+          <div class="analyzer-card" id="getReady">
             <div class="analyzer-header">
               <h2>▲ Get Your Product Ready to Hunt</h2>
               <p>Analyze your hunt strategy or generate professional assets based on your product details</p>
@@ -3477,12 +3517,24 @@ app.get('/', (req, res) => {
             }
           });
           
-          // Close menu when clicking a menu item
+          // Close menu when clicking a menu item or link
           userMenu.addEventListener('click', function(event) {
             if (event.target.tagName === 'BUTTON' || event.target.tagName === 'A') {
               mobileMenuToggle.classList.remove('active');
               userMenu.classList.remove('mobile-open');
             }
+          });
+          
+          // Smooth scroll for navigation links
+          document.querySelectorAll('.mobile-nav-link').forEach(link => {
+            link.addEventListener('click', function(e) {
+              e.preventDefault();
+              const targetId = this.getAttribute('href').substring(1);
+              const targetElement = document.getElementById(targetId);
+              if (targetElement) {
+                targetElement.scrollIntoView({ behavior: 'smooth', block: 'start' });
+              }
+            });
           });
         }
         

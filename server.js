@@ -2264,7 +2264,7 @@ app.get('/', (req, res) => {
             min-height: 48px;
           }
           
-          /* Mobile-optimized leaderboard - Card Layout */
+          /* Mobile-optimized leaderboard - Compact Card Layout */
           .leaderboard-table {
             overflow-x: visible;
             overflow-y: auto;
@@ -2273,8 +2273,8 @@ app.get('/', (req, res) => {
           .leaderboard-row {
             display: flex;
             flex-direction: column;
-            padding: 16px;
-            gap: 12px;
+            padding: 12px;
+            gap: 8px;
             min-width: auto;
             width: 100%;
           }
@@ -2288,13 +2288,14 @@ app.get('/', (req, res) => {
           }
           
           .lb-rank {
-            font-size: 20px;
+            font-size: 16px;
             font-weight: 700;
             text-align: left;
+            margin-bottom: -4px;
           }
           
           .lb-product {
-            font-size: 16px;
+            font-size: 15px;
             font-weight: 600;
             min-width: auto;
             max-width: 100%;
@@ -2302,6 +2303,7 @@ app.get('/', (req, res) => {
             text-overflow: clip;
             white-space: normal;
             word-wrap: break-word;
+            line-height: 1.3;
           }
           
           .lb-product a {
@@ -2310,39 +2312,44 @@ app.get('/', (req, res) => {
           }
           
           .lb-category {
-            font-size: 13px;
+            font-size: 12px;
             max-width: 100%;
             overflow: visible;
             text-overflow: clip;
             white-space: normal;
             background: #F3F4F6;
-            padding: 6px 12px;
+            padding: 4px 10px;
             border-radius: 4px;
             display: inline-block;
             width: auto;
+            margin-bottom: 4px;
           }
           
           .lb-upvotes,
           .lb-comments {
-            font-size: 14px;
+            font-size: 13px;
             white-space: normal;
             font-weight: 600;
+            display: inline-block;
+            margin-right: 12px;
           }
           
           .lb-velocity {
-            font-size: 13px;
-            padding: 8px 12px;
+            font-size: 12px;
+            padding: 6px 10px;
             text-align: center;
             width: auto;
             display: inline-block;
+            margin-top: 4px;
           }
           
           .track-product-btn {
             font-size: 14px;
-            padding: 12px 16px;
-            min-height: 48px;
+            padding: 10px 14px;
+            min-height: 44px;
             width: 100%;
             white-space: normal;
+            margin-top: 4px;
           }
           
           /* Modal optimization for mobile */
@@ -4071,6 +4078,13 @@ app.get('/', (req, res) => {
         
         function calculateVelocity(product, index) {
           // Simple velocity calculation based on upvotes per hour
+          if (!product.createdAt || !product.votesCount) {
+            // Fallback if data missing - estimate by rank
+            if (index < 5) return { class: 'velocity-high', label: '🔥 HOT' };
+            if (index < 12) return { class: 'velocity-medium', label: '📈 Rising' };
+            return { class: 'velocity-low', label: '📉 Slow' };
+          }
+          
           const createdAt = new Date(product.createdAt);
           const now = new Date();
           const hoursLive = Math.max((now - createdAt) / (1000 * 60 * 60), 1);

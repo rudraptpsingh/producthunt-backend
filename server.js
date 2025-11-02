@@ -2190,7 +2190,7 @@ app.get('/', (req, res) => {
           position: fixed;
           top: 0;
           left: 0;
-          width: 100%;
+          width: calc(100% - 280px);
           height: 100%;
           background: rgba(0, 0, 0, 0.5);
           z-index: 1000;
@@ -2201,6 +2201,12 @@ app.get('/', (req, res) => {
         .mobile-menu-backdrop.active {
           display: block;
           opacity: 1;
+        }
+        
+        @media (max-width: 768px) {
+          .mobile-menu-backdrop {
+            width: calc(100% - 280px);
+          }
         }
         
         @media (max-width: 768px) {

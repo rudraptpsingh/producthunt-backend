@@ -3921,35 +3921,39 @@ app.get('/', (req, res) => {
         const userMenu = document.getElementById('userMenu');
         const mobileMenuBackdrop = document.getElementById('mobileMenuBackdrop');
         
+        function closeMobileMenu() {
+          mobileMenuToggle.classList.remove('active');
+          userMenu.classList.remove('mobile-open');
+          mobileMenuBackdrop.classList.remove('active');
+        }
+        
         if (mobileMenuToggle) {
-          mobileMenuToggle.addEventListener('click', function() {
+          mobileMenuToggle.addEventListener('click', function(e) {
+            e.stopPropagation();
             this.classList.toggle('active');
             userMenu.classList.toggle('mobile-open');
             mobileMenuBackdrop.classList.toggle('active');
           });
           
           // Close menu when clicking backdrop
-          mobileMenuBackdrop.addEventListener('click', function() {
-            mobileMenuToggle.classList.remove('active');
-            userMenu.classList.remove('mobile-open');
-            mobileMenuBackdrop.classList.remove('active');
+          mobileMenuBackdrop.addEventListener('click', function(e) {
+            e.stopPropagation();
+            closeMobileMenu();
           });
           
           // Close menu when clicking outside
           document.addEventListener('click', function(event) {
-            if (!userMenu.contains(event.target) && !mobileMenuToggle.contains(event.target)) {
-              mobileMenuToggle.classList.remove('active');
-              userMenu.classList.remove('mobile-open');
-              mobileMenuBackdrop.classList.remove('active');
+            if (!userMenu.contains(event.target) && 
+                !mobileMenuToggle.contains(event.target) && 
+                !mobileMenuBackdrop.contains(event.target)) {
+              closeMobileMenu();
             }
           });
           
           // Close menu when clicking a menu item or link
           userMenu.addEventListener('click', function(event) {
             if (event.target.tagName === 'BUTTON' || event.target.tagName === 'A') {
-              mobileMenuToggle.classList.remove('active');
-              userMenu.classList.remove('mobile-open');
-              mobileMenuBackdrop.classList.remove('active');
+              closeMobileMenu();
             }
           });
           

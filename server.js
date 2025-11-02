@@ -2159,7 +2159,7 @@ app.get('/', (req, res) => {
           border: none;
           cursor: pointer;
           padding: 8px;
-          z-index: 1001;
+          z-index: 1002;
           position: relative;
         }
         
@@ -2193,7 +2193,7 @@ app.get('/', (req, res) => {
           width: 100%;
           height: 100%;
           background: rgba(0, 0, 0, 0.5);
-          z-index: 999;
+          z-index: 1000;
           opacity: 0;
           transition: opacity 0.3s ease;
         }
@@ -2269,7 +2269,7 @@ app.get('/', (req, res) => {
             box-shadow: -2px 0 10px rgba(0, 0, 0, 0.1);
             padding: 80px 20px 20px;
             transition: right 0.3s ease;
-            z-index: 1000;
+            z-index: 1001;
             overflow-y: auto;
             display: flex !important;
             flex-direction: column;
